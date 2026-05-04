@@ -1,65 +1,157 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Trophy, Gamepad2, UserCircle, Zap, QrCode } from "lucide-react"
+
+function GoogleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+    </svg>
+  )
+}
+
+const features = [
+  {
+    Icon: UserCircle,
+    title: "Your Arcade Profile",
+    description: "One identity across every FOG machine. Your stats, your rank, your legacy.",
+  },
+  {
+    Icon: Trophy,
+    title: "Live Leaderboards",
+    description: "Real-time rankings during tournaments. See where you stand the moment your score lands.",
+  },
+  {
+    Icon: Gamepad2,
+    title: "Game History",
+    description: "Every session logged. Track your progress and watch yourself improve over time.",
+  },
+]
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
+      {/* ── Hero ── */}
+      <section className="relative flex min-h-svh flex-col items-center justify-center px-6 py-20">
+        {/* Dot grid — uses --primary so it adapts to both modes */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+        {/* Top radial glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 90% 55% at 50% -5%, color-mix(in oklch, var(--primary) 18%, transparent) 0%, transparent 65%)",
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 flex w-full max-w-[320px] flex-col items-center text-center">
+          {/* Brand pill */}
+          <div className="mb-9 inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/[0.07] px-3 py-1.5 font-mono text-[10px] tracking-[0.22em] text-primary/75 uppercase">
+            <Zap size={9} className="fill-primary/75" aria-hidden />
+            FOG Technologies
+          </div>
+
+          {/* Wordmark */}
+          <h1 className="font-black leading-none tracking-tighter">
+            <span className="block text-[76px] text-foreground" style={{ lineHeight: 0.88 }}>
+              FOG
+            </span>
+            <span className="block text-[76px] text-primary" style={{ lineHeight: 0.88 }}>
+              SOCIAL
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          {/* Tagline */}
+          <p className="mt-7 font-mono text-[11px] tracking-[0.28em] text-foreground/35 uppercase">
+            Play · Track · Compete
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+          {/* Description */}
+          <p className="mt-5 max-w-[260px] text-[15px] leading-relaxed text-muted-foreground">
+            Your arcade identity. Every game on a FOG machine tracked, ranked, and remembered.
+          </p>
+
+          {/* Google CTA */}
+          <Link
+            href="/api/auth/signin"
+            className="mt-10 flex w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-all duration-100 hover:opacity-90 active:scale-[0.98]"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <GoogleIcon />
+            Continue with Google
+          </Link>
+
+          {/* QR hint */}
+          <div className="mt-5 flex items-center gap-1.5 font-mono text-[11px] text-foreground/30">
+            <QrCode size={11} aria-hidden />
+            <span>or scan a QR at any FOG machine</span>
+          </div>
         </div>
-      </main>
-    </div>
-  );
+
+        {/* Arcade ambient decoration */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-6 bottom-7 flex select-none justify-between font-mono text-[10px] uppercase tracking-widest text-primary/20"
+        >
+          <div>
+            <div>Hi-Score</div>
+            <div className="mt-0.5 text-lg font-bold">999999</div>
+          </div>
+          <div className="text-right">
+            <div>Credit</div>
+            <div className="mt-0.5 text-lg font-bold">00</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Features ── */}
+      <section className="mx-auto w-full max-w-[320px] px-6 pb-20">
+        <div className="space-y-3">
+          {features.map(({ Icon, title, description }) => (
+            <div
+              key={title}
+              className="relative overflow-hidden rounded-2xl border border-border bg-card p-5"
+            >
+              {/* shimmer top edge */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-px"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, color-mix(in oklch, var(--primary) 35%, transparent), transparent)",
+                }}
+              />
+              <div className="flex items-start gap-4">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                  <Icon size={19} className="text-primary" aria-hidden />
+                </div>
+                <div>
+                  <h2 className="text-sm font-bold text-foreground">{title}</h2>
+                  <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">{description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="border-t border-border py-7 text-center">
+        <p className="font-mono text-[10px] tracking-[0.2em] text-foreground/25 uppercase">
+          FOG Technologies © {new Date().getFullYear()}
+        </p>
+      </footer>
+    </main>
+  )
 }
