@@ -1,6 +1,8 @@
 import { MongoClient } from "mongodb"
 
-const uri = process.env.MONGODB_URI
+const uri = process.env.NODE_ENV === "production" 
+  ? process.env.MONGODB_URI_PROD 
+  : process.env.MONGODB_URI_DEV
 
 if (!uri) throw new Error("MONGODB_URI is not set")
 
