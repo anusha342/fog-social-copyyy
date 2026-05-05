@@ -1,5 +1,8 @@
+import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Trophy, Gamepad2, UserCircle, Zap, QrCode } from "lucide-react"
+import { authOptions } from "@/lib/auth"
 
 function GoogleIcon() {
   return (
@@ -30,7 +33,10 @@ const features = [
   },
 ]
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions)
+  if (session) redirect("/dashboard")
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
       {/* ── Hero ── */}

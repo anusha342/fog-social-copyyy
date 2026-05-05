@@ -4,7 +4,7 @@ import type { PlayerDoc } from "@/types"
 
 export type Player = WithId<PlayerDoc>
 
-function collection() {
+async function collection() {
   return clientPromise.then((client) =>
     client.db().collection<PlayerDoc>("players")
   )
