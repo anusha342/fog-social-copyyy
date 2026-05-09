@@ -36,9 +36,16 @@ After joining, the player sees a live leaderboard that updates in real time as o
 
 6. Store the returned player._id — needed for the player leaderboard lookup
 
-7. Show leaderboard, poll every ~5s:
+7. Fetch leaderboard snapshot (store locally for offline use):
+   GET /api/v1/tournament/:tournament_id/leaderboard/snapshot?env=<env>
+   ← { top10: [...], scores: [...], total, snapshot_at }
+
+8. Show leaderboard, poll every ~5s when online:
    GET /api/v1/tournament/:tournament_id/leaderboard/player/:player_id?env=<env>
    ← { leaderboard: [...top10], player: { rank, best_score } }
+
+   If offline, use the stored snapshot to estimate rank:
+   scores.filter(s => s > myScore).length + 1  → show as "~rank 4"
 ```
 
 ---
@@ -85,7 +92,11 @@ Base URL is the sync server (`NEXT_PUBLIC_SYNC_SERVER_URL` env var).
 |--------|------|------|-------------|
 | `GET` | `/api/v1/tournament/:t/session/:s?env=` | none | On page load, before sign-in |
 | `POST` | `/api/v1/tournament/:t/join` | none | Immediately after Google login |
-| `GET` | `/api/v1/tournament/:t/leaderboard/player/:player_id?env=` | none | Every ~5s after joining |
+| `GET` | `/api/v1/tournament/:t/leaderboard/snapshot?env=` | none | Once after joining — store locally |
+| `GET` | `/api/v1/tournament/:t/leaderboard/player/:player_id?env=` | none | Every ~5s after joining (when online) |
+| `GET` | `/api/v1/player/:google_id/stats?env=` | none | Player dashboard — aggregate stats |
+| `GET` | `/api/v1/player/:google_id/gameplays?env=&limit=` | none | Player dashboard — full gameplay history |
+| `GET` | `/api/v1/player/:google_id/gameplays?env=&tournament_id=&limit=` | none | My Plays tab — gameplays scoped to a tournament |
 
 `t` (tournament_id), `s` (session_code), and `env` all come from the URL query params on page load.
 
@@ -150,6 +161,64 @@ For a full paginated leaderboard (e.g. a results screen) use:
 GET /api/v1/tournament/:t/leaderboard?page=1&limit=10&env=<env>
 ← { leaderboard: [...], pagination: { page, limit, total, total_pages } }
 ```
+
+### Leaderboard Snapshot — response
+
+```json
+{
+  "top10": [
+    {
+      "rank": 1,
+      "score": 4200,
+      "played_at": "2026-05-07T10:00:00.000Z",
+      "players": [{ "name": "Jane Doe", "avatar_url": "https://..." }]
+    }
+  ],
+  "scores": [4200, 3800, 3500, 2900, 1500],
+  "total": 42,
+  "snapshot_at": "2026-05-09T10:00:00.000Z"
+}
+```
+
+Fetch once after joining and store in memory (or localStorage). When the player goes offline, use `scores` to estimate rank:
+
+```js
+const estimatedRank = scores.filter(s => s > myScore).length + 1;
+// Display as "~rank 4" to signal it's approximate
+```
+
+`snapshot_at` tells you how stale the data is. Refresh the snapshot when the player comes back online.
+
+### Player Stats — response
+
+```json
+{
+  "games_played": 5,
+  "best_score": 4200,
+  "global_rank": 12
+}
+```
+
+- `games_played` — total tournament gameplays this player has been part of
+- `best_score` — highest score across all those gameplays
+- `global_rank` — rank by best score vs all other players across all tournaments; `null` if the player has no gameplays yet
+
+### Player Gameplays — response
+
+```json
+{
+  "gameplays": [
+    {
+      "gameplay_id": "69fc8582fe81ba17c95bfd1d",
+      "tournament_id": "69f891381c77e5382a582b9c",
+      "score": 670,
+      "played_at": "2026-05-07T12:30:08.037Z"
+    }
+  ]
+}
+```
+
+Sorted newest first. `limit` defaults to `10`, max `100`. Pass `tournament_id` to scope results to a specific tournament (My Plays tab) — omit it for the full cross-tournament history view. Both endpoints look up the player by `google_id` from the social database — pass `session.user.google_id` (the Google `sub`) directly in the URL.
 
 ---
 

@@ -29,7 +29,7 @@ async function fetchStats(googleId: string): Promise<PlayerStats | null> {
   try {
     const res = await fetch(
       `${SYNC}/api/v1/player/${googleId}/stats?env=${SYNC_ENV}`,
-      { next: { revalidate: 60 } }
+      { cache: "no-store" }
     )
     if (!res.ok) return null
     return res.json()
@@ -42,7 +42,7 @@ async function fetchGameplays(googleId: string): Promise<PlayerGameplay[]> {
   try {
     const res = await fetch(
       `${SYNC}/api/v1/player/${googleId}/gameplays?env=${SYNC_ENV}&limit=10`,
-      { next: { revalidate: 60 } }
+      { cache: "no-store" }
     )
     if (!res.ok) return []
     const data = await res.json()

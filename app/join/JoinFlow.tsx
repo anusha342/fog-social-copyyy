@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
-import Image from "next/image"
+import { useRouter } from "next/navigation"
 import type { Session } from "next-auth"
-import { Trophy, Medal, AlertCircle, QrCode, Loader2, WifiOff } from "lucide-react"
-import type { JoinErrorCode, LeaderboardData } from "@/types"
+import { AlertCircle, QrCode, Loader2 } from "lucide-react"
+import type { JoinErrorCode } from "@/types"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -43,33 +43,6 @@ function GoogleIcon() {
   )
 }
 
-function Avatar({
-  src,
-  name,
-  size = 32,
-}: {
-  src: string
-  name: string
-  size?: number
-}) {
-  if (src) {
-    return (
-      <Image
-        src={src}
-        alt=""
-        width={size}
-        height={size}
-        className="size-full object-cover"
-      />
-    )
-  }
-  return (
-    <span className="flex size-full items-center justify-center text-xs font-bold text-muted-foreground">
-      {name.charAt(0).toUpperCase()}
-    </span>
-  )
-}
-
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface Props {
@@ -80,11 +53,9 @@ interface Props {
 }
 
 export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
-  const [phase, setPhase] = useState<"checking" | "unauthenticated" | "joining" | "error" | "leaderboard">("checking")
+  const router = useRouter()
+  const [phase, setPhase] = useState<"checking" | "unauthenticated" | "joining" | "error">("checking")
   const [errorCode, setErrorCode] = useState<JoinErrorCode | null>(null)
-  const [playerId, setPlayerId] = useState<string | null>(null)
-  const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null)
-  const [isLive, setIsLive] = useState(false)
   // Incrementing this re-triggers the join effect (used for retry).
   const [retryKey, setRetryKey] = useState(0)
 
@@ -158,8 +129,11 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
         }
 
         const body = await res.json()
-        setPlayerId(body.player._id)
-        setPhase("leaderboard")
+        if (!cancelled) {
+          router.replace(
+            `/tournament/${tournamentId}?env=${encodeURIComponent(env)}&pid=${encodeURIComponent(body.player._id)}`
+          )
+        }
       } catch {
         if (!cancelled) {
           setErrorCode("network")
@@ -170,33 +144,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
 
     join()
     return () => { cancelled = true }
-  }, [phase, session, tournamentId, sessionCode, env, retryKey])
-
-  // ── Leaderboard poll ──────────────────────────────────────────────────────
-  const pollLeaderboard = useCallback(
-    async (id: string) => {
-      try {
-        const res = await fetch(
-          `${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${id}?env=${env}`
-        )
-        if (!res.ok) return
-        const data: LeaderboardData = await res.json()
-        setLeaderboard(data)
-        setIsLive(true)
-      } catch {
-        setIsLive(false)
-      }
-    },
-    [tournamentId, env]
-  )
-
-  useEffect(() => {
-    if (phase !== "leaderboard" || !playerId) return
-
-    pollLeaderboard(playerId)
-    const interval = setInterval(() => pollLeaderboard(playerId), 5000)
-    return () => clearInterval(interval)
-  }, [phase, playerId, pollLeaderboard])
+  }, [phase, session, tournamentId, sessionCode, env, retryKey, router])
 
   // ── Checking ─────────────────────────────────────────────────────────────
   if (phase === "checking") {
@@ -215,7 +163,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
 
   // ── Unauthenticated ───────────────────────────────────────────────────────
   if (phase === "unauthenticated") {
-    const callbackUrl = `/join?t=${encodeURIComponent(tournamentId)}&s=${encodeURIComponent(sessionCode)}`
+    const callbackUrl = `/join?t=${encodeURIComponent(tournamentId)}&s=${encodeURIComponent(sessionCode)}&env=${encodeURIComponent(env)}`
     return (
       <div className="flex min-h-svh flex-col items-center justify-center px-6 bg-background">
         <div className="flex w-full max-w-[320px] flex-col items-center text-center">
@@ -288,136 +236,5 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
     )
   }
 
-  // ── Leaderboard ───────────────────────────────────────────────────────────
-  const playerInTop10 =
-    leaderboard?.player &&
-    leaderboard.leaderboard.some((e) => e.rank === leaderboard.player!.rank)
-
-  return (
-    <div className="min-h-svh bg-background">
-      {/* Sticky header */}
-      <div className="sticky top-0 z-10 border-b border-border bg-background/90 px-4 py-3 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-[400px] items-center justify-between">
-          <div>
-            <p className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
-              Live Leaderboard
-            </p>
-            <p className="mt-0.5 font-mono text-xs font-bold tracking-[0.1em] text-primary">
-              {sessionCode.toUpperCase()}
-            </p>
-          </div>
-          <div className="flex items-center gap-1.5">
-            {isLive ? (
-              <>
-                <span className="size-1.5 animate-pulse rounded-full bg-primary" />
-                <span className="font-mono text-[10px] tracking-wider text-primary uppercase">
-                  Live
-                </span>
-              </>
-            ) : (
-              <>
-                <WifiOff size={11} className="text-muted-foreground" aria-hidden />
-                <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
-                  Connecting
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* List */}
-      <div className="mx-auto w-full max-w-[400px] px-4 pt-4 pb-16">
-        {!leaderboard ? (
-          <div className="flex flex-col items-center gap-3 py-20">
-            <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
-            <p className="text-xs text-muted-foreground">Loading leaderboard…</p>
-          </div>
-        ) : (
-          <>
-            {/* Top 10 */}
-            <div className="space-y-2">
-              {leaderboard.leaderboard.map((entry) => {
-                const isMe =
-                  leaderboard.player !== undefined &&
-                  entry.rank === leaderboard.player.rank
-
-                return (
-                  <div
-                    key={entry.rank}
-                    className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${
-                      isMe
-                        ? "border-primary/30 bg-primary/10"
-                        : "border-border bg-card"
-                    }`}
-                  >
-                    {/* Rank badge */}
-                    <div
-                      className={`w-7 shrink-0 text-center font-mono text-sm font-bold ${
-                        entry.rank === 1
-                          ? "text-yellow-500"
-                          : entry.rank === 2
-                          ? "text-slate-400"
-                          : entry.rank === 3
-                          ? "text-amber-600"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {entry.rank <= 3 ? (
-                        <Medal size={15} className="mx-auto" aria-hidden />
-                      ) : (
-                        `#${entry.rank}`
-                      )}
-                    </div>
-
-                    {/* Avatar */}
-                    <div className="size-8 shrink-0 overflow-hidden rounded-full bg-muted">
-                      <Avatar src={entry.players[0]?.avatar_url ?? ""} name={entry.players[0]?.name ?? "?"} />
-                    </div>
-
-                    {/* Name */}
-                    <p
-                      className={`flex-1 truncate text-sm font-semibold ${
-                        isMe ? "text-primary" : "text-foreground"
-                      }`}
-                    >
-                      {entry.players[0]?.name ?? "Unknown"}
-                      {isMe && (
-                        <span className="ml-1.5 font-mono text-[10px] text-primary/60">
-                          (you)
-                        </span>
-                      )}
-                    </p>
-
-                    {/* Score */}
-                    <p className="font-mono text-sm font-bold tabular-nums text-foreground">
-                      {entry.score.toLocaleString()}
-                    </p>
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* Player row when outside top 10 */}
-            {leaderboard.player && !playerInTop10 && (
-              <div className="mt-3 border-t border-border pt-3">
-                <div className="flex items-center gap-3 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3">
-                  <div className="w-7 shrink-0 text-center font-mono text-sm font-bold text-primary">
-                    #{leaderboard.player.rank}
-                  </div>
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/20">
-                    <Trophy size={14} className="text-primary" aria-hidden />
-                  </div>
-                  <p className="flex-1 text-sm font-semibold text-primary">You</p>
-                  <p className="font-mono text-sm font-bold tabular-nums text-foreground">
-                    {leaderboard.player.best_score.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  )
+  return null
 }
