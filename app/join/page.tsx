@@ -7,10 +7,11 @@ export default async function JoinPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const { t, s } = await searchParams
+  const { t, s, env } = await searchParams
 
   const tournamentId = Array.isArray(t) ? t[0] : t
   const sessionCode = Array.isArray(s) ? s[0] : s
+  const environment = Array.isArray(env) ? env[0] : (env ?? "prod")
 
   if (!tournamentId || !sessionCode) {
     return (
@@ -32,6 +33,7 @@ export default async function JoinPage({
       <JoinFlow
         tournamentId={tournamentId}
         sessionCode={sessionCode}
+        env={environment}
         session={session}
       />
     </main>

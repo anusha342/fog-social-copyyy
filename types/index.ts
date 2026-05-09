@@ -30,11 +30,9 @@ export interface SyncPlayer {
 /** Body sent to `POST /api/v1/tournament/:id/join`. */
 export interface JoinRequestBody {
   session_code: string
+  env: string
   player: {
     google_id: string
-    name: string | null
-    email: string | null
-    avatar_url: string | null
   }
 }
 
@@ -48,21 +46,22 @@ export interface JoinResponse {
 export interface LeaderboardEntry {
   rank: number
   score: number
-  player: {
+  played_at: string
+  players: Array<{
     name: string
     avatar_url: string
-  }
+  }>
 }
 
 /**
- * Response from `GET /api/v1/tournament/:id/leaderboard`.
- * `player` is omitted when no `player_id` query param is supplied.
+ * Response from `GET /api/v1/tournament/:id/leaderboard/player/:player_id`.
+ * `player` is omitted when no player_id is in the path.
  */
 export interface LeaderboardData {
-  top10: LeaderboardEntry[]
+  leaderboard: LeaderboardEntry[]
   player?: {
     rank: number
-    score: number
+    best_score: number
   }
 }
 

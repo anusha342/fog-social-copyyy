@@ -75,10 +75,11 @@ function Avatar({
 interface Props {
   tournamentId: string
   sessionCode: string
+  env: string
   session: Session | null
 }
 
-export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
+export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   const [phase, setPhase] = useState<"checking" | "unauthenticated" | "joining" | "error" | "leaderboard">("checking")
   const [errorCode, setErrorCode] = useState<JoinErrorCode | null>(null)
   const [playerId, setPlayerId] = useState<string | null>(null)
@@ -94,7 +95,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
     async function checkSession() {
       try {
         const res = await fetch(
-          `${SYNC}/api/v1/tournament/${tournamentId}/session/${sessionCode}`
+          `${SYNC}/api/v1/tournament/${tournamentId}/session/${sessionCode}?env=${env}`
         )
         if (cancelled) return
 
@@ -117,7 +118,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
 
     checkSession()
     return () => { cancelled = true }
-  }, [tournamentId, sessionCode, session])
+  }, [tournamentId, sessionCode, env, session])
 
   // ── Join ──────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -136,11 +137,9 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               session_code: sessionCode,
+              env,
               player: {
                 google_id: session!.user.google_id,
-                name: session!.user.name ?? null,
-                email: session!.user.email ?? null,
-                avatar_url: session!.user.image ?? null,
               },
             }),
           }
@@ -171,14 +170,14 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
 
     join()
     return () => { cancelled = true }
-  }, [phase, session, tournamentId, sessionCode, retryKey])
+  }, [phase, session, tournamentId, sessionCode, env, retryKey])
 
   // ── Leaderboard poll ──────────────────────────────────────────────────────
   const pollLeaderboard = useCallback(
     async (id: string) => {
       try {
         const res = await fetch(
-          `${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?player_id=${id}`
+          `${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${id}?env=${env}`
         )
         if (!res.ok) return
         const data: LeaderboardData = await res.json()
@@ -188,7 +187,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
         setIsLive(false)
       }
     },
-    [tournamentId]
+    [tournamentId, env]
   )
 
   useEffect(() => {
@@ -292,7 +291,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
   // ── Leaderboard ───────────────────────────────────────────────────────────
   const playerInTop10 =
     leaderboard?.player &&
-    leaderboard.top10.some((e) => e.rank === leaderboard.player!.rank)
+    leaderboard.leaderboard.some((e) => e.rank === leaderboard.player!.rank)
 
   return (
     <div className="min-h-svh bg-background">
@@ -338,7 +337,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
           <>
             {/* Top 10 */}
             <div className="space-y-2">
-              {leaderboard.top10.map((entry) => {
+              {leaderboard.leaderboard.map((entry) => {
                 const isMe =
                   leaderboard.player !== undefined &&
                   entry.rank === leaderboard.player.rank
@@ -373,7 +372,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
 
                     {/* Avatar */}
                     <div className="size-8 shrink-0 overflow-hidden rounded-full bg-muted">
-                      <Avatar src={entry.player.avatar_url} name={entry.player.name} />
+                      <Avatar src={entry.players[0]?.avatar_url ?? ""} name={entry.players[0]?.name ?? "?"} />
                     </div>
 
                     {/* Name */}
@@ -382,7 +381,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
                         isMe ? "text-primary" : "text-foreground"
                       }`}
                     >
-                      {entry.player.name}
+                      {entry.players[0]?.name ?? "Unknown"}
                       {isMe && (
                         <span className="ml-1.5 font-mono text-[10px] text-primary/60">
                           (you)
@@ -411,7 +410,7 @@ export function JoinFlow({ tournamentId, sessionCode, session }: Props) {
                   </div>
                   <p className="flex-1 text-sm font-semibold text-primary">You</p>
                   <p className="font-mono text-sm font-bold tabular-nums text-foreground">
-                    {leaderboard.player.score.toLocaleString()}
+                    {leaderboard.player.best_score.toLocaleString()}
                   </p>
                 </div>
               </div>
