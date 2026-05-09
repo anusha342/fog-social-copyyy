@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import Image from "next/image"
-import { Zap, QrCode, Gamepad2, Trophy, Star } from "lucide-react"
+import { QrCode, Gamepad2, Trophy, Star } from "lucide-react"
 import { authOptions } from "@/lib/auth"
-import { SignOutButton } from "@/components/SignOutButton"
+import { Navbar } from "@/components/Navbar"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 const SYNC_ENV = process.env.SYNC_ENV ?? "prod"
@@ -104,31 +104,7 @@ export default async function DashboardPage() {
 
       {/* ── Sticky nav ── */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-2xl items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-1.5">
-            <Zap size={11} className="fill-primary text-primary" aria-hidden />
-            <span className="text-sm font-black tracking-tight">
-              <span className="text-foreground">FOG</span>
-              <span className="text-primary"> SOCIAL</span>
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="size-7 overflow-hidden rounded-full bg-primary/20">
-                {image ? (
-                  <Image src={image} alt="" width={28} height={28} className="size-full object-cover" />
-                ) : (
-                  <span className="flex size-full items-center justify-center text-[11px] font-bold text-primary">
-                    {name?.charAt(0).toUpperCase()}
-                  </span>
-                )}
-              </div>
-              <span className="hidden text-sm font-medium text-foreground sm:block">{name}</span>
-            </div>
-            <SignOutButton />
-          </div>
-        </div>
+        <Navbar name={name} image={image} />
       </header>
 
       {/* ── Hero / welcome ── */}

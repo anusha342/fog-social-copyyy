@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Zap, Medal, Trophy, WifiOff, Gamepad2, Loader2 } from "lucide-react"
+import { Medal, Trophy, WifiOff, Gamepad2, Loader2 } from "lucide-react"
 import Image from "next/image"
 import type { LeaderboardData } from "@/types"
+import { Navbar } from "./Navbar"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -38,9 +39,11 @@ interface Props {
   googleId: string
   env: string
   pid?: string
+  name?: string | null
+  image?: string | null
 }
 
-export function TournamentView({ tournamentId, googleId, env, pid }: Props) {
+export function TournamentView({ tournamentId, googleId, env, pid, name, image }: Props) {
   const [tab, setTab] = useState<"leaderboard" | "plays">("leaderboard")
   const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null)
   const [isLive, setIsLive] = useState(false)
@@ -99,50 +102,37 @@ export function TournamentView({ tournamentId, googleId, env, pid }: Props) {
     <div className="min-h-svh bg-background">
 
       {/* ── Sticky header ── */}
-      <div className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur-sm">
-        <div className="mx-auto max-w-[400px] px-4 pt-3 pb-0">
+      <div className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+        <Navbar name={name} image={image} />
 
-          {/* Brand + live indicator */}
-          <div className="flex items-center justify-between pb-3">
-            <div className="flex items-center gap-1.5">
-              <Zap size={11} className="fill-primary text-primary" aria-hidden />
-              <span className="text-sm font-black tracking-tight">
-                <span className="text-foreground">FOG</span>
-                <span className="text-primary"> SOCIAL</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              {isLive ? (
-                <>
-                  <span className="size-1.5 animate-pulse rounded-full bg-primary" />
-                  <span className="font-mono text-[10px] tracking-wider text-primary uppercase">Live</span>
-                </>
-              ) : (
-                <>
-                  <WifiOff size={11} className="text-muted-foreground" aria-hidden />
-                  <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Connecting</span>
-                </>
-              )}
-            </div>
+        {/* Tab bar */}
+        <div className="mx-auto flex max-w-[400px] items-center px-4">
+          {(["leaderboard", "plays"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={`flex-1 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${
+                tab === t
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t === "leaderboard" ? "Leaderboard" : "My Plays"}
+            </button>
+          ))}
+          <div className="flex items-center gap-1.5 pb-2.5 pl-3 shrink-0">
+            {isLive ? (
+              <>
+                <span className="size-1.5 animate-pulse rounded-full bg-primary" />
+                <span className="font-mono text-[9px] tracking-wider text-primary uppercase">Live</span>
+              </>
+            ) : (
+              <>
+                <WifiOff size={10} className="text-muted-foreground" aria-hidden />
+                <span className="font-mono text-[9px] tracking-wider text-muted-foreground uppercase">—</span>
+              </>
+            )}
           </div>
-
-          {/* Tab bar */}
-          <div className="flex">
-            {(["leaderboard", "plays"] as const).map((t) => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                className={`flex-1 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${
-                  tab === t
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t === "leaderboard" ? "Leaderboard" : "My Plays"}
-              </button>
-            ))}
-          </div>
-
         </div>
       </div>
 

@@ -26,6 +26,8 @@ export default async function TournamentPage({
         googleId={session.user.google_id}
         env={env}
         pid={pid}
+        name={session.user.name}
+        image={session.user.image}
       />
     </main>
   )
