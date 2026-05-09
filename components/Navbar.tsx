@@ -11,7 +11,7 @@ interface Props {
 
 export function Navbar({ name, image }: Props) {
   return (
-    <div className="flex items-center justify-between px-4 py-3">
+    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
       <div className="flex items-center gap-1.5">
         <Zap size={11} className="fill-primary text-primary" aria-hidden />
         <span className="text-sm font-black tracking-tight">

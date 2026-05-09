@@ -106,7 +106,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
         <Navbar name={name} image={image} />
 
         {/* Tab bar */}
-        <div className="mx-auto flex max-w-[400px] items-center px-4">
+        <div className="mx-auto flex max-w-[400px] md:max-w-2xl items-center px-4">
           {(["leaderboard", "plays"] as const).map((t) => (
             <button
               key={t}
@@ -137,7 +137,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
       </div>
 
       {/* ── Content ── */}
-      <div className="mx-auto w-full max-w-[400px] px-4 pt-4 pb-16">
+      <div className="mx-auto w-full max-w-[400px] md:max-w-2xl px-4 pt-4 pb-16">
 
         {tab === "leaderboard" ? (
           // ── Leaderboard tab ──────────────────────────────────────────────

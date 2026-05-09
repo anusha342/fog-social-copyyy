@@ -39,9 +39,10 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
+
       {/* ── Hero ── */}
       <section className="relative flex min-h-svh flex-col items-center justify-center px-6 py-20">
-        {/* Dot grid — uses --primary so it adapts to both modes */}
+        {/* Grid background */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -57,42 +58,48 @@ export default async function Home() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 90% 55% at 50% -5%, color-mix(in oklch, var(--primary) 18%, transparent) 0%, transparent 65%)",
+              "radial-gradient(ellipse 80% 50% at 50% -5%, color-mix(in oklch, var(--primary) 20%, transparent) 0%, transparent 65%)",
           }}
         />
 
         {/* Content */}
-        <div className="relative z-10 flex w-full max-w-[320px] flex-col items-center text-center">
+        <div className="relative z-10 flex w-full max-w-3xl flex-col items-center text-center">
           {/* Brand pill */}
           <div className="mb-9 inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/[0.07] px-3 py-1.5 font-mono text-[10px] tracking-[0.22em] text-primary/75 uppercase">
             <Zap size={9} className="fill-primary/75" aria-hidden />
             FOG Technologies
           </div>
 
-          {/* Wordmark */}
+          {/* Wordmark — scales with viewport */}
           <h1 className="font-black leading-none tracking-tighter">
-            <span className="block text-[76px] text-foreground" style={{ lineHeight: 0.88 }}>
+            <span
+              className="block text-foreground"
+              style={{ fontSize: "clamp(72px, 11vw, 140px)", lineHeight: 0.88 }}
+            >
               FOG
             </span>
-            <span className="block text-[76px] text-primary" style={{ lineHeight: 0.88 }}>
+            <span
+              className="block text-primary"
+              style={{ fontSize: "clamp(72px, 11vw, 140px)", lineHeight: 0.88 }}
+            >
               SOCIAL
             </span>
           </h1>
 
           {/* Tagline */}
-          <p className="mt-7 font-mono text-[11px] tracking-[0.28em] text-foreground/35 uppercase">
+          <p className="mt-8 font-mono text-[11px] tracking-[0.28em] text-foreground/35 uppercase">
             Play · Track · Compete
           </p>
 
           {/* Description */}
-          <p className="mt-5 max-w-[260px] text-[15px] leading-relaxed text-muted-foreground">
+          <p className="mt-5 max-w-sm text-base leading-relaxed text-muted-foreground md:max-w-md md:text-[15px]">
             Your arcade identity. Every game on a FOG machine tracked, ranked, and remembered.
           </p>
 
           {/* Google CTA */}
           <Link
             href="/api/auth/signin"
-            className="mt-10 flex w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-all duration-100 hover:opacity-90 active:scale-[0.98]"
+            className="mt-10 flex w-full max-w-xs items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-all duration-100 hover:opacity-90 active:scale-[0.98]"
           >
             <GoogleIcon />
             Continue with Google
@@ -122,12 +129,12 @@ export default async function Home() {
       </section>
 
       {/* ── Features ── */}
-      <section className="mx-auto w-full max-w-[320px] px-6 pb-20">
-        <div className="space-y-3">
+      <section className="mx-auto w-full max-w-4xl px-6 pb-20">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {features.map(({ Icon, title, description }) => (
             <div
               key={title}
-              className="relative overflow-hidden rounded-2xl border border-border bg-card p-5"
+              className="relative overflow-hidden rounded-2xl border border-border bg-card p-6"
             >
               {/* shimmer top edge */}
               <div
@@ -144,7 +151,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <h2 className="text-sm font-bold text-foreground">{title}</h2>
-                  <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">{description}</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{description}</p>
                 </div>
               </div>
             </div>
@@ -158,6 +165,7 @@ export default async function Home() {
           FOG Technologies © {new Date().getFullYear()}
         </p>
       </footer>
+
     </main>
   )
 }

@@ -127,7 +127,7 @@ export default async function DashboardPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center text-center">
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
           <div className="relative mb-6">
             <div className="size-20 overflow-hidden rounded-full border-2 border-primary/40 bg-primary/10">
               {image ? (
@@ -150,19 +150,19 @@ export default async function DashboardPage() {
       </section>
 
       {/* ── Stats ── */}
-      <section className="mx-auto max-w-2xl px-6 pb-8">
+      <section className="mx-auto max-w-4xl px-6 pb-8">
         <p className="mb-3 font-mono text-[10px] tracking-[0.2em] text-foreground/35 uppercase">
           Your Stats
         </p>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3 md:gap-4">
           {statCards.map(({ label, value, Icon }) => (
             <div
               key={label}
-              className="relative flex flex-col items-center overflow-hidden rounded-xl border border-border bg-card p-4 text-center"
+              className="relative flex flex-col items-center overflow-hidden rounded-xl border border-border bg-card p-4 text-center md:p-6"
             >
               <ShimmerEdge />
               <Icon size={14} className="mb-2 text-primary/60" aria-hidden />
-              <p className="font-mono text-2xl font-bold text-foreground">{value}</p>
+              <p className="font-mono text-2xl font-bold text-foreground md:text-3xl">{value}</p>
               <p className="mt-1 font-mono text-[9px] tracking-widest text-muted-foreground uppercase">
                 {label}
               </p>
@@ -172,7 +172,7 @@ export default async function DashboardPage() {
       </section>
 
       {/* ── Recent games ── */}
-      <section className="mx-auto max-w-2xl px-6 pb-20">
+      <section className="mx-auto max-w-4xl px-6 pb-20">
         <p className="mb-3 font-mono text-[10px] tracking-[0.2em] text-foreground/35 uppercase">
           Recent Games
         </p>
