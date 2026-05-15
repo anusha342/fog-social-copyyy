@@ -4,9 +4,9 @@ import Image from "next/image"
 import { QrCode, Gamepad2, Trophy, Star } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
+import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
-const SYNC_ENV = process.env.SYNC_ENV ?? "prod"
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ interface PlayerGameplay {
 async function fetchStats(googleId: string): Promise<PlayerStats | null> {
   try {
     const res = await fetch(
-      `${SYNC}/api/v1/player/${googleId}/stats?env=${SYNC_ENV}`,
+      getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/stats`, SYNC_ENV),
       { cache: "no-store" }
     )
     if (!res.ok) return null
@@ -41,7 +41,7 @@ async function fetchStats(googleId: string): Promise<PlayerStats | null> {
 async function fetchGameplays(googleId: string): Promise<PlayerGameplay[]> {
   try {
     const res = await fetch(
-      `${SYNC}/api/v1/player/${googleId}/gameplays?env=${SYNC_ENV}&limit=10`,
+      getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?limit=10`, SYNC_ENV),
       { cache: "no-store" }
     )
     if (!res.ok) return []

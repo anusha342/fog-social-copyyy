@@ -5,6 +5,7 @@ import { Medal, Trophy, WifiOff, Gamepad2, Loader2 } from "lucide-react"
 import Image from "next/image"
 import type { LeaderboardData } from "@/types"
 import { Navbar } from "./Navbar"
+import { getUrlForEnv } from "@/lib/sync-env"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -54,8 +55,8 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
   const pollLeaderboard = useCallback(async () => {
     try {
       const url = pid
-        ? `${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${pid}?env=${env}`
-        : `${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=10&env=${env}`
+        ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${pid}`, env)
+        : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=10`, env)
       const res = await fetch(url)
       if (!res.ok) return
       const data: LeaderboardData = await res.json()
@@ -79,7 +80,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
     async function fetchPlays() {
       try {
         const res = await fetch(
-          `${SYNC}/api/v1/player/${googleId}/gameplays?env=${env}&tournament_id=${tournamentId}&limit=50`
+          getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?tournament_id=${tournamentId}&limit=50`, env)
         )
         if (!res.ok) { setPlays([]); return }
         const data = await res.json()

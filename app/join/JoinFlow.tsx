@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import type { Session } from "next-auth"
 import { AlertCircle, QrCode, Loader2 } from "lucide-react"
 import type { JoinErrorCode } from "@/types"
+import { getUrlForEnv } from "@/lib/sync-env"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -66,7 +67,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
     async function checkSession() {
       try {
         const res = await fetch(
-          `${SYNC}/api/v1/tournament/${tournamentId}/session/${sessionCode}?env=${env}`
+          getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/session/${sessionCode}`, env)
         )
         if (cancelled) return
 
@@ -108,7 +109,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               session_code: sessionCode,
-              env,
+              ...(env !== "prod" ? { env } : {}),
               player: {
                 google_id: session!.user.google_id,
               },
@@ -131,7 +132,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
         const body = await res.json()
         if (!cancelled) {
           router.replace(
-            `/tournament/${tournamentId}?env=${encodeURIComponent(env)}&pid=${encodeURIComponent(body.player._id)}`
+            getUrlForEnv(`/tournament/${tournamentId}?pid=${encodeURIComponent(body.player._id)}`, env)
           )
         }
       } catch {
@@ -163,7 +164,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
 
   // ── Unauthenticated ───────────────────────────────────────────────────────
   if (phase === "unauthenticated") {
-    const callbackUrl = `/join?t=${encodeURIComponent(tournamentId)}&s=${encodeURIComponent(sessionCode)}&env=${encodeURIComponent(env)}`
+    const callbackUrl = getUrlForEnv(`/join?t=${encodeURIComponent(tournamentId)}&s=${encodeURIComponent(sessionCode)}`, env)
     return (
       <div className="flex min-h-svh flex-col items-center justify-center px-6 bg-background">
         <div className="flex w-full max-w-[320px] flex-col items-center text-center">
