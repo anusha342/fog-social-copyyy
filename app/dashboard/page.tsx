@@ -1,7 +1,8 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import Image from "next/image"
-import { QrCode, Gamepad2, Trophy, Star } from "lucide-react"
+import Link from "next/link"
+import { QrCode, Gamepad2, Trophy, Star, ChevronRight } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
 import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
@@ -169,6 +170,26 @@ export default async function DashboardPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* ── Tournaments link ── */}
+      <section className="mx-auto max-w-4xl px-6 pb-6">
+        <Link
+          href="/tournaments"
+          className="relative flex items-center gap-4 overflow-hidden rounded-xl border border-border bg-card px-4 py-4 transition-colors hover:border-primary/30 hover:bg-primary/5"
+        >
+          <ShimmerEdge />
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <Trophy size={16} className="text-primary" aria-hidden />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-foreground">Tournaments</p>
+            <p className="mt-0.5 font-mono text-[10px] text-muted-foreground">
+              View active and past competitions
+            </p>
+          </div>
+          <ChevronRight size={14} className="shrink-0 text-muted-foreground" aria-hidden />
+        </Link>
       </section>
 
       {/* ── Recent games ── */}

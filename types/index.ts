@@ -65,6 +65,30 @@ export interface LeaderboardData {
   }
 }
 
+/** One tournament returned by `GET /api/v1/tournaments`. */
+export interface Tournament {
+  _id: string
+  /** Optional human-readable name. Falls back to date-based label when absent. */
+  name?: string
+  status: "active" | "past"
+  player_count: number
+  top_score?: number
+  top_player?: { name: string; avatar_url: string }
+  started_at: string
+  ended_at?: string | null
+}
+
+/** Response from `GET /api/v1/tournaments`. */
+export interface TournamentsResponse {
+  tournaments: Tournament[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    total_pages: number
+  }
+}
+
 // ── UI ─────────────────────────────────────────────────────────────────────────
 
 /**
