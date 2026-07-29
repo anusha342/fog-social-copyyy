@@ -159,8 +159,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-border py-7 text-center">
+      <footer className="border-t border-zinc-200 py-4 text-center bg-zinc-200">
         <p className="font-mono text-[10px] tracking-[0.2em] text-foreground/25 uppercase">
           FOG Technologies © {new Date().getFullYear()}
         </p>

@@ -136,7 +136,7 @@ export default async function DashboardPage() {
       Icon: Gamepad2,
       iconClass: "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-[0_0_15px_rgba(6,182,212,0.3)]",
       valueClass: "bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent",
-      cardBaseClass: "border-cyan-300 bg-cyan-50/70 shadow-[0_4px_15px_rgba(6,182,212,0.06)]",
+      cardBaseClass: "border-cyan-400/80 bg-cyan-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(6,182,212,0.1)] hover:border-cyan-500 hover:bg-cyan-100/60 hover:shadow-[0_8px_24px_rgba(6,182,212,0.2)] hover:-translate-y-0.5 transition-all duration-300",
       shimmerBg: "linear-gradient(90deg, transparent, color-mix(in oklch, #06b6d4 35%, transparent), transparent)",
     },
     {
@@ -145,7 +145,7 @@ export default async function DashboardPage() {
       Icon: Trophy,
       iconClass: "bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-[0_0_15px_rgba(245,158,11,0.3)]",
       valueClass: "bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent",
-      cardBaseClass: "border-amber-300 bg-amber-50/70 shadow-[0_4px_15px_rgba(245,158,11,0.06)]",
+      cardBaseClass: "border-amber-400/80 bg-amber-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(245,158,11,0.1)] hover:border-amber-500 hover:bg-amber-100/60 hover:shadow-[0_8px_24px_rgba(245,158,11,0.2)] hover:-translate-y-0.5 transition-all duration-300",
       shimmerBg: "linear-gradient(90deg, transparent, color-mix(in oklch, #f59e0b 35%, transparent), transparent)",
     },
     {
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
       Icon: Star,
       iconClass: "bg-gradient-to-br from-violet-400 to-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]",
       valueClass: "bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent",
-      cardBaseClass: "border-indigo-300 bg-indigo-50/70 shadow-[0_4px_15px_rgba(99,102,241,0.06)]",
+      cardBaseClass: "border-indigo-400/80 bg-indigo-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(99,102,241,0.1)] hover:border-indigo-500 hover:bg-indigo-100/60 hover:shadow-[0_8px_24px_rgba(99,102,241,0.2)] hover:-translate-y-0.5 transition-all duration-300",
       shimmerBg: "linear-gradient(90deg, transparent, color-mix(in oklch, #6366f1 35%, transparent), transparent)",
     },
   ]
@@ -191,7 +191,7 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-stretch">
 
           {/* 1. Player Pass Card */}
-          <div className="relative p-[1.5px] rounded-2xl overflow-hidden bg-no-repeat animate-shimmer-slide"
+          <div className="relative p-[1.5px] rounded-2xl overflow-hidden bg-no-repeat animate-shimmer-slide shadow-[0_2px_12px_rgba(162,196,183,0.12)] hover:shadow-[0_4px_20px_rgba(162,196,183,0.22)] hover:-translate-y-1 transition-all duration-300"
             style={{ background: "linear-gradient(90deg, transparent 0%, #ffffff 30%, #a7f3d0 50%, #ffffff 70%, transparent 100%)", backgroundColor: "#a2c4b7" }}>
             <div className="w-full h-full rounded-[14px] bg-[#e6efeb] p-4 sm:p-6 flex flex-col justify-center">
               {/* Profile Card Body */}
@@ -233,7 +233,7 @@ export default async function DashboardPage() {
           <div className="flex flex-col">
             <Link
               href="/tournaments"
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-pink-300 bg-pink-50/80 p-4 sm:p-6 transition-all duration-300 hover:border-pink-500/60 hover:shadow-[0_10px_30px_rgba(236,72,153,0.12)] hover:-translate-y-1 flex-1 min-h-[250px] sm:min-h-[300px]"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-pink-400/80 bg-pink-100/45 backdrop-blur-md p-4 sm:p-6 transition-all duration-300 hover:border-pink-500 hover:bg-pink-100/60 hover:shadow-[0_8px_24px_rgba(236,72,153,0.22)] hover:-translate-y-1 flex-1 min-h-[250px] sm:min-h-[300px]"
             >
               <ShimmerEdge onlyTop background="linear-gradient(90deg, transparent 0%, #ffffff 35%, #ec4899 50%, #ffffff 65%, transparent 100%)" />
               <div>
@@ -301,11 +301,8 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* ── ROW 3: Cabinet Session History Card (Full Width) ── */}
         <div className="flex flex-col">
-          <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#D9CFC7] bg-white p-4 sm:p-6 shadow-sm min-h-[220px]">
-            <ShimmerEdge onlyTop background="linear-gradient(90deg, transparent 0%, #6e635c 35%, #ffffff 50%, #6e635c 65%, transparent 100%)" />
-
+          <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#8a7f77] bg-white p-4 sm:p-6 shadow-[0_2px_12px_rgba(110,99,92,0.12)] min-h-[220px]">
             <div className="mb-4 sm:mb-6 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
               <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
                 Cabinet Session History
@@ -368,8 +365,7 @@ export default async function DashboardPage() {
 
       </main>
 
-      {/* ── Footer ── */}
-      <footer className="relative z-10 border-t border-zinc-200 py-8 pb-12 sm:pb-8 text-center bg-zinc-50/50">
+      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-center font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wide sm:tracking-widest text-center">
           <span>© {new Date().getFullYear()} FOG Technologies Pvt. Limited</span>
         </div>

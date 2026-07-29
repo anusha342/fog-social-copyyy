@@ -1,15 +1,13 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Trophy, Users, Calendar, ChevronRight } from "lucide-react"
+import { Trophy, Users, Calendar, ChevronRight, Clock, ChevronLeft } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
 import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
 import type { Tournament, TournamentsResponse } from "@/types"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
-
-// ── Fetchers ──────────────────────────────────────────────────────────────────
 
 async function fetchTournaments(): Promise<Tournament[]> {
   try {
@@ -25,26 +23,53 @@ async function fetchTournaments(): Promise<Tournament[]> {
   }
 }
 
-// ── Components ────────────────────────────────────────────────────────────────
-
-function ShimmerEdge() {
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 h-px"
-      style={{
-        background:
-          "linear-gradient(90deg, transparent, color-mix(in oklch, var(--primary) 35%, transparent), transparent)",
-      }}
-    />
-  )
-}
-
-function TournamentCard({ t, env }: { t: Tournament; env: string }) {
+function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?: number }) {
   const href =
     env === "prod" ? `/tournament/${t._id}` : `/tournament/${t._id}?env=${env}`
 
   const isActive = t.status === "active"
+
+  const activePalette = {
+    card: "border-orange-400/80 bg-orange-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(249,115,22,0.12)] hover:border-orange-500 hover:bg-orange-100/60 hover:shadow-[0_8px_24px_rgba(249,115,22,0.22)] pl-4.5 min-[390px]:pl-5 sm:pl-6",
+    icon: "bg-orange-100 text-orange-600 shadow-[0_2px_8px_rgba(249,115,22,0.15)]",
+    badge: "text-orange-700 bg-orange-100/50 border-orange-200/40 font-bold",
+    badgeIcon: "text-orange-500",
+  }
+
+  const COLOR_PALETTES = [
+    // Cyan / Blue
+    {
+      card: "border-cyan-400/80 bg-cyan-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(6,182,212,0.1)] hover:border-cyan-500 hover:bg-cyan-100/60 hover:shadow-[0_8px_24px_rgba(6,182,212,0.2)]",
+      icon: "bg-cyan-100 text-cyan-600 shadow-[0_2px_8px_rgba(6,182,212,0.15)]",
+      badge: "text-cyan-700 bg-cyan-100/50 border-cyan-200/40 font-bold",
+      badgeIcon: "text-cyan-500",
+    },
+    // Violet / Indigo
+    {
+      card: "border-indigo-400/80 bg-indigo-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(99,102,241,0.1)] hover:border-indigo-500 hover:bg-indigo-100/60 hover:shadow-[0_8px_24px_rgba(99,102,241,0.2)]",
+      icon: "bg-indigo-100 text-indigo-600 shadow-[0_2px_8px_rgba(99,102,241,0.15)]",
+      badge: "text-indigo-700 bg-indigo-100/50 border-indigo-200/40 font-bold",
+      badgeIcon: "text-indigo-500",
+    },
+    // Pink / Rose
+    {
+      card: "border-pink-400/80 bg-pink-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(244,63,94,0.1)] hover:border-pink-500 hover:bg-pink-100/60 hover:shadow-[0_8px_24px_rgba(244,63,94,0.2)]",
+      icon: "bg-pink-100 text-pink-600 shadow-[0_2px_8px_rgba(244,63,94,0.15)]",
+      badge: "text-pink-700 bg-pink-100/50 border-pink-200/40 font-bold",
+      badgeIcon: "text-pink-500",
+    },
+    // Emerald / Green
+    {
+      card: "border-emerald-400/80 bg-emerald-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(16,185,129,0.1)] hover:border-emerald-500 hover:bg-emerald-100/60 hover:shadow-[0_8px_24px_rgba(16,185,129,0.2)]",
+      icon: "bg-emerald-100 text-emerald-600 shadow-[0_2px_8px_rgba(16,185,129,0.15)]",
+      badge: "text-emerald-700 bg-emerald-100/50 border-emerald-200/40 font-bold",
+      badgeIcon: "text-emerald-500",
+    },
+  ]
+
+  const palette = isActive
+    ? activePalette
+    : COLOR_PALETTES[(index ?? 0) % COLOR_PALETTES.length]
 
   const label =
     t.name ??
@@ -63,62 +88,63 @@ function TournamentCard({ t, env }: { t: Tournament; env: string }) {
   return (
     <Link
       href={href}
-      className="relative flex items-center gap-4 overflow-hidden rounded-xl border border-border bg-card px-4 py-4 transition-colors hover:border-primary/30 hover:bg-primary/5 active:scale-[0.99]"
+      className={`group relative flex items-center justify-between rounded-xl border p-3 min-[390px]:p-3.5 sm:p-4 overflow-hidden transition-all duration-300 hover:shadow-sm hover:-translate-y-1 ${palette.card}`}
     >
-      <ShimmerEdge />
+      {/* Brand accent stripe for live item */}
+      {isActive && (
+        <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-orange-500 rounded-l-xl" />
+      )}
 
-      {/* Icon */}
-      <div
-        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
-          isActive ? "bg-primary/15" : "bg-muted"
-        }`}
-      >
-        <Trophy
-          size={18}
-          className={isActive ? "text-primary" : "text-muted-foreground"}
-          aria-hidden
-        />
-      </div>
+      <div className="flex items-center gap-2 min-[390px]:gap-3 sm:gap-4 min-w-0">
+        {/* Icon */}
+        <div
+          className={`flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105 ${palette.icon}`}
+        >
+          <Trophy size={16} className="sm:size-[18px]" />
+        </div>
 
-      {/* Info */}
-      <div className="min-w-0 flex-1">
-        <div className="mb-0.5 flex items-center gap-2">
-          <p className="truncate text-sm font-bold text-foreground">{label}</p>
-          {isActive && (
-            <span className="flex shrink-0 items-center gap-1">
-              <span className="size-1.5 animate-pulse rounded-full bg-primary" />
-              <span className="font-mono text-[9px] tracking-wider text-primary uppercase">
+        {/* Info */}
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            <span className="text-xs sm:text-sm md:text-base font-bold text-zinc-900 truncate">
+              {label}
+            </span>
+            {isActive && (
+              <span className="flex shrink-0 items-center gap-0.5 px-1 sm:px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">
+                <span className="size-1 animate-pulse rounded-full bg-orange-500" />
                 Live
               </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3 mt-1">
+            <span className={`flex items-center gap-0.5 sm:gap-1 font-mono text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded border ${palette.badge}`}>
+              <Users size={9} className={palette.badgeIcon} />
+              {t.player_count.toLocaleString()}
             </span>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 font-mono text-[10px] text-muted-foreground">
-            <Users size={9} aria-hidden />
-            {t.player_count.toLocaleString()}
-          </span>
-          <span className="flex items-center gap-1 font-mono text-[10px] text-muted-foreground">
-            <Calendar size={9} aria-hidden />
-            {dateStr}
-          </span>
+            <span className="flex items-center gap-0.5 sm:gap-1 font-mono text-[9px] sm:text-[10px] text-[#6e635c]">
+              <Calendar size={9} className="text-[#8a7f77]" />
+              {dateStr}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Top score + arrow */}
-      <div className="flex shrink-0 flex-col items-end gap-1">
+      <div className="flex shrink-0 items-center gap-1.5 sm:gap-3 ml-2">
         {t.top_score != null && (
-          <p className="font-mono text-sm font-bold tabular-nums text-foreground">
-            {t.top_score.toLocaleString()}
-          </p>
+          <div className="text-right">
+            <p className="font-mono text-[8px] sm:text-[9px] text-[#6e635c]/80 uppercase tracking-widest leading-none mb-0.5 hidden min-[390px]:block">Top Score</p>
+            <p className="font-mono text-xs sm:text-sm md:text-base font-bold tabular-nums text-zinc-900 leading-none">
+              {t.top_score.toLocaleString()}
+            </p>
+          </div>
         )}
-        <ChevronRight size={14} className="text-muted-foreground" aria-hidden />
+        <ChevronRight size={14} className="text-[#8a7f77] group-hover:translate-x-0.5 transition-transform" />
       </div>
     </Link>
   )
 }
-
-// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function TournamentsPage() {
   const session = await getServerSession(authOptions)
@@ -134,72 +160,75 @@ export default async function TournamentsPage() {
       : "Browse active and past competitions"
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-
+    <div className="min-h-screen bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
       {/* ── Sticky nav ── */}
-      <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-xl shadow-sm">
         <Navbar name={session.user.name} image={session.user.image} />
       </header>
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden px-6 py-12">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 90% 55% at 50% -5%, color-mix(in oklch, var(--primary) 18%, transparent) 0%, transparent 65%)",
-          }}
-        />
+      {/* Page-wide subtle grid backdrop */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+        }}
+      />
 
-        <div className="relative z-10 mx-auto max-w-4xl">
+      {/* Hero radial backlight glow - orange branded warm glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] rounded-full bg-gradient-to-b from-orange-200/20 via-zinc-300/30 to-transparent blur-[120px]"
+      />
+
+      {/* ── Hero Title Section ── */}
+      <section className="relative z-10 mx-auto max-w-4xl px-4 pt-8 pb-4 sm:px-6 sm:pt-12 sm:pb-6">
+        <div>
           <Link
             href="/dashboard"
-            className="mb-6 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-muted-foreground uppercase transition-colors hover:text-foreground"
+            className="group inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg border border-orange-300 bg-orange-50/60 backdrop-blur-sm hover:bg-orange-100/80 hover:border-orange-400 font-mono text-[9px] sm:text-xs font-bold uppercase tracking-wider text-orange-700 hover:text-orange-800 shadow-sm active:scale-[0.98] transition-all w-fit"
           >
-            ← Dashboard
+            <ChevronLeft size={12} className="text-orange-500 group-hover:-translate-x-0.5 transition-transform" />
+            Dashboard
           </Link>
-          <h1 className="text-3xl font-black tracking-tight text-foreground">
+
+          <h1 className="text-xl min-[390px]:text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 uppercase font-sans mt-5 leading-none text-center">
             Tournaments
           </h1>
-          <p className="mt-1.5 font-mono text-xs text-muted-foreground">
-            {summary}
-          </p>
         </div>
       </section>
 
-      {/* ── List ── */}
-      <div className="mx-auto max-w-4xl space-y-8 px-6 pb-20">
-
+      {/* ── main container ── */}
+      <main className="relative z-10 mx-auto max-w-4xl px-4 pb-20 sm:px-6 space-y-6 sm:space-y-8">
         {tournaments.length === 0 ? (
-          <div className="relative flex flex-col items-center overflow-hidden rounded-2xl border border-border bg-card px-6 py-16 text-center">
-            <ShimmerEdge />
-            <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-primary/10">
-              <Trophy size={26} className="text-primary" aria-hidden />
+          <div className="relative flex flex-col items-center justify-center text-center py-10 border border-dashed border-[#8a7f77]/40 rounded-xl bg-[#D9CFC7]/30 min-h-[140px] max-w-md mx-auto">
+            <div className="p-3 rounded-2xl bg-white/60 mb-3 inline-flex border border-[#D9CFC7]/30 shadow-sm">
+              <Trophy size={24} className="text-orange-600" />
             </div>
-            <p className="text-sm font-bold text-foreground">No tournaments yet</p>
-            <p className="mt-1.5 max-w-[220px] text-xs leading-relaxed text-muted-foreground">
-              Tournaments will appear here once they&apos;re created. Scan a QR
-              code at any FOG machine to join one.
+            <p className="text-sm font-bold text-[#443b35]">No tournaments yet</p>
+            <p className="mt-1.5 max-w-[260px] text-xs text-[#6e635c] leading-relaxed px-4">
+              Tournaments will appear here once they&apos;re created. Scan a QR code at any FOG arcade machine to register scores.
             </p>
           </div>
         ) : (
-          <>
+          <div className="space-y-6 sm:space-y-8">
+
+            {/* Active Arenas Panel Wrap Container */}
             {active.length > 0 && (
-              <div>
-                <p className="mb-3 font-mono text-[10px] tracking-[0.2em] text-foreground/35 uppercase">
-                  Active
-                </p>
-                <div className="space-y-2">
+              <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#D9CFC7] bg-white p-4 sm:p-6 shadow-sm">
+                <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
+                  <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping"></span>
+                    Active Arenas
+                  </p>
+                  <span className="font-mono text-xs text-muted-foreground/50 uppercase tracking-widest">
+                    {active.length} Live
+                  </span>
+                </div>
+
+                <div className="space-y-3">
                   {active.map((t) => (
                     <TournamentCard key={t._id} t={t} env={SYNC_ENV} />
                   ))}
@@ -207,30 +236,36 @@ export default async function TournamentsPage() {
               </div>
             )}
 
+            {/* All Tournaments Panel Wrap Container */}
             {past.length > 0 && (
-              <div>
-                <p className="mb-3 font-mono text-[10px] tracking-[0.2em] text-foreground/35 uppercase">
-                  Past
-                </p>
-                <div className="space-y-2">
-                  {past.map((t) => (
-                    <TournamentCard key={t._id} t={t} env={SYNC_ENV} />
+              <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#D9CFC7] bg-white p-4 sm:p-6 shadow-sm">
+                <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
+                  <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
+                    <Clock size={14} className="text-[#8a7f77]" />
+                    All Tournaments
+                  </p>
+                  <span className="font-mono text-xs text-muted-foreground/50 uppercase tracking-widest">
+                    {past.length} Completed
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {past.map((t, idx) => (
+                    <TournamentCard key={t._id} t={t} env={SYNC_ENV} index={idx} />
                   ))}
                 </div>
               </div>
             )}
-          </>
+
+          </div>
         )}
+      </main>
 
-      </div>
-
-      {/* ── Footer ── */}
-      <footer className="border-t border-border py-7 text-center">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-foreground/25 uppercase">
-          FOG Technologies © {new Date().getFullYear()}
-        </p>
+      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-center font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wide sm:tracking-widest text-center">
+          <span>© {new Date().getFullYear()} FOG Technologies Pvt. Limited</span>
+        </div>
       </footer>
-
     </div>
   )
 }

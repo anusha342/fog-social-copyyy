@@ -112,11 +112,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`flex-1 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${
-                tab === t
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              className={`flex-1 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${tab === t
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
             >
               {t === "leaderboard" ? "Leaderboard" : "My Plays"}
             </button>
@@ -157,21 +156,19 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   return (
                     <div
                       key={entry.rank}
-                      className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${
-                        isMe ? "border-primary/30 bg-primary/10" : "border-border bg-card"
-                      }`}
+                      className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${isMe ? "border-primary/30 bg-primary/10" : "border-border bg-card"
+                        }`}
                     >
                       {/* Rank badge */}
                       <div
-                        className={`w-7 shrink-0 text-center font-mono text-sm font-bold ${
-                          entry.rank === 1
-                            ? "text-yellow-500"
-                            : entry.rank === 2
+                        className={`w-7 shrink-0 text-center font-mono text-sm font-bold ${entry.rank === 1
+                          ? "text-yellow-500"
+                          : entry.rank === 2
                             ? "text-slate-400"
                             : entry.rank === 3
-                            ? "text-amber-600"
-                            : "text-muted-foreground"
-                        }`}
+                              ? "text-amber-600"
+                              : "text-muted-foreground"
+                          }`}
                       >
                         {entry.rank <= 3 ? (
                           <Medal size={15} className="mx-auto" aria-hidden />
@@ -190,9 +187,8 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                       {/* Name */}
                       <p
-                        className={`flex-1 truncate text-sm font-semibold ${
-                          isMe ? "text-primary" : "text-foreground"
-                        }`}
+                        className={`flex-1 truncate text-sm font-semibold ${isMe ? "text-primary" : "text-foreground"
+                          }`}
                       >
                         {entry.players[0]?.name ?? "Unknown"}
                         {isMe && (
