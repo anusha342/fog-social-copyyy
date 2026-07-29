@@ -59,40 +59,56 @@
 
 /* ── Light mode ─────────────────────────────────────────────────────────── */
 :root {
-  --background: oklch(1 0 0);                     /* #ffffff */
-  --foreground: oklch(0.12 0.005 36.5);            /* near-black, faint warm */
+  --background: oklch(1 0 0);
+  /* #ffffff */
+  --foreground: oklch(0.12 0.005 36.5);
+  /* near-black, faint warm */
 
-  --card: oklch(0.99 0.002 36.5);                  /* barely warm white */
+  --card: oklch(0.99 0.002 36.5);
+  /* barely warm white */
   --card-foreground: oklch(0.12 0.005 36.5);
 
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.12 0.005 36.5);
 
-  --primary: oklch(0.679 0.213 36.5);              /* #ff5722 — exact */
-  --primary-foreground: oklch(0.1 0 0);            /* dark text — 6.6:1 contrast */
+  --primary: oklch(0.679 0.213 36.5);
+  /* #ff5722 — exact */
+  --primary-foreground: oklch(0.1 0 0);
+  /* dark text — 6.6:1 contrast */
 
-  --secondary: oklch(0.96 0.016 36.5);             /* pale orange tint */
+  --secondary: oklch(0.96 0.016 36.5);
+  /* pale orange tint */
   --secondary-foreground: oklch(0.2 0.005 36.5);
 
-  --muted: oklch(0.965 0.006 36.5);               /* near-neutral, warm hint */
-  --muted-foreground: oklch(0.5 0.012 36.5);       /* warm mid-gray */
+  --muted: oklch(0.965 0.006 36.5);
+  /* near-neutral, warm hint */
+  --muted-foreground: oklch(0.5 0.012 36.5);
+  /* warm mid-gray */
 
-  --accent: oklch(0.955 0.02 36.5);               /* light orange wash */
+  --accent: oklch(0.955 0.02 36.5);
+  /* light orange wash */
   --accent-foreground: oklch(0.2 0.005 36.5);
 
   /* keep standard red — hue 27 blends naturally into the orange palette */
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.908 0.012 36.5);              /* warm light gray */
+  --border: oklch(0.908 0.012 36.5);
+  /* warm light gray */
   --input: oklch(0.908 0.012 36.5);
-  --ring: oklch(0.679 0.213 36.5);                /* orange focus ring */
+  --ring: oklch(0.679 0.213 36.5);
+  /* orange focus ring */
 
   /* chart palette — warm analogous spread around the primary hue */
-  --chart-1: oklch(0.679 0.213 36.5);             /* #ff5722 */
-  --chart-2: oklch(0.72 0.18 52);                 /* amber */
-  --chart-3: oklch(0.55 0.21 22);                 /* red-orange */
-  --chart-4: oklch(0.82 0.14 68);                 /* yellow-orange */
-  --chart-5: oklch(0.42 0.17 26);                 /* burnt orange */
+  --chart-1: oklch(0.679 0.213 36.5);
+  /* #ff5722 */
+  --chart-2: oklch(0.72 0.18 52);
+  /* amber */
+  --chart-3: oklch(0.55 0.21 22);
+  /* red-orange */
+  --chart-4: oklch(0.82 0.14 68);
+  /* yellow-orange */
+  --chart-5: oklch(0.42 0.17 26);
+  /* burnt orange */
 
   --radius: 0.625rem;
 
@@ -108,10 +124,13 @@
 
 /* ── Dark mode ──────────────────────────────────────────────────────────── */
 .dark {
-  --background: oklch(0.13 0.006 36.5);           /* very dark warm black */
-  --foreground: oklch(0.97 0 0);                   /* near white */
+  --background: oklch(0.13 0.006 36.5);
+  /* very dark warm black */
+  --foreground: oklch(0.97 0 0);
+  /* near white */
 
-  --card: oklch(0.18 0.008 36.5);                 /* dark warm surface */
+  --card: oklch(0.18 0.008 36.5);
+  /* dark warm surface */
   --card-foreground: oklch(0.97 0 0);
 
   --popover: oklch(0.18 0.008 36.5);
@@ -119,13 +138,16 @@
 
   /* L raised to 0.73 so the orange pops on the dark background */
   --primary: oklch(0.73 0.19 36.5);
-  --primary-foreground: oklch(0.1 0 0);           /* dark text — 8:1 contrast */
+  --primary-foreground: oklch(0.1 0 0);
+  /* dark text — 8:1 contrast */
 
-  --secondary: oklch(0.24 0.013 36.5);            /* dark orange-tinted surface */
+  --secondary: oklch(0.24 0.013 36.5);
+  /* dark orange-tinted surface */
   --secondary-foreground: oklch(0.97 0 0);
 
   --muted: oklch(0.23 0.006 36.5);
-  --muted-foreground: oklch(0.63 0.01 36.5);      /* warm light gray */
+  --muted-foreground: oklch(0.63 0.01 36.5);
+  /* warm light gray */
 
   --accent: oklch(0.25 0.016 36.5);
   --accent-foreground: oklch(0.97 0 0);
@@ -156,10 +178,85 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes shimmer-slide {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer-slide {
+  background-size: 200% 100%;
+  animation: shimmer-slide 3.5s linear infinite;
+}
+
+/* Global scrollbar hiding */
+html, body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Premium 3D Liquid Glass Classes */
+.glass-panel-3d {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(40px) saturate(220%);
+  -webkit-backdrop-filter: blur(40px) saturate(220%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+  border-right-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 30px 60px -15px rgba(50, 40, 30, 0.16),
+    0 15px 30px -10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+}
+
+.glass-pill-3d {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+  border-right-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05),
+    0 10px 20px -5px rgba(0, 0, 0, 0.06),
+    0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
