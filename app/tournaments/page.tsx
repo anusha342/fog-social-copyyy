@@ -80,11 +80,23 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
       year: "numeric",
     })
 
-  const dateStr = new Date(t.started_at).toLocaleDateString(undefined, {
+  const startDateStr = new Date(t.started_at).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
     year: "numeric",
   })
+
+  const endDateStr = t.ended_at
+    ? new Date(t.ended_at).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null
+
+  const dateRangeStr = endDateStr
+    ? `${startDateStr} — ${endDateStr}`
+    : `${startDateStr} — Active`
 
   return (
     <Link
@@ -125,7 +137,7 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
             </span>
             <span className="flex items-center gap-0.5 sm:gap-1 font-mono text-[9px] sm:text-[10px] text-[#6e635c]">
               <Calendar size={9} className="text-[#8a7f77]" />
-              {dateStr}
+              {dateRangeStr}
             </span>
           </div>
         </div>
