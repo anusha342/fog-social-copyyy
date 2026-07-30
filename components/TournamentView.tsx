@@ -139,7 +139,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
     leaderboard.leaderboard.some((e) => e.rank === leaderboard.player!.rank)
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
+    <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
 
       {/* Page-wide subtle grid backdrop */}
       <div
@@ -159,12 +159,12 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
       />
 
       {/* ── Sticky header ── */}
-      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-xl shadow-sm transition-all">
+      <header className="sticky top-0 z-50 border-b border-zinc-200/40 bg-white/80 backdrop-blur-xl shadow-sm transition-all">
         <Navbar name={name} image={image} />
       </header>
 
       {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
-      <div className="sticky top-[56px] z-30 bg-zinc-100/95 backdrop-blur-md py-3 mb-2">
+      <div className="sticky top-[56px] z-30 bg-transparent py-3 mb-2">
         <div className="mx-auto w-full max-w-7xl px-4 flex justify-start">
           <BackButton />
         </div>

@@ -88,10 +88,10 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
 
   const endDateStr = t.ended_at
     ? new Date(t.ended_at).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
     : null
 
   const dateRangeStr = endDateStr
@@ -173,9 +173,9 @@ export default async function TournamentsPage() {
       : "Browse active and past competitions"
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
+    <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
       {/* ── Sticky nav ── */}
-      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-xl shadow-sm">
+      <header className="sticky top-0 z-50 border-b border-zinc-200/40 bg-white/80 backdrop-blur-xl shadow-sm">
         <Navbar name={session.user.name} image={session.user.image} />
       </header>
 
@@ -197,7 +197,7 @@ export default async function TournamentsPage() {
       />
 
       {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
-      <div className="sticky top-[56px] z-30 bg-zinc-100/95 backdrop-blur-md py-3 mb-2">
+      <div className="sticky top-[56px] z-30 bg-transparent py-3 mb-2">
         <div className="mx-auto w-full max-w-7xl px-4 flex justify-start">
           <BackButton />
         </div>

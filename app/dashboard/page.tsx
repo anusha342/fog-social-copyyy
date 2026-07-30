@@ -160,7 +160,7 @@ export default async function DashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
+    <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
 
       {/* Page-wide subtle grid backdrop */}
       <div
@@ -180,7 +180,7 @@ export default async function DashboardPage() {
       />
 
       {/* ── Sticky nav ── */}
-      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-xl shadow-sm transition-all">
+      <header className="sticky top-0 z-50 border-b border-zinc-200/40 bg-white/80 backdrop-blur-xl shadow-sm transition-all">
         <Navbar name={name} image={image} />
       </header>
 
