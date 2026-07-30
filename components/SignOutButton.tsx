@@ -1,6 +1,6 @@
 "use client"
 
-import { signOut } from "next-auth/react"
+import { signIn, signOut } from "next-auth/react"
 import { LogOut } from "lucide-react"
 
 export function SignOutButton() {
@@ -11,6 +11,17 @@ export function SignOutButton() {
     >
       <LogOut size={11} className="text-red-500" />
       Exit
+    </button>
+  )
+}
+
+export function GoogleSignInButton({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <button
+      onClick={() => signIn("google")}
+      className={className}
+    >
+      {children}
     </button>
   )
 }

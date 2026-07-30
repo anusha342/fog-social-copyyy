@@ -15,27 +15,49 @@ export function Navbar({ name, image }: Props) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Close dropdown on click outside
+  // Close dropdown on click/touch outside or scroll
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false)
+    if (!dropdownOpen) return
+
+    function handleEvent(event: Event) {
+      // Only ignore if clicking/touching inside the dropdown container itself
+      if (
+        (event.type === "mousedown" || event.type === "touchstart") &&
+        dropdownRef.current &&
+        dropdownRef.current.contains(event.target as Node)
+      ) {
+        return
       }
+      setDropdownOpen(false)
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+
+    document.addEventListener("mousedown", handleEvent)
+    document.addEventListener("touchstart", handleEvent)
+    window.addEventListener("scroll", handleEvent, { passive: true })
+
+    return () => {
+      document.removeEventListener("mousedown", handleEvent)
+      document.removeEventListener("touchstart", handleEvent)
+      window.removeEventListener("scroll", handleEvent)
+    }
+  }, [dropdownOpen])
 
   return (
     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 select-none">
       {/* Clickable FOG SOCIAL Logo Link */}
       <Link href="/dashboard" className="group flex items-center gap-2 cursor-pointer select-none">
-        <div className="flex size-6 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/20">
-          <Zap size={13} className="fill-primary text-primary group-hover:scale-110 transition-transform" aria-hidden />
+        <div className="relative size-6 shrink-0 overflow-hidden flex items-center justify-center">
+          <Image 
+            src="/company_logo.png" 
+            alt="FOG Technologies" 
+            width={24} 
+            height={24} 
+            className="size-full object-contain group-hover:scale-110 transition-transform duration-300"
+          />
         </div>
         <span className="text-sm font-black tracking-tight uppercase">
-          <span className="text-foreground transition-colors group-hover:text-primary">FOG</span>
-          <span className="text-primary transition-colors group-hover:text-foreground"> SOCIAL</span>
+          <span className="text-foreground">FOG</span>
+          <span className="text-primary"> SOCIAL</span>
         </span>
       </Link>
 
@@ -277,35 +299,6 @@ export function TextType({
 }
 
 export function InteractiveLogo() {
-  const [coords, setCoords] = useState({ x: 0, y: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-  const logoRef = useRef<HTMLHeadingElement>(null)
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLHeadingElement>) => {
-    if (!logoRef.current) return
-    const rect = logoRef.current.getBoundingClientRect()
-    
-    // Calculate cursor position relative to logo center (range: -0.5 to 0.5)
-    const x = (e.clientX - rect.left) / rect.width - 0.5
-    const y = (e.clientY - rect.top) / rect.height - 0.5
-    
-    // Cap tilt angles (max 28 degrees rotation)
-    setCoords({ x: x * 28, y: -y * 28 })
-  }
-
-  const handleMouseEnter = () => {
-    setIsHovered(true)
-  }
-
-  const handleMouseLeave = () => {
-    setIsHovered(false)
-    setCoords({ x: 0, y: 0 })
-  }
-
-  const transformStyle = isHovered
-    ? `perspective(1000px) rotateX(${coords.y}deg) rotateY(${coords.x}deg) scale3d(1.04, 1.04, 1.04)`
-    : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
-
   return (
     <>
       <style>{`
@@ -323,16 +316,7 @@ export function InteractiveLogo() {
         }
       `}</style>
       <h1 
-        ref={logoRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        className="font-black leading-none tracking-tighter select-none font-sans uppercase logo-float cursor-pointer relative z-20 text-center flex flex-col items-center justify-center"
-        style={{
-          transform: transformStyle,
-          transition: isHovered ? 'transform 0.08s ease-out' : 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
-          transformStyle: 'preserve-3d',
-        }}
+        className="font-black leading-none tracking-tighter select-none font-sans uppercase logo-float cursor-default relative z-20 text-center flex flex-col items-center justify-center"
       >
         <TextType 
           text={"FOG\nSOCIAL"}
@@ -341,7 +325,7 @@ export function InteractiveLogo() {
           deletingSpeed={80}
           pauseDuration={4000}
           showCursor={false}
-          isHovered={isHovered}
+          isHovered={false}
         />
       </h1>
     </>

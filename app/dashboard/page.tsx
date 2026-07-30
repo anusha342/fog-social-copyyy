@@ -191,14 +191,14 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-stretch">
 
           {/* 1. Player Pass Card */}
-          <div className="relative p-[1.5px] rounded-2xl overflow-hidden bg-no-repeat animate-shimmer-slide shadow-[0_2px_12px_rgba(162,196,183,0.12)] hover:shadow-[0_4px_20px_rgba(162,196,183,0.22)] hover:-translate-y-1 transition-all duration-300"
+          <div className="relative p-[1.5px] rounded-2xl overflow-hidden bg-no-repeat animate-shimmer-slide shadow-[0_2px_12px_rgba(162,196,183,0.12)] hover:shadow-[0_4px_20px_rgba(162,196,183,0.22)] hover:-translate-y-1 transition-all duration-300 flex flex-col"
             style={{ background: "linear-gradient(90deg, transparent 0%, #ffffff 30%, #a7f3d0 50%, #ffffff 70%, transparent 100%)", backgroundColor: "#a2c4b7" }}>
-            <div className="w-full h-full rounded-[14px] bg-[#e6efeb] p-4 sm:p-6 flex flex-col justify-center">
-              {/* Profile Card Body */}
-              <div className="py-4 sm:py-8 text-center flex flex-col items-center justify-center">
+            <div className="w-full flex-1 rounded-[14px] bg-[#e6efeb] p-4 sm:p-6 flex flex-col justify-between">
 
-                {/* Avatar */}
-                <div className="relative mb-4 sm:mb-5 cursor-pointer">
+              {/* Profile layout: Left Profile, Right Msg */}
+              <div className="flex items-center justify-start gap-4 sm:gap-6 pt-2 pb-4 border-b border-[#BED4CB]/40 w-full">
+                {/* Left: Avatar */}
+                <div className="relative cursor-pointer shrink-0">
                   <div className="size-16 sm:size-20 overflow-hidden rounded-full border-2 border-[#BED4CB]/50 bg-white p-1">
                     <div className="size-full overflow-hidden rounded-full relative bg-zinc-100">
                       {image ? (
@@ -218,14 +218,48 @@ export default async function DashboardPage() {
                   </div>
                 </div>
 
-                <p className="font-sans text-lg sm:text-xl md:text-2xl tracking-wide sm:tracking-[0.25em] text-[#5e8b76] font-black uppercase">
-                  Welcome back
-                </p>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight mt-1.5 text-[#335c49] uppercase font-sans">
-                  {firstName}
-                </h1>
-                <p className="text-xs sm:text-sm text-zinc-600/80 font-semibold mt-2 font-mono truncate w-full max-w-[240px] sm:max-w-none px-2">{email}</p>
+                {/* Right: Info */}
+                <div className="text-left min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#335c49] font-sans">
+                    Welcome Back {firstName}
+                  </h1>
+                  <p className="text-xs sm:text-sm text-zinc-600/80 font-semibold mt-1 font-mono truncate">{email}</p>
+                </div>
               </div>
+
+              {/* Bottom: Performance Telemetry (Horizontal layout) */}
+              <div className="mt-4 sm:mt-5">
+                <p className="font-sans text-xs sm:text-sm font-bold tracking-widest text-[#4d7361] uppercase text-center mb-3">
+                  Performance Telemetry
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {statCards.map(({ label, value, Icon, iconClass }, index) => {
+                    const cardColors = [
+                      { bg: "bg-cyan-100/60", border: "border-cyan-300/80", text: "text-cyan-800" },
+                      { bg: "bg-amber-100/60", border: "border-amber-300/80", text: "text-amber-800" },
+                      { bg: "bg-indigo-100/60", border: "border-indigo-300/80", text: "text-indigo-800" }
+                    ][index] || { bg: "bg-[#e6efeb]/60", border: "border-[#BED4CB]/50", text: "text-[#335c49]" };
+
+                    return (
+                      <div
+                        key={label}
+                        className={`flex flex-col items-center justify-center text-center rounded-xl border p-2 sm:p-3 transition-all duration-300 hover:scale-[1.03] ${cardColors.bg} ${cardColors.border}`}
+                      >
+                        <div className={`p-1.5 rounded-lg mb-1.5 ${iconClass}`}>
+                          <Icon size={12} className="sm:size-3.5" />
+                        </div>
+                        <p className={`text-base sm:text-lg md:text-xl font-black tracking-tight leading-none ${cardColors.text}`}>
+                          {value}
+                        </p>
+                        <p className="mt-1 font-mono text-[8px] sm:text-[9px] tracking-wide text-zinc-600 uppercase">
+                          {label}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -269,36 +303,7 @@ export default async function DashboardPage() {
 
         </div>
 
-        {/* ── ROW 2: Performance Telemetry (Horizontal Stats Grid Wrapped in One Frame) ── */}
-        <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-sm">
 
-          <div className="mb-4 sm:mb-6 flex items-center justify-between border-b border-zinc-100 pb-3">
-            <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
-              Performance Telemetry
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            {statCards.map(({ label, value, Icon, iconClass, valueClass, cardBaseClass, shimmerBg }) => (
-              <div
-                key={label}
-                className={`relative flex flex-col items-center justify-center text-center overflow-hidden rounded-2xl border p-4 sm:p-6 md:p-8 ${cardBaseClass}`}
-              >
-                <ShimmerEdge background={shimmerBg} />
-
-                <div className={`p-2.5 sm:p-3 rounded-xl mb-3 sm:mb-4 ${iconClass}`}>
-                  <Icon size={18} className="sm:size-5" />
-                </div>
-                <p className={`text-3xl sm:text-4xl font-black tracking-tight ${valueClass}`}>
-                  {value}
-                </p>
-                <p className="mt-1.5 sm:mt-2 font-mono text-[10px] sm:text-xs tracking-widest text-muted-foreground/60 uppercase">
-                  {label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
 
         <div className="flex flex-col">
           <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#8a7f77] bg-white p-4 sm:p-6 shadow-[0_2px_12px_rgba(110,99,92,0.12)] min-h-[220px]">

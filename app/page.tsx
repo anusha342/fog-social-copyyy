@@ -1,9 +1,11 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { Trophy, Gamepad2, UserCircle, Zap, QrCode } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { InteractiveLogo } from "../components/Navbar"
+import { GoogleSignInButton } from "../components/SignOutButton"
 
 
 function GoogleIcon() {
@@ -51,14 +53,20 @@ export default async function Home() {
 
 
       {/* ── Hero ── */}
-      <section className="relative flex flex-grow flex-col items-center justify-center px-6 py-20 z-10">
+      <section className="relative flex flex-grow flex-col items-center justify-start px-6 pt-10 sm:pt-16 pb-12 z-10">
 
         {/* Content */}
         <div className="relative z-10 flex w-full max-w-3xl flex-col items-center text-center">
-          {/* Brand pill */}
-          <div className="mb-9 inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-3.5 py-1.5 font-mono text-[9px] font-bold tracking-[0.25em] text-orange-700 uppercase shadow-sm">
-            <Zap size={9} className="fill-orange-500 text-orange-500" aria-hidden />
-            FOG Technologies
+
+          {/* Company Logo Image */}
+          <div className="mb-6 size-20 overflow-hidden flex items-center justify-center">
+            <Image 
+              src="/company_logo.png" 
+              alt="FOG Technologies" 
+              width={80} 
+              height={80} 
+              className="size-full object-contain"
+            />
           </div>
 
           {/* Wordmark — scales with viewport (Interactive 3D Loop-Reveal Component) */}
@@ -75,15 +83,14 @@ export default async function Home() {
           </p>
 
           {/* Google CTA */}
-          <Link
-            href="/api/auth/signin"
-            className="mt-10 flex w-full max-w-xs items-center justify-center gap-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-6 shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer font-sans text-sm tracking-wide"
+          <GoogleSignInButton
+            className="mt-10 flex w-full max-w-xs items-center justify-center gap-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-6 shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer font-sans text-sm tracking-wide border border-transparent"
           >
             <div className="flex size-5 shrink-0 items-center justify-center rounded bg-white shadow-sm mr-1">
               <GoogleIcon />
             </div>
             Continue with Google
-          </Link>
+          </GoogleSignInButton>
 
           {/* QR hint */}
           <div className="mt-5 flex items-center gap-1.5 font-mono text-[10px] text-zinc-400 font-medium">
