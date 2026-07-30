@@ -163,9 +163,11 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
         <Navbar name={name} image={image} />
       </header>
 
-      {/* ── Back Navigation Wrapper (Aligns with max-w-7xl navbar on desktop) ── */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-6 flex justify-start">
-        <BackButton />
+      {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
+      <div className="sticky top-[56px] z-30 bg-zinc-100/95 backdrop-blur-md py-3 mb-2">
+        <div className="mx-auto w-full max-w-7xl px-4 flex justify-start">
+          <BackButton />
+        </div>
       </div>
 
       {/* ── Hero Tournament Info Section ── */}

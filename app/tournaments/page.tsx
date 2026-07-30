@@ -196,9 +196,11 @@ export default async function TournamentsPage() {
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] rounded-full bg-gradient-to-b from-orange-200/20 via-zinc-300/30 to-transparent blur-[120px]"
       />
 
-      {/* ── Back Navigation Wrapper (Aligns with max-w-7xl navbar on desktop) ── */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-6 md:pt-8 flex justify-start">
-        <BackButton />
+      {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
+      <div className="sticky top-[56px] z-30 bg-zinc-100/95 backdrop-blur-md py-3 mb-2">
+        <div className="mx-auto w-full max-w-7xl px-4 flex justify-start">
+          <BackButton />
+        </div>
       </div>
 
       {/* ── Hero Title Section ── */}
