@@ -219,7 +219,8 @@ export default async function TournamentsPage() {
                     <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping"></span>
                     Active Arenas
                   </p>
-                  <span className="font-mono text-xs text-muted-foreground/50 uppercase tracking-widest">
+                  <span className="font-mono text-xs text-red-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"></span>
                     {active.length} Live
                   </span>
                 </div>

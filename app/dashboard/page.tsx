@@ -233,11 +233,10 @@ export default async function DashboardPage() {
           <div className="flex flex-col">
             <Link
               href="/tournaments"
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-pink-400/80 bg-pink-100/45 backdrop-blur-md p-4 sm:p-6 transition-all duration-300 hover:border-pink-500 hover:bg-pink-100/60 hover:shadow-[0_8px_24px_rgba(236,72,153,0.22)] hover:-translate-y-1 flex-1 min-h-[250px] sm:min-h-[300px]"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-pink-400/80 bg-pink-100/45 backdrop-blur-md p-4 sm:p-6 transition-all duration-300 hover:border-pink-500 hover:bg-pink-100/60 md:hover:shadow-[0_8px_24px_rgba(236,72,153,0.22)] md:hover:-translate-y-1 flex-1 min-h-[250px] sm:min-h-[300px]"
             >
-              <ShimmerEdge onlyTop background="linear-gradient(90deg, transparent 0%, #ffffff 35%, #ec4899 50%, #ffffff 65%, transparent 100%)" />
               <div>
-                <div className="flex items-center justify-end border-b border-zinc-100 pb-3 mb-3 sm:mb-4">
+                <div className="flex items-center justify-end pb-3 mb-3 sm:mb-4">
                   <span className="font-mono text-xs text-red-500 font-bold flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
                     ACTIVE
@@ -259,7 +258,7 @@ export default async function DashboardPage() {
                 </div>
               </div>
 
-              <div className="mt-4 sm:mt-6 border-t border-zinc-100 pt-3 sm:pt-4 flex items-center justify-end font-mono text-xs text-zinc-700 font-bold tracking-wider transition-colors duration-300 group-hover:text-pink-400">
+              <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 flex items-center justify-end font-mono text-xs text-zinc-700 font-bold tracking-wider transition-colors duration-300 group-hover:text-pink-400">
                 <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   ENTER ARENA <ChevronRight size={12} />
                 </span>
