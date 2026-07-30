@@ -1,9 +1,10 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Trophy, Users, Calendar, ChevronRight, Clock, ChevronLeft } from "lucide-react"
+import { Trophy, Users, Calendar, ChevronRight, Clock } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
+import { BackButton } from "@/components/BackButton"
 import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
 import type { Tournament, TournamentsResponse } from "@/types"
 
@@ -160,7 +161,7 @@ export default async function TournamentsPage() {
       : "Browse active and past competitions"
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
+    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
       {/* ── Sticky nav ── */}
       <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-xl shadow-sm">
         <Navbar name={session.user.name} image={session.user.image} />
@@ -183,25 +184,20 @@ export default async function TournamentsPage() {
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] rounded-full bg-gradient-to-b from-orange-200/20 via-zinc-300/30 to-transparent blur-[120px]"
       />
 
-      {/* ── Hero Title Section ── */}
-      <section className="relative z-10 mx-auto max-w-4xl px-4 pt-8 pb-4 sm:px-6 sm:pt-12 sm:pb-6">
-        <div>
-          <Link
-            href="/dashboard"
-            className="group inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg border border-orange-300 bg-orange-50/60 backdrop-blur-sm hover:bg-orange-100/80 hover:border-orange-400 font-mono text-[9px] sm:text-xs font-bold uppercase tracking-wider text-orange-700 hover:text-orange-800 shadow-sm active:scale-[0.98] transition-all w-fit"
-          >
-            <ChevronLeft size={12} className="text-orange-500 group-hover:-translate-x-0.5 transition-transform" />
-            Dashboard
-          </Link>
+      {/* ── Back Navigation Wrapper (Aligns with max-w-7xl navbar on desktop) ── */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-6 md:pt-8 flex justify-start">
+        <BackButton />
+      </div>
 
-          <h1 className="text-xl min-[390px]:text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 uppercase font-sans mt-5 leading-none text-center">
-            Tournaments
-          </h1>
-        </div>
+      {/* ── Hero Title Section ── */}
+      <section className="relative z-10 mx-auto max-w-4xl px-4 pt-2 pb-4 sm:px-6 sm:pt-4 sm:pb-6">
+        <h1 className="text-xl min-[390px]:text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 uppercase font-sans leading-none text-center">
+          Tournaments
+        </h1>
       </section>
 
       {/* ── main container ── */}
-      <main className="relative z-10 mx-auto max-w-4xl px-4 pb-20 sm:px-6 space-y-6 sm:space-y-8">
+      <main className="relative z-10 mx-auto max-w-4xl px-4 pb-20 sm:px-6 space-y-6 sm:space-y-8 flex-grow w-full">
         {tournaments.length === 0 ? (
           <div className="relative flex flex-col items-center justify-center text-center py-10 border border-dashed border-[#8a7f77]/40 rounded-xl bg-[#D9CFC7]/30 min-h-[140px] max-w-md mx-auto">
             <div className="p-3 rounded-2xl bg-white/60 mb-3 inline-flex border border-[#D9CFC7]/30 shadow-sm">

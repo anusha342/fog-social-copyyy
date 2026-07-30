@@ -160,7 +160,7 @@ export default async function DashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
+    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
 
       {/* Page-wide subtle grid backdrop */}
       <div
@@ -185,7 +185,7 @@ export default async function DashboardPage() {
       </header>
 
       {/* ── Main Dashboard grid container ── */}
-      <main className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16 space-y-6 sm:space-y-8">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16 space-y-6 sm:space-y-8 flex-grow w-full">
 
         {/* ── ROW 1: Profile Card & Tournaments Arena Card (Side-by-Side) ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-stretch">

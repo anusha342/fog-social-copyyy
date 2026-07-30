@@ -6,6 +6,7 @@ import Image from "next/image"
 import type { LeaderboardData } from "@/types"
 import { Navbar } from "./Navbar"
 import { getUrlForEnv } from "@/lib/sync-env"
+import { BackButton } from "./BackButton"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -100,10 +101,27 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
     leaderboard.leaderboard.some((e) => e.rank === leaderboard.player!.rank)
 
   return (
-    <div className="min-h-svh bg-background">
+    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 relative overflow-hidden select-none">
+
+      {/* Page-wide subtle grid backdrop */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+        }}
+      />
+
+      {/* Hero radial backlight glow - orange branded warm glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] rounded-full bg-gradient-to-b from-orange-200/20 via-zinc-300/30 to-transparent blur-[120px]"
+      />
 
       {/* ── Sticky header ── */}
-      <div className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-xl shadow-sm transition-all">
         <Navbar name={name} image={image} />
 
         {/* Tab bar */}
@@ -134,10 +152,15 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
             )}
           </div>
         </div>
+      </header>
+
+      {/* ── Back Navigation Wrapper (Aligns with max-w-7xl navbar on desktop) ── */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-6 flex justify-start">
+        <BackButton />
       </div>
 
       {/* ── Content ── */}
-      <div className="mx-auto w-full max-w-[400px] md:max-w-2xl px-4 pt-4 pb-16">
+      <main className="relative z-10 mx-auto w-full max-w-[400px] md:max-w-2xl px-4 pt-4 pb-16 flex-grow">
 
         {tab === "leaderboard" ? (
           // ── Leaderboard tab ──────────────────────────────────────────────
@@ -271,7 +294,15 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           )
         )}
 
-      </div>
+      </main>
+
+      {/* ── Footer ── */}
+      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-center font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wide sm:tracking-widest text-center">
+          <span>© {new Date().getFullYear()} FOG Technologies Pvt. Limited</span>
+        </div>
+      </footer>
+
     </div>
   )
 }
