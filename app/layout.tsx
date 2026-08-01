@@ -28,8 +28,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body 
-        className="min-h-full flex flex-col bg-cover bg-center bg-no-repeat bg-fixed relative overflow-x-hidden"
-        style={{ backgroundImage: "url('/fog-socila.png')" }}
+        className="min-h-full flex flex-col relative overflow-x-hidden"
       >
         {/* Glow backdrop colors */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
