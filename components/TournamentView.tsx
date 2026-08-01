@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Medal, Trophy, WifiOff, Gamepad2, Loader2, Calendar, ChevronRight, Crown } from "lucide-react"
+import { Gamepad2, Loader2, Calendar, Crown, Gift, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import type { LeaderboardData, Tournament } from "@/types"
 import { Navbar } from "./Navbar"
 import { getUrlForEnv } from "@/lib/sync-env"
@@ -48,10 +49,10 @@ interface Props {
 export function TournamentView({ tournamentId, googleId, env, pid, name, image }: Props) {
   const [tab, setTab] = useState<"leaderboard" | "plays">("leaderboard")
   const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null)
-  const [isLive, setIsLive] = useState(false)
   const [plays, setPlays] = useState<Gameplay[] | null>(null)
   const [playsLoaded, setPlaysLoaded] = useState(false)
   const [tournament, setTournament] = useState<Tournament | null>(null)
+
 
   const startDateStr = tournament?.started_at
     ? new Date(tournament.started_at).toLocaleDateString(undefined, {
@@ -60,16 +61,6 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
       year: "numeric",
     })
     : ""
-
-  const endDateStr = tournament?.ended_at
-    ? new Date(tournament.ended_at).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })
-    : tournament?.status === "active"
-      ? "Active"
-      : "—"
 
   // ── Fetch single tournament details ────────────────────────────────────────
   useEffect(() => {
@@ -100,9 +91,8 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
       if (!res.ok) return
       const data: LeaderboardData = await res.json()
       setLeaderboard(data)
-      setIsLive(true)
     } catch {
-      setIsLive(false)
+      // Ignore error
     }
   }, [tournamentId, pid, env])
 
@@ -134,9 +124,6 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
     fetchPlays()
   }, [tab, playsLoaded, googleId, env, tournamentId])
 
-  const playerInTop10 =
-    leaderboard?.player != null &&
-    leaderboard.leaderboard.some((e) => e.rank === leaderboard.player!.rank)
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
@@ -170,44 +157,147 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
         </div>
       </div>
 
-      {/* ── Hero Tournament Info Section ── */}
+      {/* ── Welcome Header Section ── */}
       <section className="relative z-10 mx-auto w-full max-w-4xl px-4 pt-4 pb-2">
-        <div className="rounded-2xl border border-zinc-300 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
-          <div className="flex items-center justify-between gap-4 mb-2 w-full">
-            <h1 className="text-lg min-[390px]:text-xl sm:text-2xl font-black tracking-tight text-zinc-900 uppercase font-sans leading-none">
+        {name ? (
+          <div>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-zinc-900 uppercase font-sans">
+              Welcome Back, {name.split(" ")[0]}!
+            </h1>
+            <p className="mt-1 text-xs sm:text-sm text-zinc-500 font-mono uppercase tracking-wider">
+              Tournament: <span className="font-bold text-zinc-800">{tournament?.name || `Tournament_${tournamentId.substring(0, 6)}`}</span>
+              {tournament?.status === "active" && (
+                <span className="ml-2 inline-flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-red-50 border border-red-200/50 text-red-600 font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">
+                  <span className="size-1 rounded-full bg-red-500 animate-pulse" />
+                  Active
+                </span>
+              )}
+            </p>
+          </div>
+        ) : (
+          <div>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-zinc-900 uppercase font-sans">
               {tournament?.name || `Tournament_${tournamentId.substring(0, 6)}`}
             </h1>
-            {tournament?.status === "active" ? (
-              <span className="flex shrink-0 items-center gap-1 px-1.5 py-0.5 rounded bg-red-50 border border-red-200/50 text-red-600 font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">
-                <span className="size-1 animate-pulse rounded-full bg-red-500" />
-                Live
-              </span>
-            ) : (
-              <span className="flex shrink-0 items-center gap-1 px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200/40 text-zinc-500 font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">
-                Completed
+            {tournament?.status === "active" && (
+              <span className="mt-1 inline-flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-red-50 border border-red-200/50 text-red-600 font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">
+                <span className="size-1 rounded-full bg-red-500 animate-pulse" />
+                Active
               </span>
             )}
           </div>
-
-          <div className="mt-4 flex flex-wrap items-center gap-y-2 gap-x-4 border-t border-zinc-200/60 pt-3 text-[10px] sm:text-xs font-mono text-zinc-500 uppercase">
-            {startDateStr && (
-              <span className="flex items-center gap-1">
-                Started: <span className="font-bold text-zinc-700">{startDateStr}</span>
-              </span>
-            )}
-            {tournament?.player_count !== undefined && (
-              <span className="flex items-center gap-1">
-                Players: <span className="font-bold text-zinc-700">{tournament.player_count}</span>
-              </span>
-            )}
-            {tournament?.top_score !== undefined && (
-              <span className="flex items-center gap-1">
-                Top Score: <span className="font-bold text-primary">{tournament.top_score.toLocaleString()}</span>
-              </span>
-            )}
-          </div>
-        </div>
+        )}
       </section>
+
+      {/* ── Available Rewards Section ── */}
+      {tournament?.rewards && (tournament.rewards.bannerUrl || tournament.rewards.top3Urls?.first || tournament.rewards.top3Urls?.second || tournament.rewards.top3Urls?.third) && tournament.rewards.showOnPlayerPage !== false && (
+        <section className="relative z-10 mx-auto w-full max-w-4xl px-4 py-2">
+          {/* ── Rewards Display Panel ── */}
+          <div className="rounded-2xl border border-zinc-300 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden relative">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
+              <div className="flex items-center gap-2">
+                <Gift className="text-primary size-5" />
+                <h2 className="text-sm min-[390px]:text-base font-black tracking-tight text-zinc-950 uppercase font-sans">
+                  Available Rewards
+                </h2>
+              </div>
+            </div>
+
+            {tournament.rewards.type === "banner" ? (
+              /* Banner Display State */
+              <div className="group relative w-full h-[180px] min-[390px]:h-[220px] rounded-xl overflow-hidden shadow-inner border border-zinc-100 bg-zinc-950">
+                <Image
+                  src={tournament.rewards.bannerUrl || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800"}
+                  alt="Tournament Rewards Banner"
+                  fill
+                  sizes="(max-w-4xl) 100vw, 800px"
+                  priority
+                  className="object-cover opacity-80 group-hover:scale-105 transition duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4">
+                  <span className="w-fit px-1.5 py-0.5 rounded bg-orange-500/90 text-white font-mono text-[8px] sm:text-[9px] font-black uppercase tracking-widest mb-1.5 shadow-sm">
+                    Grand Prize Reward
+                  </span>
+                  <h3 className="text-white text-xs min-[390px]:text-sm sm:text-base font-bold uppercase tracking-tight leading-normal drop-shadow-md">
+                    Claim your rewards by reaching the top ranks!
+                  </h3>
+                </div>
+              </div>
+            ) : (
+              /* Top 3 Podium Display State */
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-3 pt-1">
+                  {/* 2nd Place Prize */}
+                  {tournament.rewards.top3Urls?.second && (
+                    <div className="flex flex-col items-center border border-zinc-200/80 bg-zinc-50/50 rounded-xl p-3 shadow-sm hover:border-zinc-300 transition duration-300">
+                      <div className="relative w-full aspect-square max-h-[80px] rounded-lg overflow-hidden bg-white border border-zinc-150 mb-2.5">
+                        <Image
+                          src={tournament.rewards.top3Urls.second}
+                          alt="2nd Place Prize"
+                          fill
+                          sizes="150px"
+                          className="object-contain p-1"
+                        />
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 font-mono text-[8px] font-black uppercase tracking-wider mb-1">
+                        #2 Prize
+                      </span>
+                      <span className="text-[10px] font-black text-zinc-950 uppercase tracking-tight text-center truncate w-full">
+                        Runner Up
+                      </span>
+                    </div>
+                  )}
+
+                  {/* 1st Place Prize */}
+                  {tournament.rewards.top3Urls?.first && (
+                    <div className="flex flex-col items-center border-2 border-amber-300 bg-amber-50/20 rounded-xl p-3 shadow-[0_4px_12px_rgba(245,158,11,0.06)] hover:border-amber-400 transition duration-300 relative -translate-y-1">
+                      <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-amber-500 text-white font-mono text-[7px] min-[390px]:text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                        Champion
+                      </div>
+                      <div className="relative w-full aspect-square max-h-[90px] rounded-lg overflow-hidden bg-white border border-amber-100 mt-1 mb-2.5">
+                        <Image
+                          src={tournament.rewards.top3Urls.first}
+                          alt="1st Place Prize"
+                          fill
+                          sizes="150px"
+                          className="object-contain p-1"
+                        />
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-amber-150 text-amber-800 font-mono text-[8px] font-black uppercase tracking-wider mb-1">
+                        #1 Prize
+                      </span>
+                      <span className="text-[10px] font-black text-amber-950 uppercase tracking-tight text-center truncate w-full">
+                        Grand Champion
+                      </span>
+                    </div>
+                  )}
+
+                  {/* 3rd Place Prize */}
+                  {tournament.rewards.top3Urls?.third && (
+                    <div className="flex flex-col items-center border border-zinc-200/80 bg-zinc-50/50 rounded-xl p-3 shadow-sm hover:border-zinc-300 transition duration-300">
+                      <div className="relative w-full aspect-square max-h-[80px] rounded-lg overflow-hidden bg-white border border-zinc-150 mb-2.5">
+                        <Image
+                          src={tournament.rewards.top3Urls.third}
+                          alt="3rd Place Prize"
+                          fill
+                          sizes="150px"
+                          className="object-contain p-1"
+                        />
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 font-mono text-[8px] font-black uppercase tracking-wider mb-1">
+                        #3 Prize
+                      </span>
+                      <span className="text-[10px] font-black text-zinc-950 uppercase tracking-tight text-center truncate w-full">
+                        Third Place
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* ── Content ── */}
       <main className="relative z-10 mx-auto w-full max-w-4xl px-4 pt-4 pb-16 flex-grow">

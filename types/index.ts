@@ -65,17 +65,29 @@ export interface LeaderboardData {
   }
 }
 
+export interface TournamentReward {
+  type: "banner" | "top3"
+  bannerUrl?: string
+  top3Urls?: {
+    first?: string
+    second?: string
+    third?: string
+  }
+  showOnPlayerPage?: boolean
+}
+
 /** One tournament returned by `GET /api/v1/tournaments`. */
 export interface Tournament {
   _id: string
   /** Optional human-readable name. Falls back to date-based label when absent. */
   name?: string
-  status: "active" | "past"
+  status: "active" | "past" | "upcoming"
   player_count: number
   top_score?: number
   top_player?: { name: string; avatar_url: string }
   started_at: string
   ended_at?: string | null
+  rewards?: TournamentReward
 }
 
 /** Response from `GET /api/v1/tournaments`. */
