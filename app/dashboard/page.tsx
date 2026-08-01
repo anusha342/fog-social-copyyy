@@ -217,6 +217,22 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
+      <style>{`
+        @keyframes hoverShineSweep {
+          0% { left: -100%; }
+          100% { left: 200%; }
+        }
+        .hover-shine-sweep {
+          position: absolute;
+          top: 0;
+          height: 100%;
+          width: 50%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+          transform: skewX(-25deg);
+          pointer-events: none;
+          z-index: 10;
+        }
+      `}</style>
 
       {/* Page-wide subtle grid backdrop */}
       <div
@@ -363,8 +379,10 @@ export default async function DashboardPage() {
           {/* 2. Tournament Leaderboard Card */}
           <Link
             href="/tournaments"
-            className="group/leaderboardcard relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 border-pink-400 bg-pink-50/90 p-4 sm:p-6 shadow-[0_4px_20px_rgba(236,72,153,0.08)] transition-all duration-300 hover:border-pink-500 hover:bg-pink-100/95 hover:shadow-[0_8px_24px_rgba(236,72,153,0.15)] hover:-translate-y-0.5 w-full md:row-span-2"
+            className="group/leaderboardcard relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 border-pink-500 bg-pink-50/95 p-4 sm:p-6 shadow-[0_4px_24px_rgba(236,72,153,0.1)] transition-all duration-300 hover:border-pink-600 hover:bg-pink-100/95 hover:shadow-[0_8px_28px_rgba(236,72,153,0.18)] hover:-translate-y-0.5 w-full md:row-span-2"
           >
+            {/* Hover Shine Sweep Overlay */}
+            <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div>
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
                 <span className="font-sans text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase truncate">
@@ -387,7 +405,7 @@ export default async function DashboardPage() {
                       const isRank2 = entry.rank === 2
                       const isRank3 = entry.rank === 3
 
-                      let cardClass = "border-pink-350 bg-pink-100/40 hover:bg-pink-100/60 shadow-sm"
+                      let cardClass = "border-pink-300 bg-pink-100/40 hover:bg-pink-100/60 shadow-sm"
                       let rankWidget = null
                       let scoreColor = "text-zinc-900"
 
@@ -466,31 +484,31 @@ export default async function DashboardPage() {
                 </p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   {/* Games Played */}
-                  <div className="relative overflow-hidden flex flex-col items-center justify-center text-center rounded-xl border-2 border-cyan-500 bg-gradient-to-tr from-cyan-200 via-cyan-50 via-white to-cyan-200 p-2.5 sm:p-3.5 shadow-md hover:shadow-lg transition-all duration-300">
-                    <p className="text-sm sm:text-base md:text-lg font-black tracking-tight leading-none text-cyan-955 drop-shadow-xs">
+                  <div className="flex flex-col items-center justify-center text-center rounded-xl border border-cyan-200 bg-cyan-50/80 p-2.5 sm:p-3.5">
+                    <p className="text-sm sm:text-base md:text-lg font-black tracking-tight leading-none text-cyan-900">
                       {stats?.games_played != null ? stats.games_played.toLocaleString() : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-[8px] sm:text-[9px] font-black tracking-wider text-cyan-900 uppercase">
+                    <p className="mt-1 font-mono text-[8px] sm:text-[9px] font-black tracking-wider text-cyan-700 uppercase">
                       Games Played
                     </p>
                   </div>
 
                   {/* Best Score */}
-                  <div className="relative overflow-hidden flex flex-col items-center justify-center text-center rounded-xl border-2 border-amber-500 bg-gradient-to-tr from-amber-200 via-amber-50 via-white to-amber-200 p-2.5 sm:p-3.5 shadow-md hover:shadow-lg transition-all duration-300">
-                    <p className="text-sm sm:text-base md:text-lg font-black tracking-tight leading-none text-amber-955 drop-shadow-xs">
+                  <div className="flex flex-col items-center justify-center text-center rounded-xl border border-amber-200 bg-amber-50/80 p-2.5 sm:p-3.5">
+                    <p className="text-sm sm:text-base md:text-lg font-black tracking-tight leading-none text-amber-900">
                       {stats?.best_score != null ? stats.best_score.toLocaleString() : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-[8px] sm:text-[9px] font-black tracking-wider text-amber-900 uppercase">
+                    <p className="mt-1 font-mono text-[8px] sm:text-[9px] font-black tracking-wider text-amber-700 uppercase">
                       Best Score
                     </p>
                   </div>
 
                   {/* Global Rank */}
-                  <div className="relative overflow-hidden flex flex-col items-center justify-center text-center rounded-xl border-2 border-indigo-500 bg-gradient-to-tr from-indigo-200 via-indigo-50 via-white to-indigo-200 p-2.5 sm:p-3.5 shadow-md hover:shadow-lg transition-all duration-300">
-                    <p className="text-sm sm:text-base md:text-lg font-black tracking-tight leading-none text-indigo-950 drop-shadow-xs">
+                  <div className="flex flex-col items-center justify-center text-center rounded-xl border border-indigo-200 bg-indigo-50/80 p-2.5 sm:p-3.5">
+                    <p className="text-sm sm:text-base md:text-lg font-black tracking-tight leading-none text-indigo-900">
                       {stats?.global_rank != null ? `#${stats.global_rank}` : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-[8px] sm:text-[9px] font-black tracking-wider text-indigo-900 uppercase">
+                    <p className="mt-1 font-mono text-[8px] sm:text-[9px] font-black tracking-wider text-indigo-700 uppercase">
                       Global Rank
                     </p>
                   </div>
@@ -500,9 +518,9 @@ export default async function DashboardPage() {
 
 
               {/* Enter Arena Nav Action Footer */}
-              <div className="mt-5 pt-3.5 flex items-center justify-end font-mono text-[10px] sm:text-xs text-zinc-700 font-bold tracking-wider transition-colors duration-300 group-hover/leaderboardcard:text-pink-650 border-t border-pink-200/30">
-                <span className="flex items-center gap-1 group-hover/leaderboardcard:translate-x-1 transition-transform">
-                  ENTER ARENA <ChevronRight size={10} />
+              <div className="mt-5 pt-3.5 flex items-center justify-end border-t border-pink-200/40 relative z-20">
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-xs text-pink-700 font-black tracking-wider px-3.5 py-1.5 rounded-full border border-pink-300 bg-pink-100/30 shadow-xs transition-all duration-300 group-hover/leaderboardcard:bg-pink-600 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-600 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.55)] group-hover/leaderboardcard:translate-x-0.5">
+                  ENTER ARENA <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5" />
                 </span>
               </div>
 
