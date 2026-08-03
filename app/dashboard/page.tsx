@@ -269,7 +269,7 @@ export default async function DashboardPage() {
 
         {/* ── Flat Responsive Layout: Rewards -> Leaderboard -> History ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start w-full">
-          
+
           {/* 1. Available Rewards Card */}
           <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 border-indigo-400 bg-indigo-50/90 p-4 sm:p-6 min-h-[220px] shadow-[0_4px_20px_rgba(99,102,241,0.08)] w-full">
             <div>
@@ -290,81 +290,34 @@ export default async function DashboardPage() {
                   <h3 className="text-sm sm:text-base font-bold text-zinc-800 transition-colors duration-300">
                     Tournament Prizes
                   </h3>
-                  
-                  {activeTournament?.rewards && (activeTournament.rewards.bannerUrl || activeTournament.rewards.top3Urls?.first || activeTournament.rewards.top3Urls?.second || activeTournament.rewards.top3Urls?.third) ? (
-                    <div className="mt-3.5">
-                      {activeTournament.rewards.type === "banner" ? (
-                        <div className="relative w-full h-[180px] rounded-xl overflow-hidden shadow-inner border border-zinc-100 bg-zinc-950">
-                          <Image
-                            src={activeTournament.rewards.bannerUrl || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800"}
-                            alt="Rewards Banner"
-                            fill
-                            sizes="(max-w-xl) 50vw, 400px"
-                            className="object-cover opacity-85"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-3">
-                            <span className="w-fit px-1.5 py-0.5 rounded bg-orange-500/90 text-white font-mono text-[8px] font-black uppercase tracking-widest mb-1 shadow-sm">
-                              Grand Prize Reward
-                            </span>
+
+                  {activeTournament ? (
+                    <div className="mt-3.5 space-y-3.5">
+                      <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center pt-1.5">
+                        {/* 2nd Place */}
+                        <div className="flex flex-col justify-between rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
+                          <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">2nd Place</span>
+                          <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">₹2,500</p>
+                          <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">Cash</span>
+                        </div>
+
+                        {/* 1st Place - Champion */}
+                        <div className="flex flex-col justify-between rounded-xl border-2 border-amber-300 bg-amber-50/40 p-3.5 shadow-md relative -translate-y-1">
+                          <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-amber-500 text-white font-mono text-[7px] font-black uppercase tracking-wider shadow-xs leading-none">
+                            CHAMP
                           </div>
+                          <span className="font-mono text-[9px] font-black text-amber-700 uppercase tracking-wider mt-1">1st Place</span>
+                          <p className="mt-1.5 font-sans text-sm sm:text-base font-black text-amber-900 leading-none">₹5,000</p>
+                          <span className="mt-1 font-mono text-[8px] font-bold text-amber-600 uppercase">Cash</span>
                         </div>
-                      ) : (
-                        <div className="grid grid-cols-3 gap-2 pt-1.5">
-                          {/* 2nd Place */}
-                          {activeTournament.rewards.top3Urls?.second && (
-                            <div className="flex flex-col items-center border border-zinc-200/60 bg-white/60 rounded-xl p-2 shadow-xs">
-                              <div className="relative w-full aspect-square max-h-[70px] rounded-lg overflow-hidden bg-white border border-zinc-150 mb-1">
-                                <Image
-                                  src={activeTournament.rewards.top3Urls.second}
-                                  alt="2nd Prize"
-                                  fill
-                                  sizes="100px"
-                                  className="object-contain p-1"
-                                />
-                              </div>
-                              <span className="text-[8px] font-black text-zinc-850 uppercase truncate w-full text-center">
-                                #2 Prize
-                              </span>
-                            </div>
-                          )}
 
-                          {/* 1st Place */}
-                          {activeTournament.rewards.top3Urls?.first && (
-                            <div className="flex flex-col items-center border-2 border-amber-300 bg-amber-50/20 rounded-xl p-2 shadow-xs relative">
-                              <div className="relative w-full aspect-square max-h-[75px] rounded-lg overflow-hidden bg-white border border-amber-100 mb-1">
-                                <Image
-                                  src={activeTournament.rewards.top3Urls.first}
-                                  alt="1st Prize"
-                                  fill
-                                  sizes="100px"
-                                  className="object-contain p-1"
-                                />
-                              </div>
-                              <span className="text-[8px] font-black text-amber-850 uppercase truncate w-full text-center">
-                                Champion
-                              </span>
-                            </div>
-                          )}
-
-                          {/* 3rd Place */}
-                          {activeTournament.rewards.top3Urls?.third && (
-                            <div className="flex flex-col items-center border border-zinc-200/60 bg-white/60 rounded-xl p-2 shadow-xs">
-                              <div className="relative w-full aspect-square max-h-[70px] rounded-lg overflow-hidden bg-white border border-zinc-150 mb-1">
-                                <Image
-                                  src={activeTournament.rewards.top3Urls.third}
-                                  alt="3rd Prize"
-                                  fill
-                                  sizes="100px"
-                                  className="object-contain p-1"
-                                />
-                              </div>
-                              <span className="text-[8px] font-black text-zinc-850 uppercase truncate w-full text-center">
-                                #3 Prize
-                              </span>
-                            </div>
-                          )}
+                        {/* 3rd Place */}
+                        <div className="flex flex-col justify-between rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
+                          <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">3rd Place</span>
+                          <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">₹500</p>
+                          <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">Cash</span>
                         </div>
-                      )}
+                      </div>
                     </div>
                   ) : (
                     <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-medium">
@@ -405,34 +358,38 @@ export default async function DashboardPage() {
                       const isRank2 = entry.rank === 2
                       const isRank3 = entry.rank === 3
 
-                      let cardClass = "border-pink-300 bg-pink-100/40 hover:bg-pink-100/60 shadow-sm"
-                      let rankWidget = null
-                      let scoreColor = "text-zinc-900"
+                      let cardClass = "border-zinc-300 bg-zinc-100/40 hover:bg-zinc-100/60 shadow-sm"
+                      let rankWidget = (
+                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-zinc-100 text-zinc-700 border border-zinc-200">
+                          #{entry.rank}
+                        </div>
+                      )
+                      let scoreColor = "text-zinc-600 font-extrabold"
 
                       if (isRank1) {
-                        cardClass = "border-amber-400 bg-amber-100/45 hover:bg-amber-100/60 shadow-md border-l-4 border-l-amber-500"
+                        cardClass = "border-orange-400 bg-orange-100/45 hover:bg-orange-100/60 shadow-md border-l-4 border-l-orange-500"
                         rankWidget = (
-                          <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-amber-100 text-amber-700 border border-amber-200">
+                          <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-orange-100 text-orange-700 border border-orange-200">
                             #1
                           </div>
                         )
-                        scoreColor = "text-amber-750 font-extrabold"
+                        scoreColor = "text-orange-700 font-extrabold"
                       } else if (isRank2) {
-                        cardClass = "border-indigo-400 bg-indigo-100/45 hover:bg-indigo-100/60 shadow-sm"
+                        cardClass = "border-sky-400 bg-sky-100/45 hover:bg-sky-100/60 shadow-sm"
                         rankWidget = (
-                          <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-200">
+                          <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-sky-100 text-sky-700 border border-sky-200">
                             #2
                           </div>
                         )
-                        scoreColor = "text-indigo-700 font-extrabold"
+                        scoreColor = "text-sky-700 font-extrabold"
                       } else if (isRank3) {
-                        cardClass = "border-orange-400/80 bg-orange-100/35 hover:bg-orange-100/50 shadow-sm"
+                        cardClass = "border-indigo-400 bg-indigo-100/45 hover:bg-indigo-100/60 shadow-sm"
                         rankWidget = (
-                          <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-orange-100 text-amber-850 border border-orange-200/40">
+                          <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-200">
                             #3
                           </div>
                         )
-                        scoreColor = "text-amber-800 font-extrabold"
+                        scoreColor = "text-indigo-700 font-extrabold"
                       }
 
                       return (
@@ -455,7 +412,7 @@ export default async function DashboardPage() {
                           <p className="flex items-center flex-1 truncate text-xs sm:text-sm font-bold text-zinc-905">
                             <span className="truncate">{entry.players[0]?.name ?? "Unknown"}</span>
                             {isRank1 && (
-                              <Crown size={13} className="fill-amber-500 text-amber-600 shrink-0 ml-1.5 align-middle mb-0.5" />
+                              <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
                             )}
                           </p>
 

@@ -357,60 +357,44 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                     const isRank2 = entry.rank === 2
                     const isRank3 = entry.rank === 3
 
-                    let cardClass = "border-pink-400/80 bg-pink-100/45 hover:bg-pink-100/60 shadow-[0_4px_12px_rgba(244,63,94,0.1)]"
+                    let cardClass = "border-zinc-300 bg-zinc-100/45 hover:bg-zinc-100/60 shadow-[0_4px_12px_rgba(113,113,122,0.06)]"
                     let rankWidget = null
-                    let scoreColor = "text-zinc-900"
+                    let scoreColor = "text-zinc-600 font-extrabold"
 
                     if (isRank1) {
-                      cardClass = "border-amber-400 bg-amber-100/45 hover:bg-amber-100/60 shadow-[0_4px_16px_rgba(245,158,11,0.16)] border-l-4 border-l-amber-500"
+                      cardClass = "border-orange-400 bg-orange-100/45 hover:bg-orange-100/60 shadow-[0_4px_16px_rgba(249,115,22,0.16)] border-l-4 border-l-orange-500"
                       rankWidget = (
-                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-amber-100 text-amber-700 border border-amber-200">
+                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-orange-100 text-orange-700 border border-orange-200">
                           #1
                         </div>
                       )
-                      scoreColor = "text-amber-750 font-extrabold"
+                      scoreColor = "text-orange-700 font-extrabold"
                     } else if (isRank2) {
-                      cardClass = "border-indigo-400 bg-indigo-100/45 hover:bg-indigo-100/60 shadow-[0_4px_12px_rgba(99,102,241,0.12)]"
+                      cardClass = "border-sky-400 bg-sky-100/45 hover:bg-sky-100/60 shadow-[0_4px_12px_rgba(56,189,248,0.12)]"
                       rankWidget = (
-                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-200">
+                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-sky-100 text-sky-700 border border-sky-200">
                           #2
                         </div>
                       )
-                      scoreColor = "text-indigo-700 font-extrabold"
+                      scoreColor = "text-sky-700 font-extrabold"
                     } else if (isRank3) {
-                      cardClass = "border-orange-400/80 bg-orange-100/35 hover:bg-orange-100/50 shadow-[0_4px_12px_rgba(249,115,22,0.1)]"
+                      cardClass = "border-indigo-400 bg-indigo-100/45 hover:bg-indigo-100/60 shadow-[0_4px_12px_rgba(99,102,241,0.12)]"
                       rankWidget = (
-                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-orange-100 text-amber-800 border border-amber-600/20">
+                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-200">
                           #3
                         </div>
                       )
-                      scoreColor = "text-amber-800 font-extrabold"
-                    } else if (entry.rank === 4) {
-                      cardClass = "border-cyan-400/80 bg-cyan-100/45 hover:bg-cyan-100/60 shadow-[0_4px_12px_rgba(6,182,212,0.1)]"
-                      rankWidget = (
-                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-cyan-100 text-cyan-700 border border-cyan-200">
-                          #4
-                        </div>
-                      )
-                      scoreColor = "text-cyan-700 font-extrabold"
-                    } else if (entry.rank === 5) {
-                      cardClass = "border-emerald-400/80 bg-emerald-100/45 hover:bg-emerald-100/60 shadow-[0_4px_12px_rgba(16,185,129,0.1)]"
-                      rankWidget = (
-                        <div className="flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-200">
-                          #5
-                        </div>
-                      )
-                      scoreColor = "text-emerald-700 font-extrabold"
+                      scoreColor = "text-indigo-700 font-extrabold"
                     } else {
                       rankWidget = (
                         <div className={`flex size-7 shrink-0 items-center justify-center font-mono text-xs font-bold rounded-lg border ${isMe
                           ? "text-orange-700 bg-orange-100 border-orange-200"
-                          : "text-pink-700 bg-pink-100 border-pink-200"
+                          : "text-zinc-700 bg-zinc-100 border-zinc-200"
                           }`}>
                           #{entry.rank}
                         </div>
                       )
-                      scoreColor = "text-pink-700 font-extrabold"
+                      scoreColor = "text-zinc-600 font-extrabold"
                     }
 
                     if (isMe) {
@@ -448,7 +432,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         >
                           <span className="truncate">{entry.players[0]?.name ?? "Unknown"}</span>
                           {isRank1 && (
-                            <Crown size={13} className="fill-amber-500 text-amber-600 shrink-0 ml-1.5 align-middle mb-0.5" />
+                            <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
                           )}
                           {isMe && (
                             <span className="ml-1.5 font-mono text-[9px] font-black uppercase text-orange-600 bg-orange-100/60 border border-orange-200/50 px-1.5 py-0.5 rounded tracking-wider shadow-sm animate-pulse">YOU</span>
