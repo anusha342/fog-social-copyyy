@@ -46,3 +46,10 @@ export async function getPlayerByGoogleId(
   const col = await collection()
   return col.findOne({ google_id: googleId })
 }
+
+export async function getPlayerByEmail(
+  email: string
+): Promise<Player | null> {
+  const col = await collection()
+  return col.findOne({ email })
+}
