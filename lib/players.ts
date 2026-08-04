@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb"
 import type { WithId } from "mongodb"
 import clientPromise from "@/lib/mongodb"
 import type { PlayerDoc } from "@/types"
@@ -27,12 +28,14 @@ export async function upsertPlayer(data: {
     { google_id: data.google_id },
     {
       $set: {
-        name: data.name,
         email: data.email,
-        avatar_url: data.avatar_url,
         updated_at: now,
       },
-      $setOnInsert: { created_at: now },
+      $setOnInsert: {
+        name: data.name,
+        avatar_url: data.avatar_url,
+        created_at: now,
+      },
     },
     { upsert: true, returnDocument: "after" }
   )
@@ -52,4 +55,11 @@ export async function getPlayerByEmail(
 ): Promise<Player | null> {
   const col = await collection()
   return col.findOne({ email })
+}
+
+export async function getPlayerByPid(
+  pid: string
+): Promise<Player | null> {
+  const col = await collection()
+  return col.findOne({ _id: new ObjectId(pid) })
 }

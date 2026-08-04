@@ -36,8 +36,8 @@ export default async function TournamentPage({
         googleId={resolvedGoogleId}
         env={env}
         pid={resolvedPid}
-        name={session.user.name}
-        image={session.user.image}
+        name={dbPlayer?.name ?? session.user.name}
+        image={dbPlayer?.avatar_url ?? session.user.image}
       />
     </main>
   )

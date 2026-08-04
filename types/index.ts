@@ -51,6 +51,10 @@ export interface LeaderboardEntry {
     name: string
     avatar_url: string
   }>
+  center?: {
+    _id: string
+    name: string | null
+  }
 }
 
 /**

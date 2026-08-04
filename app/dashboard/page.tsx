@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { QrCode, Gamepad2, Trophy, Star, ChevronRight, Cpu, Activity, ShieldCheck, Gift, Crown } from "lucide-react"
+import { Gamepad2, Trophy, Star, ChevronRight } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
 import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
@@ -23,6 +23,7 @@ interface PlayerGameplay {
   tournament_id: string
   score: number
   played_at: string
+  center_name?: string | null
 }
 
 // ── Fetchers ──────────────────────────────────────────────────────────────────
@@ -62,10 +63,18 @@ interface LeaderboardEntry {
     name: string
     avatar_url: string
   }>
+  center?: {
+    _id: string
+    name: string | null
+  }
 }
 
 interface LeaderboardData {
   leaderboard: LeaderboardEntry[]
+  player?: {
+    rank: number
+    best_score: number
+  } | null
 }
 
 async function fetchActiveTournament(): Promise<any | null> {
@@ -83,12 +92,12 @@ async function fetchActiveTournament(): Promise<any | null> {
   }
 }
 
-async function fetchLeaderboard(tournamentId: string): Promise<LeaderboardData | null> {
+async function fetchLeaderboard(tournamentId: string, playerId?: string): Promise<LeaderboardData | null> {
   try {
-    const res = await fetch(
-      getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=5`, SYNC_ENV),
-      { cache: "no-store" }
-    )
+    const url = playerId
+      ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${playerId}`, SYNC_ENV)
+      : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=5`, SYNC_ENV)
+    const res = await fetch(url, { cache: "no-store" })
     if (!res.ok) return null
     return res.json()
   } catch {
@@ -163,7 +172,6 @@ export default async function DashboardPage() {
   if (!session) redirect("/")
 
   const { name, email, image, google_id } = session.user
-  const firstName = name?.split(" ")[0] ?? "Player"
 
   // Look up player by email first to support dynamic account switching by email address
   let dbPlayer = email ? await getPlayerByEmail(email) : null
@@ -171,6 +179,8 @@ export default async function DashboardPage() {
     dbPlayer = await getPlayerByGoogleId(google_id)
   }
 
+  const resolvedName = dbPlayer?.name ?? name
+  const firstName = resolvedName?.split(" ")[0] ?? "Player"
   const resolvedGoogleId = dbPlayer ? dbPlayer.google_id : google_id
 
   const [stats, gameplays, activeTournament] = await Promise.all([
@@ -267,7 +277,7 @@ export default async function DashboardPage() {
 
       {/* ── Sticky nav ── */}
       <header className="sticky top-0 z-50 border-b border-zinc-200/40 bg-white/80 backdrop-blur-xl shadow-sm transition-all">
-        <Navbar name={name} image={image} />
+        <Navbar name={resolvedName} image={dbPlayer?.avatar_url ?? image} />
       </header>
 
       {/* ── Main Dashboard Container ── */}
@@ -373,13 +383,17 @@ export default async function DashboardPage() {
 
                       const displayedEntries = [...top5]
                       if (playerRank != null && !isPlayerInTop5) {
+                        const bestGameplay = gameplays.find((g) => g.score === leaderboardData.player!.best_score)
+                        const playerCenterName = bestGameplay?.center_name
+
                         displayedEntries.push({
                           rank: playerRank,
                           score: leaderboardData.player!.best_score,
                           played_at: "",
+                          center: playerCenterName ? { _id: "", name: playerCenterName } : undefined,
                           players: [
                             {
-                              name: name ?? "You",
+                              name: resolvedName ?? "You",
                               avatar_url: image ?? "",
                             },
                           ],
@@ -454,13 +468,15 @@ export default async function DashboardPage() {
                               )}
                               <Avatar
                                 src={entry.players[0]?.avatar_url ?? ""}
-                                name={entry.players[0]?.name ?? "?"}
+                                name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
                               />
                             </div>
 
                             {/* Name */}
                             <p className={`flex items-center flex-1 truncate text-xs sm:text-sm font-bold ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
-                              <span className="truncate">{entry.players[0]?.name ?? "Unknown"}</span>
+                              <span className="truncate">
+                                {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
+                              </span>
                               {isRank1 && (
                                 <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
                               )}
@@ -560,23 +576,30 @@ export default async function DashboardPage() {
                 </div>
               ) : (
                 <div className="space-y-2.5 sm:space-y-3 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin">
-                  {sortedGameplays.map((g) => (
+                  {sortedGameplays.map((g, index) => (
                     <div
-                      key={g.gameplay_id}
+                      key={`${g.gameplay_id}-${index}`}
                       className="flex items-center justify-between rounded-xl border border-[#D9CFC7]/40 bg-[#D9CFC7]/20 p-3 sm:p-4 transition-all duration-300 hover:border-[#D9CFC7]/60 hover:bg-[#D9CFC7]/35"
                     >
                       {/* Date / Time */}
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 text-left">
                         <p className="font-mono text-xs sm:text-sm font-bold text-zinc-900">
                           {new Date(g.played_at).toLocaleDateString(undefined, {
                             month: "short", day: "numeric", year: "numeric",
                           })}
                         </p>
-                        <p className="mt-0.5 font-mono text-[10px] sm:text-xs text-zinc-500">
-                          {new Date(g.played_at).toLocaleTimeString(undefined, {
-                            hour: "2-digit", minute: "2-digit",
-                          })}
-                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                          <p className="font-mono text-[10px] sm:text-xs text-zinc-500">
+                            {new Date(g.played_at).toLocaleTimeString(undefined, {
+                              hour: "2-digit", minute: "2-digit",
+                            })}
+                          </p>
+                          {g.center_name && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 font-mono text-[8px] sm:text-[9px] font-bold text-zinc-650 uppercase tracking-wider leading-none shadow-3xs">
+                              {g.center_name}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Score */}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Gamepad2, Loader2, Calendar, Crown, Gift, ChevronRight, Trophy } from "lucide-react"
+import { Gamepad2, Loader2, Trophy } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import type { LeaderboardData, Tournament } from "@/types"
@@ -20,6 +20,7 @@ interface Gameplay {
   tournament_id: string
   score: number
   played_at: string
+  center_name?: string | null
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -257,11 +258,11 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
             <>
               <div className="space-y-2.5">
                 {(() => {
-                  const top5 = leaderboard.leaderboard.slice(0, 5)
-                  const isPlayerInTop5 = leaderboard.player != null && top5.some((e) => e.rank === leaderboard.player!.rank)
+                  const top10 = leaderboard.leaderboard.slice(0, 10)
+                  const isPlayerInTop10 = leaderboard.player != null && top10.some((e) => e.rank === leaderboard.player!.rank)
 
-                  const displayedEntries = [...top5]
-                  if (leaderboard.player && !isPlayerInTop5) {
+                  const displayedEntries = [...top10]
+                  if (leaderboard.player && !isPlayerInTop10) {
                     displayedEntries.push({
                       rank: leaderboard.player.rank,
                       score: leaderboard.player.best_score,
@@ -349,7 +350,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                           )}
                           <Avatar
                             src={entry.players[0]?.avatar_url ?? ""}
-                            name={entry.players[0]?.name ?? "?"}
+                            name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
                           />
                         </div>
 
@@ -358,7 +359,9 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                           className={`flex items-center flex-1 truncate text-xs sm:text-sm md:text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-900"
                             }`}
                         >
-                          <span className="truncate">{entry.players[0]?.name ?? "Unknown"}</span>
+                          <span className="truncate">
+                            {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
+                          </span>
                           {isRank1 && (
                             <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
                           )}
@@ -391,14 +394,13 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           ) : plays && plays.length > 0 ? (
             <div className="space-y-2.5">
               {(() => {
-                const playerBestScore = leaderboard?.player?.best_score
                 const playerRank = leaderboard?.player?.rank
                 const userTopEntry = leaderboard?.leaderboard.find((e) =>
                   e.players.some((p) => p.name === name)
                 )
                 const finalRank = playerRank || userTopEntry?.rank
-                const finalBestScore = playerBestScore || userTopEntry?.score
-                const bestPlayIndex = plays.findIndex((p) => p.score === finalBestScore)
+                const maxScore = plays && plays.length > 0 ? Math.max(...plays.map((p) => p.score)) : 0
+                const bestPlayIndex = plays.findIndex((p) => p.score === maxScore)
 
                 return plays.map((g, index) => {
                   const isBestPlay = bestPlayIndex !== -1 && index === bestPlayIndex
@@ -450,7 +452,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                   return (
                     <div
-                      key={g.gameplay_id}
+                      key={`${g.gameplay_id}-${index}`}
                       className={`flex items-center justify-between rounded-2xl border px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 ${cardClass}`}
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
@@ -461,7 +463,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                         {/* Date/Time info */}
                         <div className="min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
+                          <div className="flex items-center gap-2 flex-wrap text-left">
                             <p className="font-mono text-sm sm:text-base font-extrabold text-zinc-800 leading-none">
                               {new Date(g.played_at).toLocaleDateString(undefined, {
                                 month: "short", day: "numeric", year: "numeric",
@@ -469,11 +471,18 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                             </p>
                             {bestPlayBadge}
                           </div>
-                          <p className="mt-1.5 font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
-                            {new Date(g.played_at).toLocaleTimeString(undefined, {
-                              hour: "2-digit", minute: "2-digit",
-                            })}
-                          </p>
+                          <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                            <p className="font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
+                              {new Date(g.played_at).toLocaleTimeString(undefined, {
+                                hour: "2-digit", minute: "2-digit",
+                              })}
+                            </p>
+                            {g.center_name && (
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-150 border border-zinc-200/50 font-mono text-[8px] sm:text-[9px] font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs">
+                                {g.center_name}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -511,7 +520,6 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
             e.players.some((p) => p.name === name)
           )
           const finalRank = pid ? leaderboard?.player?.rank : userTopEntry?.rank
-          const finalBestScore = pid ? leaderboard?.player?.best_score : userTopEntry?.score
 
           const hasWon = finalRank !== undefined && finalRank >= 1 && finalRank <= 3
           let prizeAmount = ""
@@ -541,55 +549,74 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           }
 
           return (
-            <div className="w-full max-w-md mx-auto py-2 select-none">
+            <div className="space-y-2.5 select-none animate-none">
               {hasWon ? (
-                <div className={`flex items-center gap-4 rounded-xl border p-4 shadow-sm transition-all duration-300 bg-white/70 backdrop-blur-md ${borderColor}`}>
+                <div className={`flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border p-4 sm:px-4 sm:py-3.5 transition-all duration-300 hover:-translate-y-0.5 bg-white/70 backdrop-blur-md ${borderColor} gap-4`}>
                   
-                  {/* Left: Medal Emoji */}
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white border border-zinc-200 shadow-xs text-2xl select-none">
-                    {medalEmoji}
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    {/* Left: Medal Emoji */}
+                    <div className="flex size-9.5 shrink-0 items-center justify-center rounded-xl bg-white border border-zinc-200 shadow-2xs text-lg select-none">
+                      {medalEmoji}
+                    </div>
+
+                    {/* Middle: Reward Description */}
+                    <div className="min-w-0 text-left">
+                      <div className="flex items-center gap-2 flex-wrap text-left">
+                        <p className="font-sans text-base sm:text-lg md:text-xl font-black text-black leading-tight">
+                          Rank {finalRank} • {rankTitle}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                        <p className="font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
+                          {tournament?.name || "EPIC Tournament"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Middle: Reward Description */}
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="font-mono text-[9px] font-black uppercase text-zinc-500 tracking-wider">
-                      Rank {finalRank} • {rankTitle}
-                    </p>
-                    <p className="font-sans text-sm sm:text-base font-black text-zinc-900 leading-tight mt-0.5">
-                      {prizeAmount} Cash Reward
-                    </p>
-                    <p className="font-mono text-[9px] text-zinc-400 uppercase font-bold tracking-wider leading-none mt-1">
-                      {tournament?.name || "EPIC Tournament"}
-                    </p>
-                  </div>
+                  {/* Horizontal Divider for mobile screen only */}
+                  <div className="block sm:hidden h-px bg-zinc-200/60 w-full" />
 
-                  {/* Right: Claim Button & Status */}
-                  <div className="shrink-0 flex flex-col items-end gap-1.5">
-                    <button className="py-2 px-3 rounded-lg font-sans text-[10px] font-black uppercase tracking-wider bg-zinc-950 text-white shadow-xs hover:bg-zinc-900 transition-all duration-200 active:scale-98 cursor-pointer leading-none">
-                      Claim
-                    </button>
-                    <span className="font-mono text-[7px] text-orange-600 font-bold uppercase tracking-wider whitespace-nowrap">
-                      Pending Lock
-                    </span>
+                  {/* Right: Prize display & Claim Button */}
+                  <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 pl-0 sm:pl-3">
+                    <div className="text-left sm:text-right">
+                      <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest leading-none mb-1 font-bold">
+                        Prize
+                      </p>
+                      <p className="font-mono text-base sm:text-lg md:text-xl font-black tabular-nums text-zinc-950 leading-none">
+                        {prizeAmount}
+                      </p>
+                    </div>
+
+                    <div className="shrink-0 flex flex-col items-end gap-1">
+                      <button className="py-1.5 px-3 rounded-lg font-sans text-[9px] font-black uppercase tracking-wider bg-zinc-950 text-white shadow-2xs hover:bg-zinc-900 transition-all duration-200 active:scale-98 cursor-pointer leading-none">
+                        Claim
+                      </button>
+                      <span className="font-mono text-[7px] text-orange-600 font-bold uppercase tracking-wider whitespace-nowrap">
+                        Pending Lock
+                      </span>
+                    </div>
                   </div>
 
                 </div>
               ) : (
-                <div className="rounded-xl border border-zinc-250 bg-white/70 backdrop-blur-md p-4 flex items-center gap-4 text-left shadow-xs">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 shadow-xs">
-                    <Trophy size={18} className="text-zinc-400 fill-zinc-50" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-xs sm:text-sm font-extrabold text-zinc-850 leading-tight">
-                      No rewards won yet
-                    </h3>
-                    <p className="mt-0.5 text-[10px] sm:text-xs text-zinc-500 leading-normal">
-                      Rank {finalRank != null ? `#${finalRank}` : "unranked"}. Reach the top 3 spots to win cash!
-                    </p>
+                <div className="rounded-2xl border border-zinc-200 bg-white/70 backdrop-blur-md px-4 py-3.5 flex items-center justify-between gap-4 text-left shadow-xs transition-all duration-300 hover:-translate-y-0.5">
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="flex size-9.5 shrink-0 items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 shadow-2xs">
+                      <Trophy size={16} className="text-zinc-400 fill-zinc-50" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-mono text-sm sm:text-base font-extrabold text-zinc-800 leading-none">
+                        No rewards won yet
+                      </h3>
+                      <p className="mt-1.5 font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
+                        Rank {finalRank != null ? `#${finalRank}` : "unranked"}. Reach the top 3 spots to win cash!
+                      </p>
+                    </div>
                   </div>
                   <button 
                     onClick={() => setTab("leaderboard")}
-                    className="shrink-0 py-2 px-3 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 active:scale-98 shadow-2xs text-[10px] font-bold text-zinc-700 uppercase tracking-wider transition-all cursor-pointer"
+                    className="shrink-0 py-1.5 px-3 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 active:scale-98 shadow-2xs text-[9px] font-bold text-zinc-700 uppercase tracking-wider transition-all cursor-pointer"
                   >
                     Leaderboard
                   </button>
