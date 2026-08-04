@@ -315,32 +315,88 @@ export default async function DashboardPage() {
                   </h3>
 
                   {activeTournament ? (
-                    <div className="mt-3.5 space-y-3.5">
-                      <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center pt-1.5">
-                        {/* 2nd Place */}
-                        <div className="flex flex-col justify-between rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
-                          <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">2nd Place</span>
-                          <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">₹2,500</p>
-                          <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">Cash</span>
-                        </div>
+                    <div className="mt-3.5">
+                      {(() => {
+                        const reward1 = activeTournament.rewards?.find((r: any) => r.rank === 1)
+                        const reward2 = activeTournament.rewards?.find((r: any) => r.rank === 2)
+                        const reward3 = activeTournament.rewards?.find((r: any) => r.rank === 3)
 
-                        {/* 1st Place - Champion */}
-                        <div className="flex flex-col justify-between rounded-xl border-2 border-amber-300 bg-amber-50/40 p-3.5 shadow-md relative -translate-y-1">
-                          <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-amber-500 text-white font-mono text-[7px] font-black uppercase tracking-wider shadow-xs leading-none">
-                            CHAMP
+                        return (
+                          <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center">
+                            {/* 2nd Place */}
+                            <div className="flex flex-col justify-between items-center rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
+                              <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">
+                                {reward2?.title || "2nd Place"}
+                              </span>
+                              {reward2?.image_url ? (
+                                <div className="relative w-12 h-12 my-1.5 flex items-center justify-center">
+                                  <img
+                                    src={reward2.image_url}
+                                    alt={reward2.title || "2nd Place Reward"}
+                                    className="max-w-full max-h-full object-contain rounded-md"
+                                  />
+                                </div>
+                              ) : (
+                                <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">
+                                  {reward2?.prize_money || "₹2,500"}
+                                </p>
+                              )}
+                              <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">
+                                {reward2?.image_url ? "Prize" : "Cash"}
+                              </span>
+                            </div>
+
+                            {/* 1st Place - Champion */}
+                            <div className="flex flex-col justify-between items-center rounded-xl border-2 border-amber-300 bg-amber-50/40 p-3.5 shadow-md relative -translate-y-1">
+                              <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-amber-500 text-white font-mono text-[7px] font-black uppercase tracking-wider shadow-xs leading-none">
+                                CHAMP
+                              </div>
+                              <span className="font-mono text-[9px] font-black text-amber-700 uppercase tracking-wider mt-1">
+                                {reward1?.title || "1st Place"}
+                              </span>
+                              {reward1?.image_url ? (
+                                <div className="relative w-14 h-14 my-1.5 flex items-center justify-center">
+                                  <img
+                                    src={reward1.image_url}
+                                    alt={reward1.title || "1st Place Reward"}
+                                    className="max-w-full max-h-full object-contain rounded-md animate-pulse"
+                                  />
+                                </div>
+                              ) : (
+                                <p className="mt-1.5 font-sans text-sm sm:text-base font-black text-amber-900 leading-none">
+                                  {reward1?.prize_money || "₹5,000"}
+                                </p>
+                              )}
+                              <span className="mt-1 font-mono text-[8px] font-bold text-amber-600 uppercase">
+                                {reward1?.image_url ? "Prize" : "Cash"}
+                              </span>
+                            </div>
+
+                            {/* 3rd Place */}
+                            <div className="flex flex-col justify-between items-center rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
+                              <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">
+                                {reward3?.title || "3rd Place"}
+                              </span>
+                              {reward3?.image_url ? (
+                                <div className="relative w-12 h-12 my-1.5 flex items-center justify-center">
+                                  <img
+                                    src={reward3.image_url}
+                                    alt={reward3.title || "3rd Place Reward"}
+                                    className="max-w-full max-h-full object-contain rounded-md"
+                                  />
+                                </div>
+                              ) : (
+                                <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">
+                                  {reward3?.prize_money || "₹500"}
+                                </p>
+                              )}
+                              <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">
+                                {reward3?.image_url ? "Prize" : "Cash"}
+                              </span>
+                            </div>
                           </div>
-                          <span className="font-mono text-[9px] font-black text-amber-700 uppercase tracking-wider mt-1">1st Place</span>
-                          <p className="mt-1.5 font-sans text-sm sm:text-base font-black text-amber-900 leading-none">₹5,000</p>
-                          <span className="mt-1 font-mono text-[8px] font-bold text-amber-600 uppercase">Cash</span>
-                        </div>
-
-                        {/* 3rd Place */}
-                        <div className="flex flex-col justify-between rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
-                          <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">3rd Place</span>
-                          <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">₹500</p>
-                          <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">Cash</span>
-                        </div>
-                      </div>
+                        )
+                      })()}
                     </div>
                   ) : (
                     <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-medium">
@@ -583,10 +639,8 @@ export default async function DashboardPage() {
                     >
                       {/* Date / Time */}
                       <div className="min-w-0 flex-1 text-left">
-                        <p className="font-mono text-xs sm:text-sm font-bold text-zinc-900">
-                          {new Date(g.played_at).toLocaleDateString(undefined, {
-                            month: "short", day: "numeric", year: "numeric",
-                          })}
+                        <p className="font-mono text-xs sm:text-sm font-bold text-zinc-900 uppercase tracking-wide">
+                          {g.center_name || "FOG Cabinet"}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                           <p className="font-mono text-[10px] sm:text-xs text-zinc-500">
@@ -594,11 +648,6 @@ export default async function DashboardPage() {
                               hour: "2-digit", minute: "2-digit",
                             })}
                           </p>
-                          {g.center_name && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200/50 font-mono text-[8px] sm:text-[9px] font-bold text-zinc-650 uppercase tracking-wider leading-none shadow-3xs">
-                              {g.center_name}
-                            </span>
-                          )}
                         </div>
                       </div>
 
@@ -608,8 +657,12 @@ export default async function DashboardPage() {
                           {g.score.toLocaleString()}
                         </p>
                         <p className="mt-0.5 font-mono text-[10px] sm:text-xs text-[#6e635c] uppercase tracking-widest flex items-center gap-0.5 justify-end">
-                          <ShieldCheck size={12} />
-                          Synced
+                          <ShieldCheck size={12} className="text-emerald-600 shrink-0" />
+                          <span>
+                            {new Date(g.played_at).toLocaleDateString(undefined, {
+                              month: "short", day: "numeric", year: "numeric",
+                            })}
+                          </span>
                         </p>
                       </div>
                     </div>

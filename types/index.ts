@@ -70,14 +70,10 @@ export interface LeaderboardData {
 }
 
 export interface TournamentReward {
-  type: "banner" | "top3"
-  bannerUrl?: string
-  top3Urls?: {
-    first?: string
-    second?: string
-    third?: string
-  }
-  showOnPlayerPage?: boolean
+  rank: number
+  title: string
+  prize_money: string
+  image_url: string
 }
 
 /** One tournament returned by `GET /api/v1/tournaments`. */
@@ -91,7 +87,8 @@ export interface Tournament {
   top_player?: { name: string; avatar_url: string }
   started_at: string
   ended_at?: string | null
-  rewards?: TournamentReward
+  rewards?: TournamentReward[]
+  banner_url?: string | null
 }
 
 /** Response from `GET /api/v1/tournaments`. */
