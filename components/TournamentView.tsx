@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Gamepad2, Loader2, Trophy } from "lucide-react"
+import { Gamepad2, Loader2, Trophy, Gift, Crown } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import type { LeaderboardData, Tournament } from "@/types"
