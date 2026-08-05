@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Gamepad2, Loader2, Trophy, Gift, Crown } from "lucide-react"
+import { Gamepad2, Loader2, Trophy, Crown } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import type { LeaderboardData, Tournament } from "@/types"
 import { Navbar } from "./Navbar"
 import { getUrlForEnv } from "@/lib/sync-env"
 import { BackButton } from "./BackButton"
+import { RewardsCarousel } from "./RewardsCarousel"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -176,114 +177,25 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
       {/* ── Content ── */}
       <main className="relative z-10 mx-auto w-full max-w-4xl px-4 pt-4 pb-16 flex-grow">
 
-        {/* ── Available Rewards Section ── */}
-        <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 border-indigo-400 bg-indigo-50/90 p-4 sm:p-6 min-h-[220px] shadow-[0_4px_20px_rgba(99,102,241,0.08)] w-full mb-6">
-          <div>
-            <div className="flex items-center justify-between pb-3 mb-4 border-b border-indigo-200/30">
-              <span className="font-sans text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.1em] text-indigo-700 uppercase truncate">
-                Available Rewards
-              </span>
-              <span className="font-mono text-[10px] sm:text-xs text-indigo-500 font-bold uppercase tracking-wider">
-                Prizes
-              </span>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-md">
-                <Gift size={18} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="text-sm sm:text-base font-bold text-zinc-800 transition-colors duration-300">
-                  Tournament Prizes
-                </h3>
-
-                <div className="mt-3.5">
-                  {(() => {
-                    const reward1 = tournament?.rewards?.find((r: any) => r.rank === 1)
-                    const reward2 = tournament?.rewards?.find((r: any) => r.rank === 2)
-                    const reward3 = tournament?.rewards?.find((r: any) => r.rank === 3)
-
-                    return (
-                      <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center">
-                        {/* 2nd Place */}
-                        <div className="flex flex-col justify-between items-center rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
-                          <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">
-                            {reward2?.title || "2nd Place"}
-                          </span>
-                          {reward2?.image_url ? (
-                            <div className="relative w-12 h-12 my-1.5 flex items-center justify-center">
-                              <img
-                                src={reward2.image_url}
-                                alt={reward2.title || "2nd Place Reward"}
-                                className="max-w-full max-h-full object-contain rounded-md"
-                              />
-                            </div>
-                          ) : (
-                            <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">
-                              {reward2?.prize_money || "₹2,500"}
-                            </p>
-                          )}
-                          <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">
-                            {reward2?.image_url ? "Prize" : "Cash"}
-                          </span>
-                        </div>
-
-                        {/* 1st Place - Champion */}
-                        <div className="flex flex-col justify-between items-center rounded-xl border-2 border-amber-300 bg-amber-50/40 p-3.5 shadow-md relative -translate-y-1">
-                          <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-amber-500 text-white font-mono text-[7px] font-black uppercase tracking-wider shadow-xs leading-none">
-                            CHAMP
-                          </div>
-                          <span className="font-mono text-[9px] font-black text-amber-700 uppercase tracking-wider mt-1">
-                            {reward1?.title || "1st Place"}
-                          </span>
-                          {reward1?.image_url ? (
-                            <div className="relative w-14 h-14 my-1.5 flex items-center justify-center">
-                              <img
-                                src={reward1.image_url}
-                                alt={reward1.title || "1st Place Reward"}
-                                className="max-w-full max-h-full object-contain rounded-md animate-pulse"
-                              />
-                            </div>
-                          ) : (
-                            <p className="mt-1.5 font-sans text-sm sm:text-base font-black text-amber-900 leading-none">
-                              {reward1?.prize_money || "₹5,000"}
-                            </p>
-                          )}
-                          <span className="mt-1 font-mono text-[8px] font-bold text-amber-600 uppercase">
-                            {reward1?.image_url ? "Prize" : "Cash"}
-                          </span>
-                        </div>
-
-                        {/* 3rd Place */}
-                        <div className="flex flex-col justify-between items-center rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
-                          <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">
-                            {reward3?.title || "3rd Place"}
-                          </span>
-                          {reward3?.image_url ? (
-                            <div className="relative w-12 h-12 my-1.5 flex items-center justify-center">
-                              <img
-                                src={reward3.image_url}
-                                alt={reward3.title || "3rd Place Reward"}
-                                className="max-w-full max-h-full object-contain rounded-md"
-                              />
-                            </div>
-                          ) : (
-                            <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">
-                              {reward3?.prize_money || "₹500"}
-                            </p>
-                          )}
-                          <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">
-                            {reward3?.image_url ? "Prize" : "Cash"}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })()}
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* ── Standalone Slideshow Banner (Santa's style) ── */}
+        <div className="mb-6">
+          <RewardsCarousel
+            bannerUrl={tournament?.banner_url}
+            rewards={tournament?.rewards}
+            tournamentName={tournament?.name}
+          />
         </div>
+
+        {/* ── Standalone Banner Image ── */}
+        {tournament?.banner_url && (
+          <div className="relative w-full rounded-2xl overflow-hidden border border-zinc-200 bg-white shadow-sm flex items-center justify-center p-1 mb-6">
+            <img
+              src={tournament.banner_url}
+              alt="Tournament Banner"
+              className="w-full h-auto object-cover max-h-[300px] rounded-xl"
+            />
+          </div>
+        )}
 
         {/* Tab bar (Separated from Navbar) */}
         <div className="flex border-b border-zinc-200/80 mb-5 items-center justify-between">
@@ -534,7 +446,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                               })}
                             </p>
                             {g.center_name && (
-                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-150 border border-zinc-200/50 font-mono text-[8px] sm:text-[9px] font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs">
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-150 border border-zinc-200/50 font-mono text-[8px] sm:text-[9px] font-bold text-zinc-650 uppercase tracking-wider leading-none shadow-3xs">
                                 {g.center_name}
                               </span>
                             )}
@@ -582,80 +494,135 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
           let prizeAmount = dbReward?.prize_money ?? ""
           let medalEmoji = ""
-          let gradientBg = ""
-          let borderColor = ""
           let rankTitle = dbReward?.title ?? ""
 
+          let bannerClass = ""
+          let congratsText = ""
           if (finalRank === 1) {
-            if (!prizeAmount) prizeAmount = "₹5,000"
             if (!rankTitle) rankTitle = "Tournament Champion"
             medalEmoji = "🥇"
-            gradientBg = "from-amber-500/15 via-orange-500/5 to-transparent"
-            borderColor = "border-amber-400/80 shadow-md shadow-amber-500/5"
+            bannerClass = "reward-banner-gold"
+            congratsText = "CONGRATULATIONS CHAMPION!"
           } else if (finalRank === 2) {
-            if (!prizeAmount) prizeAmount = "₹2,500"
             if (!rankTitle) rankTitle = "Runner-Up Prize"
             medalEmoji = "🥈"
-            gradientBg = "from-slate-400/15 via-sky-500/5 to-transparent"
-            borderColor = "border-slate-300/80 shadow-md shadow-sky-500/5"
+            bannerClass = "reward-banner-silver"
+            congratsText = "AWESOME PLAY, RUNNER-UP!"
           } else if (finalRank === 3) {
-            if (!prizeAmount) prizeAmount = "₹500"
             if (!rankTitle) rankTitle = "Third Place Prize"
             medalEmoji = "🥉"
-            gradientBg = "from-amber-700/15 via-indigo-500/5 to-transparent"
-            borderColor = "border-amber-600/60 shadow-md shadow-indigo-500/5"
+            bannerClass = "reward-banner-bronze"
+            congratsText = "FANTASTIC JOB, 3RD PLACE!"
           }
 
           return (
             <div className="space-y-2.5 select-none animate-none">
+              <style>{`
+                @keyframes rewardsPop {
+                  0% { opacity: 0; transform: scale(0.95) translateY(15px); }
+                  70% { transform: scale(1.01) translateY(-2px); }
+                  100% { opacity: 1; transform: scale(1) translateY(0); }
+                }
+                @keyframes floatMedal {
+                  0% { transform: translateY(0px) rotate(0deg) scale(1); }
+                  50% { transform: translateY(-8px) rotate(5deg) scale(1.06); }
+                  100% { transform: translateY(0px) rotate(0deg) scale(1); }
+                }
+                @keyframes bannerShimmer {
+                  0% { background-position: -200% center; }
+                  100% { background-position: 200% center; }
+                }
+                @keyframes claimPulse {
+                  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15); }
+                  50% { box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.08); }
+                }
+                .reward-banner-gold {
+                  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+                  border: 3px solid #f59e0b;
+                  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25), 0 8px 10px -6px rgba(245, 158, 11, 0.25);
+                  animation: rewardsPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                .reward-banner-silver {
+                  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+                  border: 3px solid #94a3b8;
+                  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.2), 0 8px 10px -6px rgba(148, 163, 184, 0.25);
+                  animation: rewardsPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                .reward-banner-bronze {
+                  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+                  border: 3px solid #6366f1;
+                  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.25), 0 8px 10px -6px rgba(99, 102, 241, 0.25);
+                  animation: rewardsPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                .reward-medal-anim {
+                  animation: floatMedal 3.5s ease-in-out infinite;
+                }
+                .reward-shimmer-effect {
+                  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent);
+                  background-size: 200% 100%;
+                  animation: bannerShimmer 4s infinite linear;
+                }
+                .claim-btn-pulse {
+                  animation: claimPulse 2.5s infinite;
+                }
+              `}</style>
+
               {hasWon ? (
-                <div className={`flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border p-4 sm:px-4 sm:py-3.5 transition-all duration-300 hover:-translate-y-0.5 bg-white/70 backdrop-blur-md ${borderColor} gap-4`}>
-                  
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    {/* Left: Medal Emoji */}
-                    <div className="flex size-9.5 shrink-0 items-center justify-center rounded-xl bg-white border border-zinc-200 shadow-2xs text-lg select-none">
+                <div className={`relative flex flex-col md:flex-row items-center justify-between rounded-2xl p-6 sm:p-8 overflow-hidden gap-6 transition-all duration-300 hover:-translate-y-0.5 ${bannerClass}`}>
+                  {/* Shimmer sweep */}
+                  <div className="absolute inset-0 reward-shimmer-effect pointer-events-none opacity-40" />
+
+                  {/* Left: Medal and Congrats message */}
+                  <div className="flex flex-col sm:flex-row items-center gap-5 z-10 w-full md:w-auto text-center sm:text-left">
+                    {/* Floating Medal Emoji Container */}
+                    <div className="reward-medal-anim flex size-20 shrink-0 items-center justify-center rounded-3xl bg-white/90 border border-white shadow-md text-4xl select-none">
                       {medalEmoji}
                     </div>
 
-                    {/* Middle: Reward Description */}
-                    <div className="min-w-0 text-left">
-                      <div className="flex items-center gap-2 flex-wrap text-left">
-                        <p className="font-sans text-base sm:text-lg md:text-xl font-black text-black leading-tight">
-                          Rank {finalRank} • {rankTitle}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                        <p className="font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
-                          {tournament?.name || "EPIC Tournament"}
-                        </p>
-                      </div>
+                    {/* Congratulatory Text */}
+                    <div className="space-y-1">
+                      <span className="font-mono text-[10px] sm:text-xs font-black tracking-widest text-zinc-700 uppercase block">
+                        {congratsText}
+                      </span>
+                      <h2 className="font-sans text-xl sm:text-2xl md:text-3xl font-black text-zinc-955 leading-tight">
+                        Rank {finalRank} • {rankTitle}
+                      </h2>
+                      <p className="font-mono text-xs text-zinc-650 font-bold uppercase tracking-wider">
+                        Tournament: <span className="text-zinc-900 font-extrabold">{tournament?.name || "EPIC Tournament"}</span>
+                      </p>
                     </div>
                   </div>
 
-                  {/* Horizontal Divider for mobile screen only */}
-                  <div className="block sm:hidden h-px bg-zinc-200/60 w-full" />
-
-                  {/* Right: Prize display & Claim Button */}
-                  <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 pl-0 sm:pl-3">
-                    <div className="text-left sm:text-right">
-                      <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest leading-none mb-1 font-bold">
-                        Prize
-                      </p>
-                      <p className="font-mono text-base sm:text-lg md:text-xl font-black tabular-nums text-zinc-950 leading-none">
-                        {prizeAmount}
-                      </p>
+                  {/* Middle / Right: Big Prize & Lock Status / Claim Button */}
+                  <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-end gap-6 z-10 w-full md:w-auto border-t md:border-t-0 border-black/10 pt-4 md:pt-0">
+                    <div className="text-center sm:text-right">
+                      <span className="font-mono text-[10px] text-zinc-700 uppercase tracking-widest leading-none block mb-1.5 font-bold">
+                        Prize Won
+                      </span>
+                      {dbReward?.image_url ? (
+                        <div className="relative w-32 h-32 flex items-center justify-center bg-white/60 rounded-2xl p-2 border border-white/80 shadow-2xs">
+                          <img
+                            src={dbReward.image_url}
+                            alt="Prize Reward"
+                            className="max-w-full max-h-full object-contain rounded-md"
+                          />
+                        </div>
+                      ) : (
+                        <span className="font-sans text-2xl sm:text-3xl md:text-4xl font-black text-zinc-955 tracking-tight leading-none drop-shadow-xs">
+                          {prizeAmount}
+                        </span>
+                      )}
                     </div>
 
-                    <div className="shrink-0 flex flex-col items-end gap-1">
-                      <button className="py-1.5 px-3 rounded-lg font-sans text-[9px] font-black uppercase tracking-wider bg-zinc-950 text-white shadow-2xs hover:bg-zinc-900 transition-all duration-200 active:scale-98 cursor-pointer leading-none">
-                        Claim
+                    <div className="flex flex-col items-center sm:items-end gap-1.5">
+                      <button className="claim-btn-pulse py-3 px-6 rounded-xl font-sans text-xs font-black uppercase tracking-wider bg-zinc-950 text-white shadow-md hover:bg-zinc-900 transition-all duration-200 active:scale-95 cursor-pointer leading-none">
+                        Claim Prize
                       </button>
-                      <span className="font-mono text-[7px] text-orange-600 font-bold uppercase tracking-wider whitespace-nowrap">
+                      <span className="font-mono text-[9px] text-orange-700 font-black uppercase tracking-wider whitespace-nowrap bg-orange-100/85 px-2.5 py-1 rounded-full border border-orange-200">
                         Pending Lock
                       </span>
                     </div>
                   </div>
-
                 </div>
               ) : (
                 /* Status Banner */
@@ -676,7 +643,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                       </p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setTab("leaderboard")}
                     className="w-full sm:w-auto shrink-0 py-2.5 px-4 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 hover:border-zinc-400 active:scale-98 shadow-2xs text-[10px] font-bold text-zinc-700 uppercase tracking-wider transition-all cursor-pointer text-center"
                   >

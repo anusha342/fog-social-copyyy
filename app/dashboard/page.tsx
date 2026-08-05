@@ -1,12 +1,14 @@
 import { getServerSession } from "next-auth"
+// Trigger rebuild
 import { redirect } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Gamepad2, Trophy, Star, ChevronRight, Gift, Crown, ShieldCheck } from "lucide-react"
+import { Gamepad2, Trophy, Star, ChevronRight, Crown, ShieldCheck, QrCode } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
 import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
 import { getPlayerByGoogleId, getPlayerByEmail } from "@/lib/players"
+import { RewardsCarousel } from "@/components/RewardsCarousel"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
@@ -293,119 +295,16 @@ export default async function DashboardPage() {
         {/* ── Flat Responsive Layout: History -> Leaderboard -> Rewards ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-start w-full pb-8">
 
-          {/* 1. Available Rewards Card */}
-          <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 border-indigo-400 bg-indigo-50/90 p-4 sm:p-6 min-h-[220px] shadow-[0_4px_20px_rgba(99,102,241,0.08)] w-full">
-            <div>
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-indigo-200/30">
-                <span className="font-sans text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.1em] text-indigo-700 uppercase truncate">
-                  Available Rewards
-                </span>
-                <span className="font-mono text-[10px] sm:text-xs text-indigo-500 font-bold uppercase tracking-wider">
-                  Prizes
-                </span>
-              </div>
+          {/* 1. Available Rewards Section */}
+          <div className="space-y-6 w-full">
+            {/* Standalone Slideshow Carousel */}
+            <RewardsCarousel
+              bannerUrl={activeTournament?.banner_url}
+              rewards={activeTournament?.rewards}
+              tournamentName={activeTournament?.name}
+            />
 
-              <div className="flex items-start gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-md">
-                  <Gift size={18} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-sm sm:text-base font-bold text-zinc-800 transition-colors duration-300">
-                    Tournament Prizes
-                  </h3>
 
-                  {activeTournament ? (
-                    <div className="mt-3.5">
-                      {(() => {
-                        const reward1 = activeTournament.rewards?.find((r: any) => r.rank === 1)
-                        const reward2 = activeTournament.rewards?.find((r: any) => r.rank === 2)
-                        const reward3 = activeTournament.rewards?.find((r: any) => r.rank === 3)
-
-                        return (
-                          <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center">
-                            {/* 2nd Place */}
-                            <div className="flex flex-col justify-between items-center rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
-                              <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">
-                                {reward2?.title || "2nd Place"}
-                              </span>
-                              {reward2?.image_url ? (
-                                <div className="relative w-12 h-12 my-1.5 flex items-center justify-center">
-                                  <img
-                                    src={reward2.image_url}
-                                    alt={reward2.title || "2nd Place Reward"}
-                                    className="max-w-full max-h-full object-contain rounded-md"
-                                  />
-                                </div>
-                              ) : (
-                                <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">
-                                  {reward2?.prize_money || "₹2,500"}
-                                </p>
-                              )}
-                              <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">
-                                {reward2?.image_url ? "Prize" : "Cash"}
-                              </span>
-                            </div>
-
-                            {/* 1st Place - Champion */}
-                            <div className="flex flex-col justify-between items-center rounded-xl border-2 border-amber-300 bg-amber-50/40 p-3.5 shadow-md relative -translate-y-1">
-                              <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-amber-500 text-white font-mono text-[7px] font-black uppercase tracking-wider shadow-xs leading-none">
-                                CHAMP
-                              </div>
-                              <span className="font-mono text-[9px] font-black text-amber-700 uppercase tracking-wider mt-1">
-                                {reward1?.title || "1st Place"}
-                              </span>
-                              {reward1?.image_url ? (
-                                <div className="relative w-14 h-14 my-1.5 flex items-center justify-center">
-                                  <img
-                                    src={reward1.image_url}
-                                    alt={reward1.title || "1st Place Reward"}
-                                    className="max-w-full max-h-full object-contain rounded-md animate-pulse"
-                                  />
-                                </div>
-                              ) : (
-                                <p className="mt-1.5 font-sans text-sm sm:text-base font-black text-amber-900 leading-none">
-                                  {reward1?.prize_money || "₹5,000"}
-                                </p>
-                              )}
-                              <span className="mt-1 font-mono text-[8px] font-bold text-amber-600 uppercase">
-                                {reward1?.image_url ? "Prize" : "Cash"}
-                              </span>
-                            </div>
-
-                            {/* 3rd Place */}
-                            <div className="flex flex-col justify-between items-center rounded-xl border border-zinc-200 bg-white/60 p-2.5 sm:p-3.5 shadow-xs">
-                              <span className="font-mono text-[9px] font-black text-zinc-500 uppercase tracking-wider">
-                                {reward3?.title || "3rd Place"}
-                              </span>
-                              {reward3?.image_url ? (
-                                <div className="relative w-12 h-12 my-1.5 flex items-center justify-center">
-                                  <img
-                                    src={reward3.image_url}
-                                    alt={reward3.title || "3rd Place Reward"}
-                                    className="max-w-full max-h-full object-contain rounded-md"
-                                  />
-                                </div>
-                              ) : (
-                                <p className="mt-1.5 font-sans text-xs sm:text-sm font-black text-zinc-900 leading-none">
-                                  {reward3?.prize_money || "₹500"}
-                                </p>
-                              )}
-                              <span className="mt-1 font-mono text-[8px] font-bold text-zinc-450 uppercase">
-                                {reward3?.image_url ? "Prize" : "Cash"}
-                              </span>
-                            </div>
-                          </div>
-                        )
-                      })()}
-                    </div>
-                  ) : (
-                    <p className="mt-2 text-xs text-zinc-500 leading-relaxed font-medium">
-                      Compete in active tournaments to claim prizes. Sync scores to log your standing!
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* 2. Tournament Leaderboard Card */}
@@ -417,12 +316,14 @@ export default async function DashboardPage() {
             <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div>
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
-                <span className="font-sans text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase truncate">
-                  {activeTournament?.name || "Active Tournament"}
+                <span className="font-sans text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-2 min-w-0">
+                  <span className="size-2 rounded-full bg-red-500 animate-pulse shrink-0" />
+                  <span className="truncate">
+                    {activeTournament?.name || "Active Tournament"}
+                  </span>
                 </span>
-                <span className="font-mono text-[10px] sm:text-xs text-red-500 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="size-1.5 rounded-full bg-red-500 animate-pulse" />
-                  Active
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-xs text-pink-700 font-black tracking-wider px-3.5 py-1.5 rounded-full border border-pink-300 bg-pink-100/30 shadow-xs transition-all duration-300 group-hover/leaderboardcard:bg-pink-600 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-600 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.55)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                  ENTER ARENA <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5" />
                 </span>
               </div>
 
@@ -561,7 +462,7 @@ export default async function DashboardPage() {
               <div className="my-6 border-t border-pink-200/30" />
 
               {/* Performance Telemetry Block */}
-              <div className="mb-6">
+              <div>
                 <p className="font-sans text-[10px] sm:text-xs font-black tracking-widest text-pink-700 uppercase mb-2.5 text-center">
                   Your Performance Telemetry
                 </p>
@@ -596,13 +497,6 @@ export default async function DashboardPage() {
                     </p>
                   </div>
                 </div>
-              </div>
-
-              {/* Enter Arena Nav Action Footer */}
-              <div className="mt-6 pt-4 flex items-center justify-end border-t border-pink-200/40 relative z-20">
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-xs text-pink-700 font-black tracking-wider px-3.5 py-1.5 rounded-full border border-pink-300 bg-pink-100/30 shadow-xs transition-all duration-300 group-hover/leaderboardcard:bg-pink-600 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-600 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.55)] group-hover/leaderboardcard:translate-x-0.5">
-                  ENTER ARENA <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5" />
-                </span>
               </div>
 
             </div>

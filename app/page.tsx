@@ -49,6 +49,16 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-transparent text-zinc-900 flex flex-col justify-between relative">
+      {/* Page-wide subtle grid backdrop */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+        }}
+      />
 
 
 
@@ -59,13 +69,16 @@ export default async function Home() {
         <div className="relative z-10 flex w-full max-w-3xl flex-col items-center text-center">
 
           {/* Company Logo Image */}
-          <div className="mb-6 size-20 overflow-hidden flex items-center justify-center">
+          <div className="mb-8 size-20 flex items-center justify-center">
             <Image 
               src="/company_logo.png" 
               alt="FOG Technologies" 
               width={80} 
               height={80} 
               className="size-full object-contain"
+              style={{
+                filter: "drop-shadow(1px 1px 0px #ffffff) drop-shadow(1px 1px 0px #fed7aa) drop-shadow(1px 1px 0px #f97316) drop-shadow(1px 1px 0px #ea580c) drop-shadow(1px 1px 0px #9a3412) drop-shadow(2px 2px 8px rgba(0,0,0,0.25))"
+              }}
             />
           </div>
 
