@@ -90,17 +90,15 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
       {slides.map((slide, idx) => (
         <div
           key={idx}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-            idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-          }`}
+          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+            }`}
         >
           {/* Santa's Lucky Spin style: full-bleed background card layout */}
-          <div className={`relative w-full h-full flex bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white transition-all duration-300 ${
-            slide.url === "all-rewards" 
-              ? "flex-col justify-start items-center text-center p-4 sm:p-5 pt-3 pb-7 gap-2" 
+          <div className={`relative w-full h-full flex bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white transition-all duration-300 ${slide.url === "all-rewards"
+              ? "flex-col justify-start items-center text-center p-4 sm:p-5 pt-3 pb-7 gap-2"
               : "flex-row justify-between items-center p-6 sm:p-8"
-          }`}>
-            
+            }`}>
+
             {/* Festive Hanging Lights Overlay (SVG styled as Santa's lights decoration) */}
             <div className="absolute top-0 inset-x-0 h-8 opacity-40 pointer-events-none z-10 bg-repeat-x" style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' viewBox='0 0 40 20'%3E%3Cpath d='M0,0 Q10,12 20,0 Q30,12 40,0' fill='none' stroke='white' stroke-width='1'/%3E%3Ccircle cx='10' cy='6' r='2' fill='%23ffeb3b'/%3E%3Ccircle cx='20' cy='0' r='2.5' fill='%23ff1744'/%3E%3Ccircle cx='30' cy='6' r='2' fill='%2300e676'/%3E%3C/svg%3E")`,
@@ -226,9 +224,8 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
             <button
               key={idx}
               onClick={() => setCurrentSlide(idx)}
-              className={`size-2 rounded-full transition-all duration-305 ${
-                idx === currentSlide ? "bg-white w-5" : "bg-white/40 hover:bg-white/60"
-              }`}
+              className={`size-2 rounded-full transition-all duration-305 ${idx === currentSlide ? "bg-white w-5" : "bg-white/40 hover:bg-white/60"
+                }`}
               aria-label={`Go to slide ${idx + 1}`}
             />
           ))}

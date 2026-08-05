@@ -89,18 +89,18 @@ export default async function Home() {
           <InteractiveLogo />
 
           {/* Tagline */}
-          <p className="mt-8 font-mono text-[10px] font-bold tracking-[0.3em] text-zinc-500 uppercase">
+          <p className="mt-8 font-mono text-xs font-bold tracking-[0.3em] text-zinc-500 uppercase">
             Play · Track · Compete
           </p>
 
           {/* Description */}
-          <p className="mt-5 max-w-sm text-sm sm:text-base leading-relaxed text-zinc-600 md:max-w-md">
+          <p className="mt-5 max-w-sm text-base leading-relaxed text-zinc-600 md:max-w-md">
             Your arcade identity. Every game on a FOG machine tracked, ranked, and remembered.
           </p>
 
           {/* Google CTA */}
           <GoogleSignInButton
-            className="mt-10 flex w-full max-w-xs items-center justify-center gap-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-6 shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer font-sans text-sm tracking-wide border border-transparent"
+            className="mt-10 flex w-full max-w-xs items-center justify-center gap-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-6 shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer font-sans text-base tracking-wide border border-transparent"
           >
             <div className="flex size-5 shrink-0 items-center justify-center rounded bg-white shadow-sm mr-1">
               <GoogleIcon />
@@ -109,7 +109,7 @@ export default async function Home() {
           </GoogleSignInButton>
 
           {/* QR hint */}
-          <div className="mt-5 flex items-center gap-1.5 font-mono text-[10px] text-zinc-400 font-medium">
+          <div className="mt-5 flex items-center gap-1.5 font-mono text-xs text-zinc-400 font-medium">
             <QrCode size={11} className="text-zinc-400" aria-hidden />
             <span>or scan a QR at any FOG machine</span>
           </div>
@@ -129,8 +129,8 @@ export default async function Home() {
                   <Icon size={19} className="text-inherit" aria-hidden />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-zinc-950">{title}</h2>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-700">{description}</p>
+                  <h2 className="text-base font-bold text-zinc-955">{title}</h2>
+                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-700">{description}</p>
                 </div>
               </div>
             </div>

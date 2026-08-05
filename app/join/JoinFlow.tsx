@@ -153,8 +153,8 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
       <div className="flex min-h-svh items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <Loader2 size={28} className="text-primary animate-spin" aria-hidden />
-          <p className="text-sm font-medium text-foreground">Checking session…</p>
-          <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+          <p className="text-base font-bold text-foreground">Checking session…</p>
+          <p className="font-mono text-sm tracking-widest text-muted-foreground uppercase">
             {sessionCode.toUpperCase()}
           </p>
         </div>
@@ -171,7 +171,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
           {/* Session code display */}
           <div className="mb-8 flex flex-col items-center gap-2">
             <QrCode size={30} className="text-primary/50" aria-hidden />
-            <span className="font-mono text-[10px] tracking-widest text-foreground/35 uppercase">
+            <span className="font-mono text-xs tracking-widest text-foreground/35 uppercase">
               Session Code
             </span>
             <span className="font-mono text-2xl font-bold tracking-[0.15em] text-primary">
@@ -179,14 +179,14 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
             </span>
           </div>
 
-          <h1 className="text-xl font-bold text-foreground">Join the tournament</h1>
-          <p className="mt-2 mb-8 text-sm leading-relaxed text-muted-foreground">
+          <h1 className="text-2xl font-bold text-foreground">Join the tournament</h1>
+          <p className="mt-2 mb-8 text-base leading-relaxed text-muted-foreground">
             Sign in with Google to link your account to this game session.
           </p>
 
           <button
             onClick={() => signIn("google", { callbackUrl })}
-            className="flex w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
+            className="flex w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-base font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
           >
             <GoogleIcon />
             Continue with Google
@@ -202,8 +202,8 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
       <div className="flex min-h-svh items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <Loader2 size={28} className="text-primary animate-spin" aria-hidden />
-          <p className="text-sm font-medium text-foreground">Joining tournament…</p>
-          <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+          <p className="text-base font-bold text-foreground">Joining tournament…</p>
+          <p className="font-mono text-sm tracking-widest text-muted-foreground uppercase">
             {sessionCode.toUpperCase()}
           </p>
         </div>
@@ -221,13 +221,13 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
             <AlertCircle size={26} className="text-destructive" aria-hidden />
           </div>
           <div>
-            <p className="text-lg font-bold text-foreground">{title}</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{desc}</p>
+            <p className="text-xl font-bold text-foreground">{title}</p>
+            <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{desc}</p>
           </div>
           {errorCode === "network" && (
             <button
               onClick={() => { setPhase("joining"); setRetryKey((k) => k + 1) }}
-              className="rounded-xl bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
+              className="rounded-xl bg-primary px-6 py-2.5 text-base font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
             >
               Try again
             </button>

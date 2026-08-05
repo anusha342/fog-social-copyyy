@@ -303,33 +303,31 @@ export default async function DashboardPage() {
               rewards={activeTournament?.rewards}
               tournamentName={activeTournament?.name}
             />
-
-
           </div>
 
           {/* 2. Tournament Leaderboard Card */}
           <Link
             href="/tournaments"
-            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/15 !border-pink-200/50 p-4 sm:p-6 transition-all duration-300 hover:!border-pink-300/80 hover:!bg-pink-50/30 hover:-translate-y-0.5 w-full h-full md:row-span-2"
+            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/15 !border-pink-200/50 p-4 sm:p-6 transition-all duration-300 hover:!border-pink-300/80 hover:!bg-pink-50/30 active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
             <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="flex flex-col justify-between h-full flex-grow relative z-20">
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
-                <span className="font-sans text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-2 min-w-0">
+                <span className="font-sans text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-2 min-w-0">
                   <span className="size-2 rounded-full bg-red-500 animate-pulse shrink-0" />
                   <span className="truncate">
                     {activeTournament?.name || "Active Tournament"}
                   </span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-xs text-pink-700 font-black tracking-wider px-3.5 py-1.5 rounded-full border border-pink-300 bg-pink-100/30 shadow-xs transition-all duration-300 group-hover/leaderboardcard:bg-pink-600 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-600 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.55)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                <span className="inline-flex items-center gap-1.5 font-mono text-sm text-pink-700 font-black tracking-wider px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-pink-300 bg-pink-100/30 shadow-xs transition-all duration-300 group-hover/leaderboardcard:bg-pink-600 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-600 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.55)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
                   ENTER ARENA <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5" />
                 </span>
               </div>
 
               <div className="w-full text-center">
-                <h3 className="text-sm sm:text-base font-bold text-zinc-800 transition-colors duration-300">
+                <h3 className="text-lg font-bold text-zinc-800 transition-colors duration-300">
                   Tournament Leaderboard
                 </h3>
                 {leaderboardData && leaderboardData.leaderboard.length > 0 ? (
@@ -364,16 +362,16 @@ export default async function DashboardPage() {
                         const isRank3 = entry.rank === 3
                         const isMe = playerRank != null && entry.rank === playerRank
 
-                        let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 border-zinc-300/40 shadow-sm"
+                        let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 active:!bg-white/45 active:scale-[0.99] border-zinc-300/40 shadow-sm"
                         let rankWidget = (
-                          <div className={`font-mono text-sm sm:text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
+                          <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
                             {entry.rank}
                           </div>
                         )
                         let scoreColor = "text-zinc-600 font-extrabold"
 
                         if (isRank1) {
-                          cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/70 border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
+                          cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/70 active:!bg-orange-100/65 active:scale-[0.99] border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥇
@@ -381,7 +379,7 @@ export default async function DashboardPage() {
                           )
                           scoreColor = "text-orange-700 font-extrabold"
                         } else if (isRank2) {
-                          cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/70 border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
+                          cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/70 active:!bg-sky-100/65 active:scale-[0.99] border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥈
@@ -389,7 +387,7 @@ export default async function DashboardPage() {
                           )
                           scoreColor = "text-sky-700 font-extrabold"
                         } else if (isRank3) {
-                          cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/70 border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
+                          cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/70 active:!bg-indigo-100/65 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥉
@@ -400,7 +398,7 @@ export default async function DashboardPage() {
 
                         if (isMe) {
                           if (!isRank1 && !isRank2 && !isRank3) {
-                            cardClass = "glass-pill-3d !bg-emerald-50/20 hover:!bg-emerald-50/35 border-emerald-500/60 shadow-md border-2"
+                            cardClass = "glass-pill-3d !bg-emerald-50/20 hover:!bg-emerald-50/35 active:!bg-emerald-50/25 active:scale-[0.99] border-emerald-500/60 shadow-md border-2"
                           } else {
                             cardClass = `${cardClass} border-emerald-500/70 border-2`
                           }
@@ -412,7 +410,7 @@ export default async function DashboardPage() {
                             className={`relative flex items-center gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 text-left ${cardClass}`}
                           >
                             {isMe && (
-                              <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-[9px] font-black uppercase tracking-wider shadow-sm z-10 leading-none">
+                              <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
                                 YOU
                               </span>
                             )}
@@ -431,7 +429,7 @@ export default async function DashboardPage() {
                             </div>
 
                             {/* Name */}
-                            <p className={`flex items-center flex-1 truncate text-xs sm:text-sm font-bold ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
+                            <p className={`flex items-center flex-1 truncate text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
                               <span className="truncate">
                                 {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
                               </span>
@@ -441,7 +439,7 @@ export default async function DashboardPage() {
                             </p>
 
                             {/* Score */}
-                            <p className={`font-mono text-xs sm:text-sm font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
+                            <p className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
                               {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0 mb-0.5" />}
                               {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0 mb-0.5" />}
                               {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0 mb-0.5" />}
@@ -465,36 +463,36 @@ export default async function DashboardPage() {
 
             {/* Performance Telemetry Block */}
             <div>
-                <p className="font-sans text-[10px] sm:text-xs font-black tracking-widest text-pink-700 uppercase mb-2.5 text-center">
+                <p className="font-sans text-sm font-black tracking-widest text-pink-700 uppercase mb-2.5 text-center">
                   Your Performance Telemetry
                 </p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   {/* Games Played */}
                   <div className="glass-pill-3d !bg-cyan-100/45 border-cyan-300/80 shadow-[0_4px_12px_rgba(6,182,212,0.12)] flex flex-col items-center justify-center text-center rounded-xl p-2 sm:p-3">
-                    <p className="text-base sm:text-lg md:text-xl font-black tracking-tight leading-tight text-cyan-950">
+                    <p className="text-xl font-black tracking-tight leading-tight text-cyan-950">
                       {stats?.games_played != null ? stats.games_played.toLocaleString() : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-[9px] sm:text-[10px] font-bold tracking-wider text-cyan-800 uppercase">
+                    <p className="mt-1 font-mono text-xs font-bold tracking-wider text-cyan-800 uppercase">
                       Games Played
                     </p>
                   </div>
 
                   {/* Best Score */}
                   <div className="glass-pill-3d !bg-amber-100/45 border-amber-300/80 shadow-[0_4px_12px_rgba(245,158,11,0.12)] flex flex-col items-center justify-center text-center rounded-xl p-2 sm:p-3">
-                    <p className="text-base sm:text-lg md:text-xl font-black tracking-tight leading-tight text-amber-950">
+                    <p className="text-xl font-black tracking-tight leading-tight text-amber-955">
                       {stats?.best_score != null ? stats.best_score.toLocaleString() : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-[9px] sm:text-[10px] font-bold tracking-wider text-amber-800 uppercase">
+                    <p className="mt-1 font-mono text-xs font-bold tracking-wider text-amber-800 uppercase">
                       Best Score
                     </p>
                   </div>
 
                   {/* Global Rank */}
                   <div className="glass-pill-3d !bg-indigo-100/45 border-indigo-300/80 shadow-[0_4px_12px_rgba(99,102,241,0.12)] flex flex-col items-center justify-center text-center rounded-xl p-2 sm:p-3">
-                    <p className="text-base sm:text-lg md:text-xl font-black tracking-tight leading-tight text-indigo-950">
+                    <p className="text-xl font-black tracking-tight leading-tight text-indigo-950">
                       {stats?.global_rank != null ? `# ${stats.global_rank}` : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-[9px] sm:text-[10px] font-bold tracking-wider text-indigo-800 uppercase">
+                    <p className="mt-1 font-mono text-xs font-bold tracking-wider text-indigo-800 uppercase">
                       Global Rank
                     </p>
                   </div>
@@ -509,10 +507,10 @@ export default async function DashboardPage() {
             {/* Hover Shine Sweep Overlay */}
             <div className="hover-shine-sweep opacity-0 group-hover/historycard:opacity-100 group-hover/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="mb-4 sm:mb-6 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
-              <p className="font-mono text-xs sm:text-sm font-black tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
+              <p className="font-mono text-base font-black tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
                 Cabinet Session History
               </p>
-              <span className="font-mono text-xs text-muted-foreground/50 uppercase tracking-widest">
+              <span className="font-mono text-sm text-muted-foreground/50 uppercase tracking-widest">
                 Limit_10_Sess
               </span>
             </div>
@@ -533,15 +531,15 @@ export default async function DashboardPage() {
                   {sortedGameplays.map((g, index) => (
                     <div
                       key={`${g.gameplay_id}-${index}`}
-                      className="glass-pill-3d !bg-[#D9CFC7]/15 hover:!bg-[#D9CFC7]/30 border-zinc-300/40 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-300 shadow-sm"
+                      className="glass-pill-3d !bg-[#D9CFC7]/15 hover:!bg-[#D9CFC7]/30 active:!bg-[#D9CFC7]/20 active:scale-[0.99] border-zinc-300/40 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-300 shadow-sm"
                     >
                       {/* Date / Time */}
                       <div className="min-w-0 flex-1 text-left">
-                        <p className="font-mono text-xs sm:text-sm font-bold text-zinc-900 uppercase tracking-wide">
+                        <p className="font-mono text-base font-bold text-zinc-900 uppercase tracking-wide">
                           {g.center_name || "FOG Cabinet"}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                          <p className="font-mono text-[10px] sm:text-xs text-zinc-500">
+                          <p className="font-mono text-sm text-zinc-500">
                             {new Date(g.played_at).toLocaleTimeString(undefined, {
                               hour: "2-digit", minute: "2-digit",
                             })}
@@ -551,10 +549,10 @@ export default async function DashboardPage() {
 
                       {/* Score */}
                       <div className="text-right">
-                        <p className="font-mono text-sm sm:text-base md:text-lg font-bold tabular-nums text-zinc-900">
+                        <p className="font-mono text-lg font-bold tabular-nums text-zinc-900">
                           {g.score.toLocaleString()}
                         </p>
-                        <p className="mt-0.5 font-mono text-[10px] sm:text-xs text-[#6e635c] uppercase tracking-widest flex items-center gap-0.5 justify-end">
+                        <p className="mt-0.5 font-mono text-sm text-[#6e635c] uppercase tracking-widest flex items-center gap-0.5 justify-end">
                           <ShieldCheck size={12} className="text-emerald-600 shrink-0" />
                           <span>
                             {new Date(g.played_at).toLocaleDateString(undefined, {

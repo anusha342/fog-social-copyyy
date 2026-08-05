@@ -198,7 +198,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
               {/* Shimmer Sweep Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full animate-[shimmerSweep_6s_infinite_linear] pointer-events-none" />
 
-              <h3 className="font-mono text-xs sm:text-sm md:text-base text-zinc-955 font-black uppercase tracking-widest mb-4 text-center sm:text-left flex items-center justify-center sm:justify-start gap-1.5 relative z-10 drop-shadow-sm">
+              <h3 className="font-mono text-sm sm:text-base text-zinc-955 font-black uppercase tracking-widest mb-4 text-center sm:text-left flex items-center justify-center sm:justify-start gap-1.5 relative z-10 drop-shadow-sm">
                 🏆 Tournament Prizes
               </h3>
 
@@ -209,13 +209,13 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   if (!r2) return <div />;
                   return (
                     <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/20 !border-white/30 shadow-xs transition-transform duration-300 hover:scale-[1.02] h-fit">
-                      <span className="font-mono text-[9px] sm:text-[11px] text-zinc-800 font-black uppercase tracking-wider block mb-2.5 leading-none">
+                      <span className="font-mono text-xs sm:text-xs text-zinc-800 font-black uppercase tracking-wider block mb-2.5 leading-none">
                         2nd Place
                       </span>
                       <span className="font-sans text-base sm:text-2xl font-black text-zinc-955 tracking-tight leading-none mb-1.5 sm:mb-2 drop-shadow-xs">
                         {r2.prize_money}
                       </span>
-                      <span className="font-mono text-[9px] sm:text-[10px] text-zinc-600 font-bold uppercase tracking-widest leading-none">
+                      <span className="font-mono text-[10px] sm:text-xs text-zinc-600 font-bold uppercase tracking-widest leading-none">
                         Cash
                       </span>
                     </div>
@@ -229,16 +229,16 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   return (
                     <div className="relative flex flex-col items-center text-center p-4 sm:p-5 rounded-xl glass-pill-3d !bg-white/35 !border-white/60 shadow-sm transition-transform duration-300 hover:scale-[1.02] scale-[1.04] z-10">
                       {/* Champ tag */}
-                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-955 font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full leading-none shadow-2xs border border-white/25 select-none">
+                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-955 font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full leading-none shadow-2xs border border-white/25 select-none">
                         Champ
                       </span>
-                      <span className="font-mono text-[9px] sm:text-[11px] text-zinc-900 font-black uppercase tracking-wider block mb-3 leading-none">
+                      <span className="font-mono text-xs sm:text-xs text-zinc-900 font-black uppercase tracking-wider block mb-3 leading-none">
                         1st Place
                       </span>
                       <span className="font-sans text-lg sm:text-3xl font-black text-zinc-955 tracking-tight leading-none mb-1.5 sm:mb-2 drop-shadow-xs">
                         {r1.prize_money}
                       </span>
-                      <span className="font-mono text-[9px] sm:text-[10px] text-zinc-700 font-bold uppercase tracking-widest leading-none">
+                      <span className="font-mono text-[10px] sm:text-xs text-zinc-700 font-bold uppercase tracking-widest leading-none">
                         Cash
                       </span>
                     </div>
@@ -251,13 +251,13 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   if (!r3) return <div />;
                   return (
                     <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/20 !border-white/30 shadow-xs transition-transform duration-300 hover:scale-[1.02] h-fit">
-                      <span className="font-mono text-[9px] sm:text-[11px] text-zinc-800 font-black uppercase tracking-wider block mb-2.5 leading-none">
+                      <span className="font-mono text-xs sm:text-xs text-zinc-800 font-black uppercase tracking-wider block mb-2.5 leading-none">
                         3rd Place
                       </span>
                       <span className="font-sans text-base sm:text-2xl font-black text-zinc-955 tracking-tight leading-none mb-1.5 sm:mb-2 drop-shadow-xs">
                         {r3.prize_money}
                       </span>
-                      <span className="font-mono text-[9px] sm:text-[10px] text-zinc-600 font-bold uppercase tracking-widest leading-none">
+                      <span className="font-mono text-[10px] sm:text-xs text-zinc-600 font-bold uppercase tracking-widest leading-none">
                         Cash
                       </span>
                     </div>
@@ -334,12 +334,12 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                     const isRank2 = entry.rank === 2
                     const isRank3 = entry.rank === 3
 
-                    let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 border-zinc-300/40 shadow-sm"
+                    let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 active:!bg-white/45 active:scale-[0.99] border-zinc-300/40 shadow-sm"
                     let rankWidget = null
                     let scoreColor = "text-zinc-600 font-extrabold"
 
                     if (isRank1) {
-                      cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/70 border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
+                      cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/70 active:!bg-orange-100/60 active:scale-[0.99] border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
                       rankWidget = (
                         <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                           🥇
@@ -347,7 +347,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                       )
                       scoreColor = "text-orange-700 font-extrabold"
                     } else if (isRank2) {
-                      cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/70 border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
+                      cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/70 active:!bg-sky-100/60 active:scale-[0.99] border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
                       rankWidget = (
                         <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                           🥈
@@ -355,7 +355,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                       )
                       scoreColor = "text-sky-700 font-extrabold"
                     } else if (isRank3) {
-                      cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/70 border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
+                      cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/70 active:!bg-indigo-100/60 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
                       rankWidget = (
                         <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                           🥉
@@ -364,7 +364,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                       scoreColor = "text-indigo-700 font-extrabold"
                     } else {
                       rankWidget = (
-                        <div className={`font-mono text-sm sm:text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"
+                        <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"
                           }`}>
                           {entry.rank}
                         </div>
@@ -374,7 +374,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                     if (isMe) {
                       if (!isRank1 && !isRank2 && !isRank3) {
-                        cardClass = "glass-pill-3d !bg-emerald-50/20 hover:!bg-emerald-50/35 border-emerald-500/60 shadow-md border-2"
+                        cardClass = "glass-pill-3d !bg-emerald-50/20 hover:!bg-emerald-50/35 active:!bg-emerald-50/25 active:scale-[0.99] border-emerald-500/60 shadow-md border-2"
                       } else {
                         cardClass = `${cardClass} border-emerald-500/70 border-2`
                       }
@@ -386,7 +386,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         className={`relative flex items-center gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 ${cardClass}`}
                       >
                         {isMe && (
-                          <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-[9px] font-black uppercase tracking-wider shadow-sm z-10 leading-none">
+                          <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
                             YOU
                           </span>
                         )}
@@ -406,7 +406,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                         {/* Name */}
                         <p
-                          className={`flex items-center flex-1 truncate text-xs sm:text-sm md:text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-900"
+                          className={`flex items-center flex-1 truncate text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-900"
                             }`}
                         >
                           <span className="truncate">
@@ -418,7 +418,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         </p>
 
                         {/* Score */}
-                        <p className={`font-mono text-xs sm:text-sm md:text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
+                        <p className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
                           {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0 mb-0.5" />}
                           {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0 mb-0.5" />}
                           {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0 mb-0.5" />}
@@ -439,7 +439,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           !playsLoaded ? (
             <div className="flex flex-col items-center gap-3 py-20">
               <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
-              <p className="text-xs text-muted-foreground">Loading plays…</p>
+              <p className="text-sm text-muted-foreground">Loading plays…</p>
             </div>
           ) : plays && plays.length > 0 ? (
             <div className="space-y-2.5">
@@ -455,45 +455,45 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                 return plays.map((g, index) => {
                   const isBestPlay = bestPlayIndex !== -1 && index === bestPlayIndex
 
-                  let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 border-zinc-300/40 shadow-sm"
+                  let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 active:!bg-white/45 active:scale-[0.99] border-zinc-300/40 shadow-sm"
                   let iconBg = "bg-zinc-100 text-zinc-500 border border-zinc-200/50"
                   let iconElement = <Gamepad2 size={16} />
                   let bestPlayBadge = null
 
                   if (isBestPlay) {
                     if (finalRank === 1) {
-                      cardClass = "glass-pill-3d !bg-orange-100/35 hover:!bg-orange-100/50 border-orange-400/50 shadow-md shadow-orange-500/8 border-l-4 border-l-orange-500"
+                      cardClass = "glass-pill-3d !bg-orange-100/35 hover:!bg-orange-100/50 active:!bg-orange-100/45 active:scale-[0.99] border-orange-400/50 shadow-md shadow-orange-500/8 border-l-4 border-l-orange-500"
                       iconBg = "bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-sm"
                       iconElement = <Crown size={16} />
                       bestPlayBadge = (
-                        <span className="inline-flex items-center gap-1 font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200 shadow-xs">
+                        <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200 shadow-xs">
                           👑 Personal Best
                         </span>
                       )
                     } else if (finalRank === 2) {
-                      cardClass = "glass-pill-3d !bg-sky-100/35 hover:!bg-sky-100/50 border-sky-400/50 shadow-md shadow-sky-500/8 border-l-4 border-l-sky-500"
+                      cardClass = "glass-pill-3d !bg-sky-100/35 hover:!bg-sky-100/50 active:!bg-sky-100/45 active:scale-[0.99] border-sky-400/50 shadow-md shadow-sky-500/8 border-l-4 border-l-sky-500"
                       iconBg = "bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-sm"
                       iconElement = <Trophy size={16} />
                       bestPlayBadge = (
-                        <span className="inline-flex items-center gap-1 font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200 shadow-xs">
+                        <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200 shadow-xs">
                           🏆 Personal Best
                         </span>
                       )
                     } else if (finalRank === 3) {
-                      cardClass = "glass-pill-3d !bg-indigo-100/35 hover:!bg-indigo-100/50 border-indigo-400/50 shadow-md shadow-indigo-500/8 border-l-4 border-l-indigo-500"
+                      cardClass = "glass-pill-3d !bg-indigo-100/35 hover:!bg-indigo-100/50 active:!bg-indigo-100/45 active:scale-[0.99] border-indigo-400/50 shadow-md shadow-indigo-500/8 border-l-4 border-l-indigo-500"
                       iconBg = "bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-sm"
                       iconElement = <Trophy size={16} />
                       bestPlayBadge = (
-                        <span className="inline-flex items-center gap-1 font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-xs">
+                        <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-xs">
                           🏆 Personal Best
                         </span>
                       )
                     } else {
-                      cardClass = "glass-pill-3d !bg-amber-100/35 hover:!bg-amber-100/50 border-amber-400/50 shadow-md shadow-amber-500/8 border-l-4 border-l-amber-500"
+                      cardClass = "glass-pill-3d !bg-amber-100/35 hover:!bg-amber-100/50 active:!bg-amber-100/45 active:scale-[0.99] border-amber-400/50 shadow-md shadow-amber-500/8 border-l-4 border-l-amber-500"
                       iconBg = "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-sm"
                       iconElement = <Trophy size={16} />
                       bestPlayBadge = (
-                        <span className="inline-flex items-center gap-1 font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 shadow-xs">
+                        <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 shadow-xs">
                           🏆 Personal Best
                         </span>
                       )
@@ -514,7 +514,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         {/* Date/Time info */}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap text-left">
-                            <p className="font-mono text-sm sm:text-base font-extrabold text-zinc-800 leading-none">
+                            <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-800 leading-none">
                               {new Date(g.played_at).toLocaleDateString(undefined, {
                                 month: "short", day: "numeric", year: "numeric",
                               })}
@@ -522,13 +522,13 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                             {bestPlayBadge}
                           </div>
                           <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                            <p className="font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
+                            <p className="font-mono text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
                               {new Date(g.played_at).toLocaleTimeString(undefined, {
                                 hour: "2-digit", minute: "2-digit",
                               })}
                             </p>
                             {g.center_name && (
-                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-150 border border-zinc-200/50 font-mono text-[8px] sm:text-[9px] font-bold text-zinc-650 uppercase tracking-wider leading-none shadow-3xs">
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 font-mono text-[10px] sm:text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs">
                                 {g.center_name}
                               </span>
                             )}
@@ -538,10 +538,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                       {/* Score display */}
                       <div className="text-right shrink-0 pl-3">
-                        <p className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest leading-none mb-1 font-bold">
+                        <p className="font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-widest leading-none mb-1 font-bold">
                           Score
                         </p>
-                        <p className="font-mono text-base sm:text-lg md:text-xl font-black tabular-nums text-zinc-950 leading-none">
+                        <p className="font-mono text-lg sm:text-xl md:text-2xl font-black tabular-nums text-zinc-950 leading-none">
                           {g.score.toLocaleString()}
                         </p>
                       </div>
@@ -622,6 +622,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   background: linear-gradient(135deg, rgba(255, 248, 220, 0.8) 0%, rgba(253, 224, 71, 0.35) 60%, rgba(234, 179, 8, 0.15) 100%);
                   backdrop-filter: blur(30px) saturate(240%);
                   -webkit-backdrop-filter: blur(30px) saturate(240%);
+                  /* Force GPU rendering to fix WebKit overflow/border-radius backdrop-filter bugs */
+                  -webkit-transform: translate3d(0, 0, 0);
+                  transform: translate3d(0, 0, 0);
+                  will-change: transform, backdrop-filter;
                   border: 2px solid rgba(234, 179, 8, 0.6);
                   box-shadow: 
                     0 30px 60px -15px rgba(234, 179, 8, 0.15),
@@ -632,6 +636,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(203, 213, 225, 0.35) 60%, rgba(148, 163, 184, 0.15) 100%);
                   backdrop-filter: blur(30px) saturate(240%);
                   -webkit-backdrop-filter: blur(30px) saturate(240%);
+                  /* Force GPU rendering to fix WebKit overflow/border-radius backdrop-filter bugs */
+                  -webkit-transform: translate3d(0, 0, 0);
+                  transform: translate3d(0, 0, 0);
+                  will-change: transform, backdrop-filter;
                   border: 2px solid rgba(148, 163, 184, 0.5);
                   box-shadow: 
                     0 30px 60px -15px rgba(148, 163, 184, 0.1),
@@ -642,6 +650,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   background: linear-gradient(135deg, rgba(245, 243, 255, 0.8) 0%, rgba(199, 210, 254, 0.35) 60%, rgba(99, 102, 241, 0.15) 100%);
                   backdrop-filter: blur(30px) saturate(240%);
                   -webkit-backdrop-filter: blur(30px) saturate(240%);
+                  /* Force GPU rendering to fix WebKit overflow/border-radius backdrop-filter bugs */
+                  -webkit-transform: translate3d(0, 0, 0);
+                  transform: translate3d(0, 0, 0);
+                  will-change: transform, backdrop-filter;
                   border: 2px solid rgba(99, 102, 241, 0.5);
                   box-shadow: 
                     0 30px 60px -15px rgba(99, 102, 241, 0.12),
@@ -662,7 +674,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
               `}</style>
 
               {hasWon ? (
-                <div className={`relative flex flex-row items-center justify-between rounded-3xl p-5 sm:p-7 overflow-hidden gap-4 transition-all duration-300 hover:-translate-y-0.5 w-full ${bannerClass}`}>
+                <div className={`relative flex flex-row items-center justify-between rounded-3xl p-5 sm:p-7 overflow-hidden gap-4 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.99] w-full ${bannerClass}`}>
                   {/* Shimmer sweep */}
                   <div className="absolute inset-0 reward-shimmer-effect pointer-events-none opacity-40" />
 
@@ -679,10 +691,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                     {/* Simple Title */}
                     <div className="min-w-0 flex-1 text-left pr-2 sm:pr-3">
-                      <h2 className="font-sans text-xs min-[360px]:text-sm sm:text-lg md:text-xl font-black text-zinc-955 uppercase leading-snug tracking-tight break-normal">
+                      <h2 className="font-sans text-sm min-[360px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 uppercase leading-snug tracking-tight break-normal">
                         {tournament?.name || "EPIC Tournament"}
                       </h2>
-                      <span className="font-mono text-[8px] sm:text-[9px] font-black tracking-widest text-[#6e635c]/90 uppercase block leading-none mt-1">
+                      <span className="font-mono text-[10px] sm:text-xs font-black tracking-widest text-[#6e635c]/90 uppercase block leading-none mt-1">
                         {finalRank === 1 ? "1st Place Winner" : finalRank === 2 ? "2nd Place Winner" : "3rd Place Winner"}
                       </span>
                     </div>
@@ -693,7 +705,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                     {!dbReward?.image_url || dbReward.image_url === "" ? (
                        <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex flex-col items-center justify-center glass-pill-3d rounded-2xl p-3 bg-white/45 border-white shadow-md text-center">
                          <span className="text-xl sm:text-2xl mb-1 sm:mb-1.5 select-none">💵</span>
-                         <span className="font-sans text-sm sm:text-base font-extrabold text-zinc-955 tracking-tight leading-none">
+                         <span className="font-sans text-base sm:text-lg font-extrabold text-zinc-955 tracking-tight leading-none">
                            {prizeAmount}
                          </span>
                        </div>
@@ -710,18 +722,18 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                 </div>
               ) : (
                 /* Status Banner */
-                <div className="glass-panel-3d relative overflow-hidden !bg-white/10 !border-zinc-250 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transition-all duration-300 hover:-translate-y-0.5">
+                <div className="glass-panel-3d relative overflow-hidden !bg-white/10 active:!bg-white/15 active:scale-[0.99] !border-zinc-300/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transition-all duration-300 hover:-translate-y-0.5">
                   <div className="flex items-center gap-4 min-w-0">
                     <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 border border-zinc-200 shadow-2xs animate-pulse">
                       <Trophy size={18} className="text-zinc-400 fill-zinc-50" />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-sans text-base sm:text-lg font-black text-zinc-900 leading-tight">
+                      <h3 className="font-sans text-lg sm:text-xl font-black text-zinc-900 leading-tight">
                         No rewards won yet
                       </h3>
-                      <p className="mt-1.5 font-mono text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 flex-wrap">
+                      <p className="mt-1.5 font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 flex-wrap">
                         <span>Current Rank:</span>
-                        <span className="px-1.5 py-0.5 rounded bg-zinc-150 border border-zinc-250 text-zinc-700 font-black">
+                        <span className="px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-350 text-zinc-700 font-black">
                           {finalRank != null ? `#${finalRank}` : "UNRANKED"}
                         </span>
                       </p>

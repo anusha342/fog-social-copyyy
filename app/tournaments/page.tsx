@@ -246,11 +246,11 @@ export default async function TournamentsPage() {
               <div className="group/activepanel glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
                 <div className="hover-shine-sweep opacity-0 group-hover/activepanel:opacity-100 group-hover/activepanel:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
                 <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
-                  <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
+                  <p className="font-mono text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping"></span>
                     Active Arenas
                   </p>
-                  <span className="font-mono text-xs text-red-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="font-mono text-sm text-red-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"></span>
                     {active.length} Live
                   </span>
@@ -269,11 +269,11 @@ export default async function TournamentsPage() {
               <div className="group/pastpanel glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
                 <div className="hover-shine-sweep opacity-0 group-hover/pastpanel:opacity-100 group-hover/pastpanel:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
                 <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
-                  <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
+                  <p className="font-mono text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
                     <Clock size={14} className="text-[#8a7f77]" />
                     All Tournaments
                   </p>
-                  <span className="font-mono text-xs text-muted-foreground/50 uppercase tracking-widest">
+                  <span className="font-mono text-sm text-muted-foreground/50 uppercase tracking-widest">
                     {past.length} Completed
                   </span>
                 </div>
