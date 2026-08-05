@@ -69,7 +69,10 @@ export default async function Home() {
         <div className="relative z-10 flex w-full max-w-3xl flex-col items-center text-center">
 
           {/* Company Logo Image */}
-          <div className="mb-8 size-20 flex items-center justify-center">
+          <div 
+            className="mb-8 size-20 flex items-center justify-center logo-float"
+            style={{ animationDelay: '0.6s' }}
+          >
             <Image 
               src="/company_logo.png" 
               alt="FOG Technologies" 

@@ -31,7 +31,7 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   const isActive = t.status === "active"
 
   const activePalette = {
-    card: "border-orange-400/80 bg-orange-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(249,115,22,0.12)] hover:border-orange-500 hover:bg-orange-100/60 hover:shadow-[0_8px_24px_rgba(249,115,22,0.22)] pl-4.5 min-[390px]:pl-5 sm:pl-6",
+    card: "glass-pill-3d !bg-orange-100/50 hover:!bg-orange-100/65 border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] hover:border-orange-500 pl-4.5 min-[390px]:pl-5 sm:pl-6",
     icon: "bg-orange-100 text-orange-600 shadow-[0_2px_8px_rgba(249,115,22,0.15)]",
     badge: "text-orange-700 bg-orange-100/50 border-orange-200/40 font-bold",
     badgeIcon: "text-orange-500",
@@ -40,28 +40,28 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   const COLOR_PALETTES = [
     // Cyan / Blue
     {
-      card: "border-cyan-400/80 bg-cyan-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(6,182,212,0.1)] hover:border-cyan-500 hover:bg-cyan-100/60 hover:shadow-[0_8px_24px_rgba(6,182,212,0.2)]",
+      card: "glass-pill-3d !bg-cyan-100/35 hover:!bg-cyan-100/50 border-cyan-400/50 shadow-[0_4px_14px_rgba(6,182,212,0.1)] hover:shadow-[0_8px_24px_rgba(6,182,212,0.2)] hover:border-cyan-500",
       icon: "bg-cyan-100 text-cyan-600 shadow-[0_2px_8px_rgba(6,182,212,0.15)]",
       badge: "text-cyan-700 bg-cyan-100/50 border-cyan-200/40 font-bold",
       badgeIcon: "text-cyan-500",
     },
     // Violet / Indigo
     {
-      card: "border-indigo-400/80 bg-indigo-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(99,102,241,0.1)] hover:border-indigo-500 hover:bg-indigo-100/60 hover:shadow-[0_8px_24px_rgba(99,102,241,0.2)]",
+      card: "glass-pill-3d !bg-indigo-100/35 hover:!bg-indigo-100/50 border-indigo-400/50 shadow-[0_4px_14px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_24px_rgba(99,102,241,0.2)] hover:border-indigo-500",
       icon: "bg-indigo-100 text-indigo-600 shadow-[0_2px_8px_rgba(99,102,241,0.15)]",
       badge: "text-indigo-700 bg-indigo-100/50 border-indigo-200/40 font-bold",
       badgeIcon: "text-indigo-500",
     },
     // Pink / Rose
     {
-      card: "border-pink-400/80 bg-pink-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(244,63,94,0.1)] hover:border-pink-500 hover:bg-pink-100/60 hover:shadow-[0_8px_24px_rgba(244,63,94,0.2)]",
+      card: "glass-pill-3d !bg-pink-100/35 hover:!bg-pink-100/50 border-pink-400/50 shadow-[0_4px_14px_rgba(244,63,94,0.1)] hover:shadow-[0_8px_24px_rgba(244,63,94,0.2)] hover:border-pink-500",
       icon: "bg-pink-100 text-pink-600 shadow-[0_2px_8px_rgba(244,63,94,0.15)]",
       badge: "text-pink-700 bg-pink-100/50 border-pink-200/40 font-bold",
       badgeIcon: "text-pink-500",
     },
     // Emerald / Green
     {
-      card: "border-emerald-400/80 bg-emerald-100/45 backdrop-blur-md shadow-[0_4px_14px_rgba(16,185,129,0.1)] hover:border-emerald-500 hover:bg-emerald-100/60 hover:shadow-[0_8px_24px_rgba(16,185,129,0.2)]",
+      card: "glass-pill-3d !bg-emerald-100/35 hover:!bg-emerald-100/50 border-emerald-400/50 shadow-[0_4px_14px_rgba(16,185,129,0.1)] hover:shadow-[0_8px_24px_rgba(16,185,129,0.2)] hover:border-emerald-500",
       icon: "bg-emerald-100 text-emerald-600 shadow-[0_2px_8px_rgba(16,185,129,0.15)]",
       badge: "text-emerald-700 bg-emerald-100/50 border-emerald-200/40 font-bold",
       badgeIcon: "text-emerald-500",
@@ -174,6 +174,22 @@ export default async function TournamentsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
+      <style>{`
+        @keyframes hoverShineSweep {
+          0% { left: -100%; }
+          100% { left: 200%; }
+        }
+        .hover-shine-sweep {
+          position: absolute;
+          top: 0;
+          height: 100%;
+          width: 50%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+          transform: skewX(-25deg);
+          pointer-events: none;
+          z-index: 10;
+        }
+      `}</style>
       {/* ── Sticky nav ── */}
       <header className="sticky top-0 z-50 border-b border-zinc-200/40 bg-white/80 backdrop-blur-xl shadow-sm">
         <Navbar name={session.user.name} image={session.user.image} />
@@ -227,7 +243,8 @@ export default async function TournamentsPage() {
 
             {/* Active Arenas Panel Wrap Container */}
             {active.length > 0 && (
-              <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#D9CFC7] bg-white p-4 sm:p-6 shadow-sm">
+              <div className="group/activepanel glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
+                <div className="hover-shine-sweep opacity-0 group-hover/activepanel:opacity-100 group-hover/activepanel:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
                 <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
                   <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping"></span>
@@ -249,7 +266,8 @@ export default async function TournamentsPage() {
 
             {/* All Tournaments Panel Wrap Container */}
             {past.length > 0 && (
-              <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#D9CFC7] bg-white p-4 sm:p-6 shadow-sm">
+              <div className="group/pastpanel glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
+                <div className="hover-shine-sweep opacity-0 group-hover/pastpanel:opacity-100 group-hover/pastpanel:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
                 <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
                   <p className="font-mono text-xs sm:text-sm font-bold tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
                     <Clock size={14} className="text-[#8a7f77]" />

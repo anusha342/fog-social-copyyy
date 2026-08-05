@@ -29,23 +29,47 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
   const r2 = rewards?.find((r) => r.rank === 2)
   const r3 = rewards?.find((r) => r.rank === 3)
 
-  if (r1?.image_url) {
-    slides.push({
-      url: r1.image_url,
-      title: r1.title || "1st Place Reward",
-    })
+  if (r1) {
+    if (r1.image_url) {
+      slides.push({
+        url: r1.image_url,
+        title: r1.title || "1st Place Reward",
+      })
+    } else if (r1.prize_money) {
+      slides.push({
+        url: "cash-reward",
+        title: r1.title || "1st Place Reward",
+        subtitle: r1.prize_money,
+      })
+    }
   }
-  if (r2?.image_url) {
-    slides.push({
-      url: r2.image_url,
-      title: r2.title || "2nd Place Reward",
-    })
+  if (r2) {
+    if (r2.image_url) {
+      slides.push({
+        url: r2.image_url,
+        title: r2.title || "2nd Place Reward",
+      })
+    } else if (r2.prize_money) {
+      slides.push({
+        url: "cash-reward",
+        title: r2.title || "2nd Place Reward",
+        subtitle: r2.prize_money,
+      })
+    }
   }
-  if (r3?.image_url) {
-    slides.push({
-      url: r3.image_url,
-      title: r3.title || "3rd Place Reward",
-    })
+  if (r3) {
+    if (r3.image_url) {
+      slides.push({
+        url: r3.image_url,
+        title: r3.title || "3rd Place Reward",
+      })
+    } else if (r3.prize_money) {
+      slides.push({
+        url: "cash-reward",
+        title: r3.title || "3rd Place Reward",
+        subtitle: r3.prize_money,
+      })
+    }
   }
 
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -97,31 +121,58 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
 
                 {/* Bottom Photos Content (Clean Side-by-Side Podium Row) */}
                 <div className="flex items-center justify-center gap-3 sm:gap-4.5 w-full h-[95px] sm:h-[120px] mt-1 sm:mt-1.5 z-20">
-                  {r3?.image_url && (
-                    <div className="relative h-[80%] sm:h-[88%] aspect-square flex items-center justify-center bg-white p-1 rounded-xl border border-white/80 shadow-md">
-                      <img
-                        src={r3.image_url}
-                        alt="3rd Place Reward"
-                        className="max-w-full max-h-full object-contain rounded-lg"
-                      />
+                  {r3 && (
+                    <div className="relative h-[80%] sm:h-[88%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/45 !border-white/80 p-1.5 rounded-xl shadow-md text-center">
+                      {r3.image_url ? (
+                        <img
+                          src={r3.image_url}
+                          alt="3rd Place Reward"
+                          className="max-w-full max-h-full object-contain rounded-lg"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center select-none">
+                          <span className="text-xl sm:text-2xl mb-0.5 sm:mb-1">🥉</span>
+                          <span className="font-sans text-[8px] sm:text-[10px] font-black text-zinc-955 tracking-tight leading-none">
+                            {r3.prize_money}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
-                  {r1?.image_url && (
-                    <div className="relative h-[95%] sm:h-[100%] aspect-square flex items-center justify-center bg-white p-1 rounded-xl border border-white shadow-lg z-10 animate-[float_4s_ease-in-out_infinite]">
-                      <img
-                        src={r1.image_url}
-                        alt="1st Place Reward"
-                        className="max-w-full max-h-full object-contain rounded-lg"
-                      />
+                  {r1 && (
+                    <div className="relative h-[95%] sm:h-[100%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/55 !border-white/90 p-1.5 rounded-xl shadow-lg z-10 animate-[float_4s_ease-in-out_infinite] text-center">
+                      {r1.image_url ? (
+                        <img
+                          src={r1.image_url}
+                          alt="1st Place Reward"
+                          className="max-w-full max-h-full object-contain rounded-lg"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center select-none">
+                          <span className="text-2xl sm:text-3xl mb-0.5 sm:mb-1.5">🥇</span>
+                          <span className="font-sans text-[9px] sm:text-[11px] font-black text-zinc-955 tracking-tight leading-none">
+                            {r1.prize_money}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
-                  {r2?.image_url && (
-                    <div className="relative h-[85%] sm:h-[92%] aspect-square flex items-center justify-center bg-white p-1 rounded-xl border border-white/80 shadow-md">
-                      <img
-                        src={r2.image_url}
-                        alt="2nd Place Reward"
-                        className="max-w-full max-h-full object-contain rounded-lg"
-                      />
+                  {r2 && (
+                    <div className="relative h-[85%] sm:h-[92%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/45 !border-white/80 p-1.5 rounded-xl shadow-md text-center">
+                      {r2.image_url ? (
+                        <img
+                          src={r2.image_url}
+                          alt="2nd Place Reward"
+                          className="max-w-full max-h-full object-contain rounded-lg"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center select-none">
+                          <span className="text-xl sm:text-2xl mb-0.5 sm:mb-1">🥈</span>
+                          <span className="font-sans text-[8px] sm:text-[10px] font-black text-zinc-955 tracking-tight leading-none">
+                            {r2.prize_money}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -140,13 +191,24 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                   )}
                 </div>
 
-                {/* Right side floating/hovering image */}
+                {/* Right side floating/hovering content */}
                 <div className="relative h-full w-[42%] flex items-center justify-center z-20 animate-[float_4s_ease-in-out_infinite]">
-                  <img
-                    src={slide.url}
-                    alt={slide.title}
-                    className="max-h-[96%] max-w-full object-contain rounded-xl drop-shadow-[0_10px_20px_rgba(0,0,0,0.25)]"
-                  />
+                  {slide.url === "cash-reward" ? (
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center glass-pill-3d rounded-2xl p-3 bg-white/45 border-white shadow-md text-center">
+                      <span className="text-2xl sm:text-3xl mb-1 sm:mb-1.5 select-none">
+                        {slide.title.includes("1st") ? "🥇" : slide.title.includes("2nd") ? "🥈" : "🥉"}
+                      </span>
+                      <span className="font-sans text-xs sm:text-sm font-extrabold text-zinc-955 tracking-tight leading-none">
+                        {slide.subtitle}
+                      </span>
+                    </div>
+                  ) : (
+                    <img
+                      src={slide.url}
+                      alt={slide.title}
+                      className="max-h-[96%] max-w-full object-contain rounded-xl drop-shadow-[0_10px_20px_rgba(0,0,0,0.25)]"
+                    />
+                  )}
                 </div>
               </>
             )}
