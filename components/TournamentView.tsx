@@ -165,8 +165,8 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           {tournament?.name || "Tournament"}
         </h1>
         {tournament?.status === "active" && (
-          <span className="flex shrink-0 items-center gap-1.5 text-red-600 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
-            <span className="size-1.5 rounded-full bg-red-500 animate-pulse" />
+          <span className="flex shrink-0 items-center gap-1.5 text-pink-700 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
+            <span className="size-1.5 rounded-full bg-pink-500 animate-pulse" />
             Active
           </span>
         )}

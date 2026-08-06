@@ -293,7 +293,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* ── Flat Responsive Layout: History -> Leaderboard -> Rewards ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-stretch w-full pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 md:gap-12 items-stretch w-full pb-8">
 
           {/* 1. Available Rewards Section */}
           <div className="space-y-6 w-full">
@@ -308,7 +308,7 @@ export default async function DashboardPage() {
           {/* 2. Tournament Leaderboard Card */}
           <Link
             href="/tournaments"
-            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-300 shadow-[0_4px_20px_rgba(236,72,153,0.22)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-300/80 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(236,72,153,0.15)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
+            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-700 shadow-[0_4px_20px_rgba(190,24,74,0.15)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-700 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(190,24,74,0.18)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
             <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/leaderboardcard:opacity-100 group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
@@ -316,13 +316,13 @@ export default async function DashboardPage() {
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
                 <span className="font-sans text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-2 min-w-0">
-                  <span className="size-2 rounded-full bg-red-500 animate-pulse shrink-0" />
+                  <span className="size-2 rounded-full bg-pink-700 animate-pulse shrink-0" />
                   <span className="truncate">
                     {activeTournament?.name || "Active Tournament"}
                   </span>
                 </span>
-                <span className="inline-flex items-center justify-center gap-1.5 pl-3.5 pr-2 py-1 rounded-full bg-pink-500 text-white border-pink-500 shadow-[0_4px_12px_rgba(236,72,153,0.2)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(236,72,153,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-500 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-500 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.45)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
-                  <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest leading-none">
+                <span className="inline-flex items-center justify-center gap-1.5 pl-3.5 pr-2 py-1.5 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                  <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest">
                     ENTER ARENA
                   </span>
                   <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
@@ -461,7 +461,7 @@ export default async function DashboardPage() {
               </div>
 
               {/* Divider */}
-              <div className="my-6 border-t border-pink-200/30" />
+              <div className="my-4 sm:my-6 border-t border-pink-200/30" />
             </div>
 
             {/* Performance Telemetry Block */}
@@ -511,11 +511,8 @@ export default async function DashboardPage() {
             <div className="hover-shine-sweep opacity-0 group-hover/historycard:opacity-100 group-hover/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/historycard:opacity-100 group-active/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="mb-4 sm:mb-6 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
               <p className="font-mono text-base font-black tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
-                Cabinet Session History
+                Session History
               </p>
-              <span className="font-mono text-sm text-muted-foreground/50 uppercase tracking-widest">
-                Limit_10_Sess
-              </span>
             </div>
 
             <div>

@@ -82,10 +82,12 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
     return () => clearInterval(interval)
   }, [slides.length])
 
+  const hasPodium = !!(r1 || r2 || r3)
+
   if (slides.length === 0) return null
 
   return (
-    <div className="relative w-full h-[200px] sm:h-[240px] rounded-2xl overflow-hidden shadow-md select-none group border border-amber-500/25">
+    <div className={`relative w-full ${hasPodium ? "h-[200px] sm:h-[240px]" : "h-[100px] sm:h-[120px]"} rounded-2xl overflow-hidden shadow-md select-none group border border-amber-500/25`}>
       {/* Background container holding the slides */}
       {slides.map((slide, idx) => (
         <div
@@ -95,7 +97,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
         >
           {/* Santa's Lucky Spin style: full-bleed background card layout */}
           <div className={`relative w-full h-full flex bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white transition-all duration-300 ${slide.url === "all-rewards"
-              ? "flex-col justify-start items-center text-center p-4 sm:p-5 pt-3 pb-7 gap-2"
+              ? (hasPodium ? "flex-col justify-start items-center text-center p-4 sm:p-5 pt-3 pb-7 gap-2" : "flex-col justify-center items-center text-center p-4 sm:p-5")
               : "flex-row justify-between items-center p-6 sm:p-8"
             }`}>
 
