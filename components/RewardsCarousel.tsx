@@ -1,7 +1,6 @@
 "use client"
 // Touch to force compile
 import { useState, useEffect } from "react"
-import { ChevronRight, ChevronLeft } from "lucide-react"
 
 interface Slide {
   url: string
@@ -74,6 +73,33 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
 
   const [currentSlide, setCurrentSlide] = useState(0)
 
+  // Swipe navigation logic for carousel
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    setTouchStart({ x: touch.clientX, y: touch.clientY })
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart) return
+    const touch = e.changedTouches[0]
+    const diffX = touchStart.x - touch.clientX
+    const diffY = touchStart.y - touch.clientY
+
+    // Ensure it's a clear horizontal swipe (more horizontal than vertical, and > 50px delta)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        // Swipe Left -> Next Slide
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+      } else {
+        // Swipe Right -> Previous Slide
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+      }
+    }
+    setTouchStart(null)
+  }
+
   useEffect(() => {
     if (slides.length <= 1) return
     const interval = setInterval(() => {
@@ -87,7 +113,11 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
   if (slides.length === 0) return null
 
   return (
-    <div className={`relative w-full ${hasPodium ? "h-[200px] sm:h-[240px]" : "h-[100px] sm:h-[120px]"} rounded-2xl overflow-hidden shadow-md select-none group border border-amber-500/25`}>
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className={`relative w-full ${hasPodium ? "h-[200px] sm:h-[240px]" : "h-[100px] sm:h-[120px]"} rounded-2xl overflow-hidden shadow-md select-none group border border-amber-500/25`}
+    >
       {/* Background container holding the slides */}
       {slides.map((slide, idx) => (
         <div
@@ -234,16 +264,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
         </div>
       )}
 
-      {/* Next/Chevron Button (Centered Vertically) */}
-      {slides.length > 1 && (
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center size-8 rounded-full bg-white/20 hover:bg-white/30 border border-white/25 text-white shadow-md active:scale-90 transition-all cursor-pointer backdrop-blur-xs select-none"
-          aria-label="Next slide"
-        >
-          <ChevronRight size={16} />
-        </button>
-      )}
+
 
       <style>{`
         @keyframes float {

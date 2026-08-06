@@ -524,8 +524,8 @@ export default async function DashboardPage() {
                   <div className="p-3 sm:p-4 rounded-2xl bg-white/60 mb-3 sm:mb-4 inline-flex">
                     <QrCode size={24} className="text-orange-600 sm:size-7" />
                   </div>
-                  <p className="text-sm font-bold text-[#443b35]">No synced sessions</p>
-                  <p className="mt-1.5 max-w-[260px] text-xs text-[#6e635c] leading-relaxed px-4">
+                  <p className="text-base font-black text-[#3c342f] tracking-tight">No synced sessions</p>
+                  <p className="mt-2 max-w-[320px] text-sm text-[#5d534c] leading-relaxed px-4 mx-auto">
                     Sync your profile key at any active FOG arcade machine to register scores.
                   </p>
                 </div>

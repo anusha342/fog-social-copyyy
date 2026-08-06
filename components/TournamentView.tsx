@@ -55,6 +55,34 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
   const [playsLoaded, setPlaysLoaded] = useState(false)
   const [tournament, setTournament] = useState<Tournament | null>(null)
 
+  // Swipe navigation logic for mobile users
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    setTouchStart({ x: touch.clientX, y: touch.clientY })
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart) return
+    const touch = e.changedTouches[0]
+    const diffX = touchStart.x - touch.clientX
+    const diffY = touchStart.y - touch.clientY
+
+    // Ensure it's a clear horizontal swipe (more horizontal than vertical, and > 50px delta)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        // Swipe Left -> Next Tab
+        if (tab === "leaderboard") setTab("plays")
+        else if (tab === "plays") setTab("rewards")
+      } else {
+        // Swipe Right -> Previous Tab
+        if (tab === "rewards") setTab("plays")
+        else if (tab === "plays") setTab("leaderboard")
+      }
+    }
+    setTouchStart(null)
+  }
 
   const startDateStr = tournament?.started_at
     ? new Date(tournament.started_at).toLocaleDateString(undefined, {
@@ -298,7 +326,12 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           </div>
         </div>
 
-        {tab === "leaderboard" && (
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="w-full"
+        >
+          {tab === "leaderboard" && (
           // ── Leaderboard tab ──────────────────────────────────────────────
           !leaderboard ? (
             <div className="flex flex-col items-center gap-3 py-20">
@@ -557,8 +590,8 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                 <Gamepad2 size={26} className="text-primary animate-pulse" aria-hidden />
               </div>
               <div>
-                <p className="text-sm font-bold text-zinc-800">No plays yet</p>
-                <p className="mt-1.5 max-w-[200px] text-xs leading-relaxed text-muted-foreground mx-auto">
+                <p className="text-base font-black text-zinc-900 tracking-tight">No plays yet</p>
+                <p className="mt-2 max-w-[280px] text-sm leading-relaxed text-zinc-500 mx-auto">
                   Your scores for this tournament will appear here after you play.
                 </p>
               </div>
@@ -751,6 +784,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
             </div>
           )
         })()}
+        </div>
 
       </main>
 
