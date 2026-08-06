@@ -316,7 +316,10 @@ export default async function DashboardPage() {
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
                 <span className="font-sans text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-2 min-w-0">
-                  <span className="size-2 rounded-full bg-pink-700 animate-pulse shrink-0" />
+                  <span className="relative flex size-2 shrink-0">
+                    <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60"></span>
+                    <span className="relative inline-flex rounded-full size-2 bg-pink-700"></span>
+                  </span>
                   <span className="truncate">
                     {activeTournament?.name || "Active Tournament"}
                   </span>
@@ -365,7 +368,7 @@ export default async function DashboardPage() {
                         const isRank3 = entry.rank === 3
                         const isMe = playerRank != null && entry.rank === playerRank
 
-                        let cardClass = "glass-pill-3d !bg-white/55 hover:!bg-white/75 active:!bg-white/65 active:scale-[0.99] border-zinc-300/80 shadow-xs hover:shadow-md hover:border-zinc-400 transition-all duration-300"
+                        let cardClass = "glass-pill-3d !bg-white/95 hover:!bg-white active:!bg-white/95 active:scale-[0.99] border-zinc-300 shadow-xs hover:shadow-md hover:border-zinc-400 transition-all duration-300"
                         let rankWidget = (
                           <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
                             {entry.rank}
@@ -374,7 +377,7 @@ export default async function DashboardPage() {
                         let scoreColor = "text-zinc-600 font-extrabold"
 
                         if (isRank1) {
-                          cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/75 active:!bg-orange-100/65 active:scale-[0.99] border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_10px_30px_rgba(249,115,22,0.25)] hover:border-orange-500/90 border-l-4 border-l-orange-500 transition-all duration-300"
+                          cardClass = "glass-pill-3d !bg-orange-100/95 hover:!bg-orange-200/95 active:!bg-orange-200/90 active:scale-[0.99] border-orange-400 shadow-[0_6px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_10px_30px_rgba(249,115,22,0.25)] hover:border-orange-500/90 border-l-4 border-l-orange-500 transition-all duration-300"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥇
@@ -382,7 +385,7 @@ export default async function DashboardPage() {
                           )
                           scoreColor = "text-orange-700 font-extrabold"
                         } else if (isRank2) {
-                          cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/75 active:!bg-sky-100/65 active:scale-[0.99] border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)] hover:shadow-[0_10px_30px_rgba(56,189,248,0.22)] hover:border-sky-500/90 transition-all duration-300"
+                          cardClass = "glass-pill-3d !bg-sky-100/95 hover:!bg-sky-200/95 active:!bg-sky-200/90 active:scale-[0.99] border-sky-400 shadow-[0_6px_20px_rgba(56,189,248,0.12)] hover:shadow-[0_10px_30px_rgba(56,189,248,0.22)] hover:border-sky-500/90 transition-all duration-300"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥈
@@ -390,7 +393,7 @@ export default async function DashboardPage() {
                           )
                           scoreColor = "text-sky-700 font-extrabold"
                         } else if (isRank3) {
-                          cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/75 active:!bg-indigo-100/65 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.22)] hover:border-indigo-500/90 transition-all duration-300"
+                          cardClass = "glass-pill-3d !bg-indigo-100/95 hover:!bg-indigo-200/95 active:!bg-indigo-200/90 active:scale-[0.99] border-indigo-400 shadow-[0_6px_20px_rgba(99,102,241,0.12)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.22)] hover:border-indigo-500/90 transition-all duration-300"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥉
@@ -401,7 +404,7 @@ export default async function DashboardPage() {
 
                         if (isMe) {
                           if (!isRank1 && !isRank2 && !isRank3) {
-                            cardClass = "glass-pill-3d !bg-emerald-50/55 hover:!bg-emerald-50/75 active:!bg-emerald-50/65 active:scale-[0.99] border-emerald-500 shadow-md border-2 transition-all duration-300"
+                            cardClass = "glass-pill-3d !bg-emerald-100/95 hover:!bg-emerald-200/95 active:!bg-emerald-200/90 active:scale-[0.99] border-emerald-500 shadow-md border-2 transition-all duration-300"
                           } else {
                             cardClass = `${cardClass} border-emerald-500 border-2`
                           }

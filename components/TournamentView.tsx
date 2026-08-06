@@ -165,8 +165,11 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           {tournament?.name || "Tournament"}
         </h1>
         {tournament?.status === "active" && (
-          <span className="flex shrink-0 items-center gap-1.5 text-pink-700 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
-            <span className="size-1.5 rounded-full bg-pink-500 animate-pulse" />
+          <span className="flex shrink-0 items-center gap-1.5 text-red-600 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
+            <span className="relative flex size-1.5 shrink-0">
+              <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
+              <span className="relative inline-flex rounded-full size-1.5 bg-red-500"></span>
+            </span>
             Active
           </span>
         )}
@@ -332,12 +335,12 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                     const isRank2 = entry.rank === 2
                     const isRank3 = entry.rank === 3
 
-                    let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 active:!bg-white/45 active:scale-[0.99] border-zinc-300/40 shadow-sm"
+                    let cardClass = "glass-pill-3d !bg-white/95 hover:!bg-white active:!bg-white/95 active:scale-[0.99] border-zinc-300 shadow-sm"
                     let rankWidget = null
                     let scoreColor = "text-zinc-600 font-extrabold"
 
                     if (isRank1) {
-                      cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/70 active:!bg-orange-100/60 active:scale-[0.99] border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
+                      cardClass = "glass-pill-3d !bg-orange-100/95 hover:!bg-orange-200/95 active:!bg-orange-200/90 active:scale-[0.99] border-orange-400 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
                       rankWidget = (
                         <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                           🥇
@@ -345,7 +348,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                       )
                       scoreColor = "text-orange-700 font-extrabold"
                     } else if (isRank2) {
-                      cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/70 active:!bg-sky-100/60 active:scale-[0.99] border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
+                      cardClass = "glass-pill-3d !bg-sky-100/95 hover:!bg-sky-200/95 active:!bg-sky-200/90 active:scale-[0.99] border-sky-400 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
                       rankWidget = (
                         <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                           🥈
@@ -353,7 +356,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                       )
                       scoreColor = "text-sky-700 font-extrabold"
                     } else if (isRank3) {
-                      cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/70 active:!bg-indigo-100/60 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
+                      cardClass = "glass-pill-3d !bg-indigo-100/95 hover:!bg-indigo-200/95 active:!bg-indigo-200/90 active:scale-[0.99] border-indigo-400 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
                       rankWidget = (
                         <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                           🥉
@@ -372,9 +375,9 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
                     if (isMe) {
                       if (!isRank1 && !isRank2 && !isRank3) {
-                        cardClass = "glass-pill-3d !bg-emerald-50/20 hover:!bg-emerald-50/35 active:!bg-emerald-50/25 active:scale-[0.99] border-emerald-500/60 shadow-md border-2"
+                        cardClass = "glass-pill-3d !bg-emerald-100/95 hover:!bg-emerald-200/95 active:!bg-emerald-200/90 active:scale-[0.99] border-emerald-500 shadow-md border-2"
                       } else {
-                        cardClass = `${cardClass} border-emerald-500/70 border-2`
+                        cardClass = `${cardClass} border-emerald-500 border-2`
                       }
                     }
 
