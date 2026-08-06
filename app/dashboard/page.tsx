@@ -308,10 +308,10 @@ export default async function DashboardPage() {
           {/* 2. Tournament Leaderboard Card */}
           <Link
             href="/tournaments"
-            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/15 !border-pink-200/50 p-4 sm:p-6 transition-all duration-300 hover:!border-pink-300/80 hover:!bg-pink-50/30 active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
+            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-300 shadow-[0_4px_20px_rgba(236,72,153,0.22)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-300/80 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(236,72,153,0.15)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
-            <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+            <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/leaderboardcard:opacity-100 group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="flex flex-col justify-between h-full flex-grow relative z-20">
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
@@ -321,8 +321,11 @@ export default async function DashboardPage() {
                     {activeTournament?.name || "Active Tournament"}
                   </span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 font-mono text-sm text-pink-700 font-black tracking-wider px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-pink-300 bg-pink-100/30 shadow-xs transition-all duration-300 group-hover/leaderboardcard:bg-pink-600 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-600 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.55)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
-                  ENTER ARENA <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5" />
+                <span className="inline-flex items-center justify-center gap-1.5 pl-3.5 pr-2 py-1 rounded-full bg-pink-500 text-white border-pink-500 shadow-[0_4px_12px_rgba(236,72,153,0.2)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(236,72,153,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-500 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-500 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(236,72,153,0.45)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                  <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest leading-none">
+                    ENTER ARENA
+                  </span>
+                  <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
                 </span>
               </div>
 
@@ -362,7 +365,7 @@ export default async function DashboardPage() {
                         const isRank3 = entry.rank === 3
                         const isMe = playerRank != null && entry.rank === playerRank
 
-                        let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 active:!bg-white/45 active:scale-[0.99] border-zinc-300/40 shadow-sm"
+                        let cardClass = "glass-pill-3d !bg-white/55 hover:!bg-white/75 active:!bg-white/65 active:scale-[0.99] border-zinc-300/80 shadow-xs hover:shadow-md hover:border-zinc-400 transition-all duration-300"
                         let rankWidget = (
                           <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
                             {entry.rank}
@@ -371,7 +374,7 @@ export default async function DashboardPage() {
                         let scoreColor = "text-zinc-600 font-extrabold"
 
                         if (isRank1) {
-                          cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/70 active:!bg-orange-100/65 active:scale-[0.99] border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] border-l-4 border-l-orange-500"
+                          cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/75 active:!bg-orange-100/65 active:scale-[0.99] border-orange-400/80 shadow-[0_6px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_10px_30px_rgba(249,115,22,0.25)] hover:border-orange-500/90 border-l-4 border-l-orange-500 transition-all duration-300"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥇
@@ -379,7 +382,7 @@ export default async function DashboardPage() {
                           )
                           scoreColor = "text-orange-700 font-extrabold"
                         } else if (isRank2) {
-                          cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/70 active:!bg-sky-100/65 active:scale-[0.99] border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)]"
+                          cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/75 active:!bg-sky-100/65 active:scale-[0.99] border-sky-400/80 shadow-[0_6px_20px_rgba(56,189,248,0.12)] hover:shadow-[0_10px_30px_rgba(56,189,248,0.22)] hover:border-sky-500/90 transition-all duration-300"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥈
@@ -387,7 +390,7 @@ export default async function DashboardPage() {
                           )
                           scoreColor = "text-sky-700 font-extrabold"
                         } else if (isRank3) {
-                          cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/70 active:!bg-indigo-100/65 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)]"
+                          cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/75 active:!bg-indigo-100/65 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.22)] hover:border-indigo-500/90 transition-all duration-300"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
                               🥉
@@ -398,9 +401,9 @@ export default async function DashboardPage() {
 
                         if (isMe) {
                           if (!isRank1 && !isRank2 && !isRank3) {
-                            cardClass = "glass-pill-3d !bg-emerald-50/20 hover:!bg-emerald-50/35 active:!bg-emerald-50/25 active:scale-[0.99] border-emerald-500/60 shadow-md border-2"
+                            cardClass = "glass-pill-3d !bg-emerald-50/55 hover:!bg-emerald-50/75 active:!bg-emerald-50/65 active:scale-[0.99] border-emerald-500 shadow-md border-2 transition-all duration-300"
                           } else {
-                            cardClass = `${cardClass} border-emerald-500/70 border-2`
+                            cardClass = `${cardClass} border-emerald-500 border-2`
                           }
                         }
 
@@ -503,9 +506,9 @@ export default async function DashboardPage() {
           </Link>
 
           {/* 3. Cabinet Session History Card */}
-          <div className="group/historycard glass-panel-3d relative flex flex-col justify-start overflow-hidden !bg-stone-50/10 !border-stone-400/50 p-4 sm:p-6 transition-all duration-300 hover:!border-stone-500/80 hover:!bg-stone-50/25 hover:-translate-y-0.5 h-full min-h-[220px] w-full">
+          <div className="group/historycard glass-panel-3d relative flex flex-col justify-start overflow-hidden !bg-stone-50/45 !border-stone-400/80 p-4 sm:p-6 transition-all duration-300 hover:!border-stone-500 hover:!bg-stone-50/65 hover:-translate-y-0.5 h-full min-h-[220px] w-full shadow-[0_6px_20px_rgba(120,113,108,0.08)] hover:shadow-[0_12px_32px_rgba(120,113,108,0.18)]">
             {/* Hover Shine Sweep Overlay */}
-            <div className="hover-shine-sweep opacity-0 group-hover/historycard:opacity-100 group-hover/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+            <div className="hover-shine-sweep opacity-0 group-hover/historycard:opacity-100 group-hover/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/historycard:opacity-100 group-active/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="mb-4 sm:mb-6 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
               <p className="font-mono text-base font-black tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
                 Cabinet Session History
@@ -531,7 +534,7 @@ export default async function DashboardPage() {
                   {sortedGameplays.map((g, index) => (
                     <div
                       key={`${g.gameplay_id}-${index}`}
-                      className="glass-pill-3d !bg-[#D9CFC7]/15 hover:!bg-[#D9CFC7]/30 active:!bg-[#D9CFC7]/20 active:scale-[0.99] border-zinc-300/40 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-300 shadow-sm"
+                      className="glass-pill-3d !bg-[#D9CFC7]/45 hover:!bg-[#D9CFC7]/65 active:!bg-[#D9CFC7]/55 active:scale-[0.99] border-zinc-300/80 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-300 shadow-sm hover:border-zinc-400 hover:shadow-md"
                     >
                       {/* Date / Time */}
                       <div className="min-w-0 flex-1 text-left">

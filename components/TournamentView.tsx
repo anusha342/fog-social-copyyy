@@ -141,10 +141,10 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
         }}
       />
 
-      {/* Hero radial backlight glow - orange branded warm glow */}
+      {/* Hero radial backlight glow - Soft Gray/Slate instead of Orange */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] rounded-full bg-gradient-to-b from-orange-200/20 via-zinc-300/30 to-transparent blur-[120px]"
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] rounded-full bg-zinc-300/40 blur-[130px]"
       />
 
       {/* ── Sticky header ── */}
@@ -154,28 +154,26 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
       {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
       <div className="sticky top-[56px] z-30 bg-transparent py-3 mb-2">
-        <div className="mx-auto w-full max-w-7xl px-4 flex justify-start">
+        <div className="mx-auto w-full max-w-6xl px-4 flex justify-start">
           <BackButton />
         </div>
       </div>
 
-      {/* ── Header Section ── */}
-      <section className="relative z-10 mx-auto w-full max-w-4xl px-4 pt-4 pb-2 text-left">
-        <div className="text-xs sm:text-sm text-zinc-500 font-mono uppercase tracking-wider flex items-center justify-between gap-2 flex-wrap w-full">
-          <span>
-            Tournament: <span className="font-bold text-zinc-800">{tournament?.name || `Tournament_${tournamentId.substring(0, 6)}`}</span>
+      {/* ── Simple Title Header (Clean text, no card) ── */}
+      <div className="border-b border-zinc-200/60 pb-5 mb-2 w-full max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-left truncate">
+          {tournament?.name || "Tournament"}
+        </h1>
+        {tournament?.status === "active" && (
+          <span className="flex shrink-0 items-center gap-1.5 text-red-600 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
+            <span className="size-1.5 rounded-full bg-red-500 animate-pulse" />
+            Active
           </span>
-          {tournament?.status === "active" && (
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-red-50 border border-red-200/50 text-red-600 font-mono font-bold uppercase tracking-wider shadow-xs">
-              <span className="size-1.5 rounded-full bg-red-500 animate-pulse" />
-              Active
-            </span>
-          )}
-        </div>
-      </section>
+        )}
+      </div>
 
       {/* ── Content ── */}
-      <main className="relative z-10 mx-auto w-full max-w-4xl px-4 pt-4 pb-16 flex-grow">
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-2 pb-8 sm:pt-3 sm:pb-12 flex-grow">
 
         {/* ── Rewards Display (Carousel or Static cash podium) ── */}
         <div className="mb-6">
@@ -208,7 +206,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   const r2 = tournament.rewards.find(r => r.rank === 2);
                   if (!r2) return <div />;
                   return (
-                    <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/20 !border-white/30 shadow-xs transition-transform duration-300 hover:scale-[1.02] h-fit">
+                    <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/55 !border-white/70 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-white/95 h-fit">
                       <span className="font-mono text-xs sm:text-xs text-zinc-800 font-black uppercase tracking-wider block mb-2.5 leading-none">
                         2nd Place
                       </span>
@@ -227,7 +225,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   const r1 = tournament.rewards.find(r => r.rank === 1);
                   if (!r1) return <div />;
                   return (
-                    <div className="relative flex flex-col items-center text-center p-4 sm:p-5 rounded-xl glass-pill-3d !bg-white/35 !border-white/60 shadow-sm transition-transform duration-300 hover:scale-[1.02] scale-[1.04] z-10">
+                    <div className="relative flex flex-col items-center text-center p-4 sm:p-5 rounded-xl glass-pill-3d !bg-white/70 !border-white/90 shadow-md transition-all duration-300 hover:scale-[1.02] hover:border-white scale-[1.04] z-10">
                       {/* Champ tag */}
                       <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-955 font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full leading-none shadow-2xs border border-white/25 select-none">
                         Champ
@@ -250,7 +248,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                   const r3 = tournament.rewards.find(r => r.rank === 3);
                   if (!r3) return <div />;
                   return (
-                    <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/20 !border-white/30 shadow-xs transition-transform duration-300 hover:scale-[1.02] h-fit">
+                    <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/55 !border-white/70 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:border-white/95 h-fit">
                       <span className="font-mono text-xs sm:text-xs text-zinc-800 font-black uppercase tracking-wider block mb-2.5 leading-none">
                         3rd Place
                       </span>
@@ -455,14 +453,14 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                 return plays.map((g, index) => {
                   const isBestPlay = bestPlayIndex !== -1 && index === bestPlayIndex
 
-                  let cardClass = "glass-pill-3d !bg-white/35 hover:!bg-white/50 active:!bg-white/45 active:scale-[0.99] border-zinc-300/40 shadow-sm"
+                  let cardClass = "glass-pill-3d !bg-white/55 hover:!bg-white/75 active:!bg-white/65 active:scale-[0.99] border-zinc-300/80 shadow-xs hover:shadow-md hover:border-zinc-400 transition-all duration-300"
                   let iconBg = "bg-zinc-100 text-zinc-500 border border-zinc-200/50"
                   let iconElement = <Gamepad2 size={16} />
                   let bestPlayBadge = null
 
                   if (isBestPlay) {
                     if (finalRank === 1) {
-                      cardClass = "glass-pill-3d !bg-orange-100/35 hover:!bg-orange-100/50 active:!bg-orange-100/45 active:scale-[0.99] border-orange-400/50 shadow-md shadow-orange-500/8 border-l-4 border-l-orange-500"
+                      cardClass = "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/75 active:!bg-orange-100/65 active:scale-[0.99] border-orange-400/80 shadow-md shadow-orange-500/12 border-l-4 border-l-orange-500 transition-all duration-300"
                       iconBg = "bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-sm"
                       iconElement = <Crown size={16} />
                       bestPlayBadge = (
@@ -471,7 +469,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         </span>
                       )
                     } else if (finalRank === 2) {
-                      cardClass = "glass-pill-3d !bg-sky-100/35 hover:!bg-sky-100/50 active:!bg-sky-100/45 active:scale-[0.99] border-sky-400/50 shadow-md shadow-sky-500/8 border-l-4 border-l-sky-500"
+                      cardClass = "glass-pill-3d !bg-sky-100/55 hover:!bg-sky-100/75 active:!bg-sky-100/65 active:scale-[0.99] border-sky-400/80 shadow-md shadow-sky-500/12 border-l-4 border-l-sky-500 transition-all duration-300"
                       iconBg = "bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-sm"
                       iconElement = <Trophy size={16} />
                       bestPlayBadge = (
@@ -480,7 +478,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         </span>
                       )
                     } else if (finalRank === 3) {
-                      cardClass = "glass-pill-3d !bg-indigo-100/35 hover:!bg-indigo-100/50 active:!bg-indigo-100/45 active:scale-[0.99] border-indigo-400/50 shadow-md shadow-indigo-500/8 border-l-4 border-l-indigo-500"
+                      cardClass = "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/75 active:!bg-indigo-100/65 active:scale-[0.99] border-indigo-400/80 shadow-md shadow-indigo-500/12 border-l-4 border-l-indigo-500 transition-all duration-300"
                       iconBg = "bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-sm"
                       iconElement = <Trophy size={16} />
                       bestPlayBadge = (
@@ -489,7 +487,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         </span>
                       )
                     } else {
-                      cardClass = "glass-pill-3d !bg-amber-100/35 hover:!bg-amber-100/50 active:!bg-amber-100/45 active:scale-[0.99] border-amber-400/50 shadow-md shadow-amber-500/8 border-l-4 border-l-amber-500"
+                      cardClass = "glass-pill-3d !bg-amber-100/55 hover:!bg-amber-100/75 active:!bg-amber-100/65 active:scale-[0.99] border-amber-400/80 shadow-md shadow-amber-500/12 border-l-4 border-l-amber-500 transition-all duration-300"
                       iconBg = "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-sm"
                       iconElement = <Trophy size={16} />
                       bestPlayBadge = (
@@ -512,23 +510,23 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
                         </div>
 
                         {/* Date/Time info */}
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap text-left">
-                            <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-800 leading-none">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap text-left">
+                            <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-800 leading-none whitespace-nowrap">
                               {new Date(g.played_at).toLocaleDateString(undefined, {
                                 month: "short", day: "numeric", year: "numeric",
                               })}
                             </p>
                             {bestPlayBadge}
                           </div>
-                          <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                            <p className="font-mono text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none">
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
+                            <p className="font-mono text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none whitespace-nowrap">
                               {new Date(g.played_at).toLocaleTimeString(undefined, {
                                 hour: "2-digit", minute: "2-digit",
                               })}
                             </p>
                             {g.center_name && (
-                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 font-mono text-[10px] sm:text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs">
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 font-mono text-[10px] sm:text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs whitespace-nowrap shrink-0">
                                 {g.center_name}
                               </span>
                             )}

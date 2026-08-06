@@ -24,22 +24,22 @@ const features = [
     Icon: UserCircle,
     title: "Your Arcade Profile",
     description: "One identity across every FOG machine. Your stats, your rank, your legacy.",
-    iconClass: "bg-cyan-100 text-cyan-600 border border-cyan-200/50",
-    cardClass: "bg-cyan-50/60 border-cyan-300/80 backdrop-blur-lg hover:bg-cyan-50/75 hover:border-cyan-400/90 shadow-[0_8px_30px_rgba(6,182,212,0.1)] hover:shadow-[0_12px_40px_rgba(6,182,212,0.2)]"
+    iconClass: "bg-cyan-100 text-cyan-600 border border-cyan-200/50 shadow-[0_2px_8px_rgba(6,182,212,0.15)]",
+    cardClass: "glass-pill-3d !bg-cyan-100/55 hover:!bg-cyan-100/75 border-cyan-400/80 shadow-[0_6px_20px_rgba(6,182,212,0.15)] hover:shadow-[0_10px_30px_rgba(6,182,212,0.25)] hover:border-cyan-500/90 active:scale-[0.99] transition-all"
   },
   {
     Icon: Trophy,
     title: "Live Leaderboards",
     description: "Real-time rankings during tournaments. See where you stand the moment your score lands.",
-    iconClass: "bg-amber-100 text-amber-600 border border-amber-200/50",
-    cardClass: "bg-amber-50/60 border-amber-300/80 backdrop-blur-lg hover:bg-amber-50/75 hover:border-amber-400/90 shadow-[0_8px_30px_rgba(245,158,11,0.1)] hover:shadow-[0_12px_40px_rgba(245,158,11,0.2)]"
+    iconClass: "bg-amber-100 text-amber-600 border border-amber-200/50 shadow-[0_2px_8px_rgba(245,158,11,0.15)]",
+    cardClass: "glass-pill-3d !bg-amber-100/55 hover:!bg-amber-100/75 border-amber-400/80 shadow-[0_6px_20px_rgba(245,158,11,0.15)] hover:shadow-[0_10px_30px_rgba(245,158,11,0.25)] hover:border-amber-500/90 active:scale-[0.99] transition-all"
   },
   {
     Icon: Gamepad2,
     title: "Game History",
     description: "Every session logged. Track your progress and watch yourself improve over time.",
-    iconClass: "bg-emerald-100 text-emerald-600 border border-emerald-200/50",
-    cardClass: "bg-emerald-50/60 border-emerald-300/80 backdrop-blur-lg hover:bg-emerald-50/75 hover:border-emerald-400/90 shadow-[0_8px_30px_rgba(16,185,129,0.1)] hover:shadow-[0_12px_40px_rgba(16,185,129,0.2)]"
+    iconClass: "bg-emerald-100 text-emerald-600 border border-emerald-200/50 shadow-[0_2px_8px_rgba(16,185,129,0.15)]",
+    cardClass: "glass-pill-3d !bg-emerald-100/55 hover:!bg-emerald-100/75 border-emerald-400/80 shadow-[0_6px_20px_rgba(16,185,129,0.15)] hover:shadow-[0_10px_30px_rgba(16,185,129,0.25)] hover:border-emerald-500/90 active:scale-[0.99] transition-all"
   },
 ]
 
@@ -58,6 +58,12 @@ export default async function Home() {
             "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
         }}
+      />
+
+      {/* Hero radial backlight glow - Soft Gray/Slate instead of Orange */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] rounded-full bg-zinc-300/40 blur-[130px]"
       />
 
 
@@ -117,20 +123,20 @@ export default async function Home() {
       </section>
 
       {/* ── Features ── */}
-      <section className="mx-auto w-full max-w-4xl px-6 pb-20 relative z-10">
+      <section className="mx-auto w-full max-w-6xl px-6 pb-20 relative z-10">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {features.map(({ Icon, title, description, iconClass, cardClass }) => (
             <div
               key={title}
-              className={`relative overflow-hidden rounded-2xl border p-6 hover:-translate-y-0.5 transition-all duration-300 ${cardClass}`}
+              className={`relative overflow-hidden rounded-2xl p-6 hover:-translate-y-0.5 transition-all duration-300 ${cardClass}`}
             >
               <div className="flex items-start gap-4">
-                <div className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${iconClass}`}>
-                  <Icon size={19} className="text-inherit" aria-hidden />
+                <div className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${iconClass}`}>
+                  <Icon size={22} className="text-inherit" aria-hidden />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-zinc-955">{title}</h2>
-                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-700">{description}</p>
+                  <h2 className="text-base sm:text-lg font-bold text-zinc-955">{title}</h2>
+                  <p className="mt-1.5 text-sm sm:text-base leading-relaxed text-zinc-700">{description}</p>
                 </div>
               </div>
             </div>

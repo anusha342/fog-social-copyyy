@@ -151,9 +151,9 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   if (phase === "checking") {
     return (
       <div className="flex min-h-svh items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-3.5">
           <Loader2 size={28} className="text-primary animate-spin" aria-hidden />
-          <p className="text-base font-bold text-foreground">Checking session…</p>
+          <p className="text-base sm:text-lg font-bold text-zinc-955 uppercase font-sans tracking-wide">Checking session…</p>
           <p className="font-mono text-sm tracking-widest text-muted-foreground uppercase">
             {sessionCode.toUpperCase()}
           </p>
@@ -179,7 +179,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
             </span>
           </div>
 
-          <h1 className="text-2xl font-bold text-foreground">Join the tournament</h1>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-center">Join the tournament</h1>
           <p className="mt-2 mb-8 text-base leading-relaxed text-muted-foreground">
             Sign in with Google to link your account to this game session.
           </p>
@@ -200,9 +200,9 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   if (phase === "joining") {
     return (
       <div className="flex min-h-svh items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-3.5">
           <Loader2 size={28} className="text-primary animate-spin" aria-hidden />
-          <p className="text-base font-bold text-foreground">Joining tournament…</p>
+          <p className="text-base sm:text-lg font-bold text-zinc-955 uppercase font-sans tracking-wide">Joining tournament…</p>
           <p className="font-mono text-sm tracking-widest text-muted-foreground uppercase">
             {sessionCode.toUpperCase()}
           </p>
@@ -220,8 +220,8 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
           <div className="flex size-14 items-center justify-center rounded-full bg-destructive/10">
             <AlertCircle size={26} className="text-destructive" aria-hidden />
           </div>
-          <div>
-            <p className="text-xl font-bold text-foreground">{title}</p>
+          <div className="flex flex-col items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-center">{title}</h1>
             <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{desc}</p>
           </div>
           {errorCode === "network" && (
