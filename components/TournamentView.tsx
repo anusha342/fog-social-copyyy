@@ -206,7 +206,7 @@ export function TournamentView({
 
       {/* ── Simple Title Header (Clean text, no card) ── */}
       <div className="border-b border-zinc-200/60 pb-5 mb-2 w-full max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-left truncate">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-tight text-left whitespace-normal break-words">
           {tournament?.name || "Tournament"}
         </h1>
         {tournament?.status === "active" && (
@@ -221,7 +221,9 @@ export function TournamentView({
       </div>
 
       {/* ── Content ── */}
-      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-2 pb-8 sm:pt-3 sm:pb-12 flex-grow">
+      <main
+        className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-2 pb-8 sm:pt-3 sm:pb-12 flex-grow min-h-[70vh]"
+      >
 
         {/* ── Rewards Display (Carousel or Static cash podium) ── */}
         <div className="mb-6">
@@ -343,326 +345,361 @@ export function TournamentView({
           </div>
         </div>
 
+        {/* 3D sliding deck */}
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="w-full"
+          className="w-full overflow-hidden py-4"
+          style={{ perspective: "1200px" }}
         >
-          {tab === "leaderboard" && (
-            // ── Leaderboard tab ──────────────────────────────────────────────
-            !leaderboard ? (
-              <div className="flex flex-col items-center gap-3 py-20">
-                <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
-                <p className="text-xs text-muted-foreground">Loading leaderboard…</p>
-              </div>
-            ) : leaderboard.leaderboard.length === 0 ? (
-              <div className="flex flex-col items-center gap-4 py-20 text-center select-none animate-in fade-in zoom-in-95 duration-200">
-                <div className="flex size-14 items-center justify-center rounded-2xl bg-orange-100/50 border border-orange-200/30 shadow-sm">
-                  <Trophy size={26} className="text-primary animate-pulse" aria-hidden />
+          <div
+            className="flex w-[300%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              transform: `translateX(-${(tab === "leaderboard" ? 0 : tab === "plays" ? 1 : 2) * 33.3333}%)`,
+            }}
+          >
+            {/* Slide 1: Leaderboard */}
+            <div
+              className="w-1/3 px-1 transition-all duration-500 origin-center"
+              style={{
+                transform: tab === "leaderboard" ? "scale(1) rotateY(0deg)" : "scale(0.95) rotateY(-8deg)",
+                opacity: tab === "leaderboard" ? 1 : 0.15,
+                filter: tab === "leaderboard" ? "none" : "blur(2px)",
+                pointerEvents: tab === "leaderboard" ? "auto" : "none",
+              }}
+            >
+              {/* ── Leaderboard tab ────────────────────────────────────────────── */}
+              {!leaderboard ? (
+                <div className="flex flex-col items-center gap-3 py-20">
+                  <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
+                  <p className="text-xs text-muted-foreground">Loading leaderboard…</p>
                 </div>
-                <div>
-                  <p className="text-base font-black text-zinc-900 tracking-tight">No rankings yet</p>
-                  <p className="mt-2 max-w-[280px] text-sm leading-relaxed text-zinc-500 mx-auto">
-                    No scores have been submitted for this tournament. Play a game to claim your spot on the leaderboard!
-                  </p>
+              ) : leaderboard.leaderboard.length === 0 ? (
+                <div className="flex flex-col items-center gap-4 py-20 text-center select-none animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-orange-100/50 border border-orange-200/30 shadow-sm">
+                    <Trophy size={26} className="text-primary animate-pulse" aria-hidden />
+                  </div>
+                  <div>
+                    <p className="text-base font-black text-zinc-900 tracking-tight">No rankings yet</p>
+                    <p className="mt-2 max-w-[280px] text-sm leading-relaxed text-zinc-500 mx-auto">
+                      No scores have been submitted for this tournament. Play a game to claim your spot on the leaderboard!
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <>
-                <div className="space-y-2.5">
-                  {(() => {
-                    const top10 = leaderboard.leaderboard.slice(0, 10)
-                    const isPlayerInTop10 = leaderboard.player != null && top10.some((e) => e.rank === leaderboard.player!.rank)
+              ) : (
+                <>
+                  <div className="space-y-2.5">
+                    {(() => {
+                      const top10 = leaderboard.leaderboard.slice(0, 10)
+                      const isPlayerInTop10 = leaderboard.player != null && top10.some((e) => e.rank === leaderboard.player!.rank)
 
-                    const displayedEntries = [...top10]
-                    if (leaderboard.player && !isPlayerInTop10) {
-                      displayedEntries.push({
-                        rank: leaderboard.player.rank,
-                        score: leaderboard.player.best_score,
-                        played_at: "",
-                        players: [
-                          {
-                            name: name ?? "You",
-                            avatar_url: image ?? "",
-                          },
-                        ],
-                      })
-                    }
-
-                    return displayedEntries.map((entry) => {
-                      const isMe =
-                        leaderboard.player != null && entry.rank === leaderboard.player.rank
-
-                      const isRank1 = entry.rank === 1
-                      const isRank2 = entry.rank === 2
-                      const isRank3 = entry.rank === 3
-
-                      let cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-pink-200/90 shadow-[0_4px_15px_rgba(232,121,249,0.06)]"
-                      let rankWidget = null
-                      let scoreColor = "text-zinc-600 font-extrabold"
-
-                      if (isRank1) {
-                        cardClass = "glass-pill-3d !bg-none !bg-[#FFDEB3] md:hover:!bg-[#FFD59E] md:active:scale-[0.99] border-[#FFA726] shadow-[0_8px_30px_rgba(249,115,22,0.22)] border-l-4 border-l-orange-500 scale-[1.02] md:transition-transform md:duration-200 z-10"
-                        rankWidget = (
-                          <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
-                            🥇
-                          </div>
-                        )
-                        scoreColor = "text-orange-700 font-extrabold"
-                      } else if (isRank2) {
-                        cardClass = "glass-pill-3d !bg-none !bg-[#CBE6FF] md:hover:!bg-[#B3D7FF] md:active:scale-[0.99] border-[#4FC3F7] shadow-[0_8px_30px_rgba(3,169,244,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
-                        rankWidget = (
-                          <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
-                            🥈
-                          </div>
-                        )
-                        scoreColor = "text-sky-700 font-extrabold"
-                      } else if (isRank3) {
-                        cardClass = "glass-pill-3d !bg-none !bg-[#E5DFFF] md:hover:!bg-[#D1C9FF] md:active:scale-[0.99] border-[#9FA8DA] shadow-[0_8px_30px_rgba(99,102,241,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
-                        rankWidget = (
-                          <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
-                            🥉
-                          </div>
-                        )
-                        scoreColor = "text-indigo-700 font-extrabold"
-                      } else {
-                        rankWidget = (
-                          <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"
-                            }`}>
-                            {entry.rank}
-                          </div>
-                        )
-                        scoreColor = "text-zinc-600 font-extrabold"
+                      const displayedEntries = [...top10]
+                      if (leaderboard.player && !isPlayerInTop10) {
+                        displayedEntries.push({
+                          rank: leaderboard.player.rank,
+                          score: leaderboard.player.best_score,
+                          played_at: "",
+                          players: [
+                            {
+                              name: name ?? "You",
+                              avatar_url: image ?? "",
+                            },
+                          ],
+                        })
                       }
 
-                      if (isMe) {
-                        if (!isRank1 && !isRank2 && !isRank3) {
-                          cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-emerald-500 shadow-md border-2"
+                      return displayedEntries.map((entry) => {
+                        const isMe =
+                          leaderboard.player != null && entry.rank === leaderboard.player.rank
+
+                        const isRank1 = entry.rank === 1
+                        const isRank2 = entry.rank === 2
+                        const isRank3 = entry.rank === 3
+
+                        let cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-pink-200/90 shadow-[0_4px_15px_rgba(232,121,249,0.06)]"
+                        let rankWidget = null
+                        let scoreColor = "text-zinc-600 font-extrabold"
+
+                        if (isRank1) {
+                          cardClass = "glass-pill-3d !bg-none !bg-[#FFDEB3] md:hover:!bg-[#FFD59E] md:active:scale-[0.99] border-[#FFA726] shadow-[0_8px_30px_rgba(249,115,22,0.22)] border-l-4 border-l-orange-500 scale-[1.02] md:transition-transform md:duration-200 z-10"
+                          rankWidget = (
+                            <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
+                              🥇
+                            </div>
+                          )
+                          scoreColor = "text-orange-700 font-extrabold"
+                        } else if (isRank2) {
+                          cardClass = "glass-pill-3d !bg-none !bg-[#CBE6FF] md:hover:!bg-[#B3D7FF] md:active:scale-[0.99] border-[#4FC3F7] shadow-[0_8px_30px_rgba(3,169,244,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
+                          rankWidget = (
+                            <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
+                              🥈
+                            </div>
+                          )
+                          scoreColor = "text-sky-700 font-extrabold"
+                        } else if (isRank3) {
+                          cardClass = "glass-pill-3d !bg-none !bg-[#E5DFFF] md:hover:!bg-[#D1C9FF] md:active:scale-[0.99] border-[#9FA8DA] shadow-[0_8px_30px_rgba(99,102,241,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
+                          rankWidget = (
+                            <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
+                              🥉
+                            </div>
+                          )
+                          scoreColor = "text-indigo-700 font-extrabold"
                         } else {
-                          cardClass = `${cardClass} border-emerald-500 border-2`
+                          rankWidget = (
+                            <div className={`font-mono text-base font-black shrink-0 w-6 sm:w-8 flex items-center justify-center ${isMe ? "text-orange-700" : "text-zinc-500"
+                              }`}>
+                              {entry.rank}
+                            </div>
+                          )
+                          scoreColor = "text-zinc-600 font-extrabold"
+                        }
+
+                        if (isMe) {
+                          if (!isRank1 && !isRank2 && !isRank3) {
+                            cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-emerald-500 shadow-md border-2"
+                          } else {
+                            cardClass = `${cardClass} border-emerald-500 border-2`
+                          }
+                        }
+
+                        return (
+                          <div
+                            key={entry.rank}
+                            className={`relative flex items-center gap-2.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 ${cardClass}`}
+                          >
+                            {isMe && (
+                              <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
+                                YOU
+                              </span>
+                            )}
+                            {/* Rank Widget */}
+                            {rankWidget}
+
+                            {/* Avatar */}
+                            <div className="size-8 shrink-0 overflow-hidden rounded-full bg-zinc-200 border border-zinc-300/60 shadow-sm relative">
+                              {isMe && (
+                                <span className="absolute inset-0 rounded-full border-2 border-emerald-500/80 animate-pulse pointer-events-none" />
+                              )}
+                              <Avatar
+                                src={entry.players[0]?.avatar_url ?? ""}
+                                name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
+                              />
+                            </div>
+
+                            {/* Name */}
+                            <div className="flex-1 min-w-0 pr-1">
+                              <p className={`text-base font-bold leading-tight flex items-center gap-1 flex-wrap ${isMe ? "text-emerald-950" : "text-zinc-900"}`}>
+                                <span>
+                                  {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
+                                </span>
+                                {isRank1 && (
+                                  <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 mb-0.5" />
+                                )}
+                              </p>
+                            </div>
+
+                            {/* Score */}
+                            <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-start gap-0.5 w-[68px] shrink-0`}><div className="w-3.5 flex items-center justify-start shrink-0">
+                              {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0" />}
+                              {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0" />}
+                              {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0" />}
+                            </div><span className="text-left flex-grow">{entry.score.toLocaleString()}</span>
+                            </div>
+                          </div>
+                        )
+                      })
+                    })()}
+                  </div>
+
+                </>)}
+            </div>
+
+            {/* Slide 2: My Plays */}
+            <div
+              className="w-1/3 px-1 transition-all duration-500 origin-center"
+              style={{
+                transform: tab === "plays" ? "scale(1) rotateY(0deg)" : tab === "leaderboard" ? "scale(0.95) rotateY(8deg)" : "scale(0.95) rotateY(-8deg)",
+                opacity: tab === "plays" ? 1 : 0.15,
+                filter: tab === "plays" ? "none" : "blur(2px)",
+                pointerEvents: tab === "plays" ? "auto" : "none",
+              }}
+            >
+              {/* ── My Plays tab ───────────────────────────────────────────────── */}
+              {!playsLoaded ? (
+                <div className="flex flex-col items-center gap-3 py-20">
+                  <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
+                  <p className="text-sm text-muted-foreground">Loading plays…</p>
+                </div>
+              ) : plays && plays.length > 0 ? (
+                <div className="space-y-2.5">
+                  {(() => {
+                    const playerRank = leaderboard?.player?.rank
+                    const userTopEntry = leaderboard?.leaderboard.find((e) =>
+                      e.players.some((p) => p.name === name)
+                    )
+                    const finalRank = playerRank || userTopEntry?.rank
+                    const maxScore = plays && plays.length > 0 ? Math.max(...plays.map((p) => p.score)) : 0
+                    const bestPlayIndex = plays.findIndex((p) => p.score === maxScore)
+
+                    return plays.map((g, index) => {
+                      const isBestPlay = bestPlayIndex !== -1 && index === bestPlayIndex
+
+                      let cardClass = "glass-pill-3d !bg-white/98 relative flex items-start justify-between rounded-xl p-4 sm:p-5 border border-zinc-350 shadow-xs transition-all duration-200"
+                      let iconBg = "bg-zinc-100 text-zinc-500 border border-zinc-200/50"
+                      let iconElement = <Gamepad2 size={16} />
+                      let bestPlayBadge = null
+
+                      if (isBestPlay) {
+                        if (finalRank === 1) {
+                          cardClass = "glass-pill-3d !bg-orange-200 relative flex items-start justify-between rounded-xl p-4 sm:p-5 border border-orange-300 border-l-4 border-l-orange-500 shadow-xs transition-all duration-200"
+                          iconBg = "bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-sm"
+                          iconElement = <Crown size={16} />
+                          bestPlayBadge = (
+                            <span className="absolute -top-3 left-14 px-3 py-1 rounded bg-orange-500 text-white font-mono text-[10.5px] sm:text-[13px] font-black uppercase tracking-wider shadow-md z-10 leading-none flex items-center gap-1">
+                              👑 Personal Best
+                            </span>
+                          )
+                        } else if (finalRank === 2) {
+                          cardClass = "glass-pill-3d !bg-sky-200 relative flex items-start justify-between rounded-xl p-4 sm:p-5 border border-sky-300 border-l-4 border-l-sky-500 shadow-xs transition-all duration-200"
+                          iconBg = "bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-sm"
+                          iconElement = <Trophy size={16} />
+                          bestPlayBadge = (
+                            <span className="absolute -top-3 left-14 px-3 py-1 rounded bg-sky-500 text-white font-mono text-[10.5px] sm:text-[13px] font-black uppercase tracking-wider shadow-md z-10 leading-none flex items-center gap-1">
+                              🏆 Personal Best
+                            </span>
+                          )
+                        } else if (finalRank === 3) {
+                          cardClass = "glass-pill-3d !bg-indigo-200 relative flex items-start justify-between rounded-xl p-4 sm:p-5 border border-indigo-300 border-l-4 border-l-indigo-500 shadow-xs transition-all duration-200"
+                          iconBg = "bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-sm"
+                          iconElement = <Trophy size={16} />
+                          bestPlayBadge = (
+                            <span className="absolute -top-3 left-14 px-3 py-1 rounded bg-indigo-500 text-white font-mono text-[10.5px] sm:text-[13px] font-black uppercase tracking-wider shadow-md z-10 leading-none flex items-center gap-1">
+                              🏆 Personal Best
+                            </span>
+                          )
+                        } else {
+                          cardClass = "glass-pill-3d !bg-amber-200 relative flex items-start justify-between rounded-xl p-4 sm:p-5 border border-amber-300 border-l-4 border-l-amber-500 shadow-xs transition-all duration-200"
+                          iconBg = "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-sm"
+                          iconElement = <Trophy size={16} />
+                          bestPlayBadge = (
+                            <span className="absolute -top-3 left-14 px-3 py-1 rounded bg-amber-500 text-white font-mono text-[10.5px] sm:text-[13px] font-black uppercase tracking-wider shadow-md z-10 leading-none flex items-center gap-1">
+                              🏆 Personal Best
+                            </span>
+                          )
                         }
                       }
 
                       return (
                         <div
-                          key={entry.rank}
-                          className={`relative flex items-center gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 ${cardClass}`}
+                          key={`${g.gameplay_id}-${index}`}
+                          className={`transition-all duration-200 ${cardClass}`}
                         >
-                          {isMe && (
-                            <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
-                              YOU
-                            </span>
-                          )}
-                          {/* Rank Widget */}
-                          {rankWidget}
+                          {bestPlayBadge}
+                          <div className="flex items-start gap-3.5 min-w-0 flex-1">
+                            {/* Status Icon Indicator */}
+                            <div className={`flex size-9.5 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${iconBg}`}>
+                              {iconElement}
+                            </div>
 
-                          {/* Avatar */}
-                          <div className="size-8 shrink-0 overflow-hidden rounded-full bg-zinc-200 border border-zinc-300/60 shadow-sm relative">
-                            {isMe && (
-                              <span className="absolute inset-0 rounded-full border-2 border-emerald-500/80 animate-pulse pointer-events-none" />
-                            )}
-                            <Avatar
-                              src={entry.players[0]?.avatar_url ?? ""}
-                              name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
-                            />
+                            {/* Date/Time info */}
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap text-left">
+                                <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-800 leading-none whitespace-nowrap">
+                                  {new Date(g.played_at).toLocaleDateString("en-US", {
+                                    month: "short", day: "numeric", year: "numeric",
+                                  })}
+                                </p>
+                                {/* badge removed to top border */}
+                              </div>
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
+                                <p className="font-mono text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none whitespace-nowrap">
+                                  {new Date(g.played_at).toLocaleTimeString("en-US", {
+                                    hour: "2-digit", minute: "2-digit",
+                                  })}
+                                </p>
+                                {g.center_name && (
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 font-mono text-[10px] sm:text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs whitespace-nowrap shrink-0">
+                                    {g.center_name}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
 
-                          {/* Name */}
-                          <p
-                            className={`flex items-center flex-1 truncate text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-900"
-                              }`}
-                          >
-                            <span className="truncate">
-                              {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
-                            </span>
-                            {isRank1 && (
-                              <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
-                            )}
-                          </p>
-
-                          {/* Score */}
-                          <p className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
-                            {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0 mb-0.5" />}
-                            {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0 mb-0.5" />}
-                            {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0 mb-0.5" />}
-                            {entry.score.toLocaleString()}
-                          </p>
+                          {/* Score display */}
+                          <div className="text-right shrink-0 pl-3">
+                            <p className="font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-widest leading-none mb-1 font-bold">
+                              Score
+                            </p>
+                            <p className="font-mono text-lg sm:text-xl md:text-2xl font-black tabular-nums text-zinc-950 leading-none">
+                              {g.score.toLocaleString()}
+                            </p>
+                          </div>
                         </div>
                       )
                     })
                   })()}
                 </div>
-
-              </>
-            )
-          )}
-
-          {tab === "plays" && (
-            // ── My Plays tab ─────────────────────────────────────────────────
-            !playsLoaded ? (
-              <div className="flex flex-col items-center gap-3 py-20">
-                <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
-                <p className="text-sm text-muted-foreground">Loading plays…</p>
-              </div>
-            ) : plays && plays.length > 0 ? (
-              <div className="space-y-2.5">
-                {(() => {
-                  const playerRank = leaderboard?.player?.rank
-                  const userTopEntry = leaderboard?.leaderboard.find((e) =>
-                    e.players.some((p) => p.name === name)
-                  )
-                  const finalRank = playerRank || userTopEntry?.rank
-                  const maxScore = plays && plays.length > 0 ? Math.max(...plays.map((p) => p.score)) : 0
-                  const bestPlayIndex = plays.findIndex((p) => p.score === maxScore)
-
-                  return plays.map((g, index) => {
-                    const isBestPlay = bestPlayIndex !== -1 && index === bestPlayIndex
-
-                    let cardClass = "glass-pill-3d !bg-white/98 relative flex items-center justify-between rounded-xl p-4 sm:p-5 border border-zinc-350 shadow-xs transition-all duration-200"
-                    let iconBg = "bg-zinc-100 text-zinc-500 border border-zinc-200/50"
-                    let iconElement = <Gamepad2 size={16} />
-                    let bestPlayBadge = null
-
-                    if (isBestPlay) {
-                      if (finalRank === 1) {
-                        cardClass = "glass-pill-3d !bg-orange-200 relative flex items-center justify-between rounded-xl p-4 sm:p-5 border border-orange-300 border-l-4 border-l-orange-500 shadow-xs transition-all duration-200"
-                        iconBg = "bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-sm"
-                        iconElement = <Crown size={16} />
-                        bestPlayBadge = (
-                          <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 border border-orange-200 shadow-xs">
-                            👑 Personal Best
-                          </span>
-                        )
-                      } else if (finalRank === 2) {
-                        cardClass = "glass-pill-3d !bg-sky-200 relative flex items-center justify-between rounded-xl p-4 sm:p-5 border border-sky-300 border-l-4 border-l-sky-500 shadow-xs transition-all duration-200"
-                        iconBg = "bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-sm"
-                        iconElement = <Trophy size={16} />
-                        bestPlayBadge = (
-                          <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200 shadow-xs">
-                            🏆 Personal Best
-                          </span>
-                        )
-                      } else if (finalRank === 3) {
-                        cardClass = "glass-pill-3d !bg-indigo-200 relative flex items-center justify-between rounded-xl p-4 sm:p-5 border border-indigo-300 border-l-4 border-l-indigo-500 shadow-xs transition-all duration-200"
-                        iconBg = "bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-sm"
-                        iconElement = <Trophy size={16} />
-                        bestPlayBadge = (
-                          <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-xs">
-                            🏆 Personal Best
-                          </span>
-                        )
-                      } else {
-                        cardClass = "glass-pill-3d !bg-amber-200 relative flex items-center justify-between rounded-xl p-4 sm:p-5 border border-amber-300 border-l-4 border-l-amber-500 shadow-xs transition-all duration-200"
-                        iconBg = "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-sm"
-                        iconElement = <Trophy size={16} />
-                        bestPlayBadge = (
-                          <span className="inline-flex items-center gap-1 font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 shadow-xs">
-                            🏆 Personal Best
-                          </span>
-                        )
-                      }
-                    }
-
-                    return (
-                      <div
-                        key={`${g.gameplay_id}-${index}`}
-                        className={`transition-all duration-200 ${cardClass}`}
-                      >
-                        <div className="flex items-center gap-3.5 min-w-0">
-                          {/* Status Icon Indicator */}
-                          <div className={`flex size-9.5 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${iconBg}`}>
-                            {iconElement}
-                          </div>
-
-                          {/* Date/Time info */}
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap text-left">
-                              <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-800 leading-none whitespace-nowrap">
-                                {new Date(g.played_at).toLocaleDateString(undefined, {
-                                  month: "short", day: "numeric", year: "numeric",
-                                })}
-                              </p>
-                              {bestPlayBadge}
-                            </div>
-                            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
-                              <p className="font-mono text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none whitespace-nowrap">
-                                {new Date(g.played_at).toLocaleTimeString(undefined, {
-                                  hour: "2-digit", minute: "2-digit",
-                                })}
-                              </p>
-                              {g.center_name && (
-                                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 font-mono text-[10px] sm:text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs whitespace-nowrap shrink-0">
-                                  {g.center_name}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Score display */}
-                        <div className="text-right shrink-0 pl-3">
-                          <p className="font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-widest leading-none mb-1 font-bold">
-                            Score
-                          </p>
-                          <p className="font-mono text-lg sm:text-xl md:text-2xl font-black tabular-nums text-zinc-950 leading-none">
-                            {g.score.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    )
-                  })
-                })()}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-4 py-20 text-center select-none">
-                <div className="flex size-14 items-center justify-center rounded-2xl bg-orange-100/50 border border-orange-200/30 shadow-sm">
-                  <Gamepad2 size={26} className="text-primary animate-pulse" aria-hidden />
+              ) : (
+                <div className="flex flex-col items-center gap-4 py-20 text-center select-none">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-orange-100/50 border border-orange-200/30 shadow-sm">
+                    <Gamepad2 size={26} className="text-primary animate-pulse" aria-hidden />
+                  </div>
+                  <div>
+                    <p className="text-base font-black text-zinc-900 tracking-tight">No plays yet</p>
+                    <p className="mt-2 max-w-[280px] text-sm leading-relaxed text-zinc-500 mx-auto">
+                      Your scores for this tournament will appear here after you play.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-base font-black text-zinc-900 tracking-tight">No plays yet</p>
-                  <p className="mt-2 max-w-[280px] text-sm leading-relaxed text-zinc-500 mx-auto">
-                    Your scores for this tournament will appear here after you play.
-                  </p>
-                </div>
-              </div>
-            )
-          )}
+              )}
+            </div>
 
-          {tab === "rewards" && (() => {
-            const userTopEntry = leaderboard?.leaderboard.find((e) =>
-              e.players.some((p) => p.name === name)
-            )
-            const finalRank = pid ? leaderboard?.player?.rank : userTopEntry?.rank
+            {/* Slide 3: My Rewards */}
+            <div
+              className="w-1/3 px-1 transition-all duration-500 origin-center"
+              style={{
+                transform: tab === "rewards" ? "scale(1) rotateY(0deg)" : "scale(0.95) rotateY(8deg)",
+                opacity: tab === "rewards" ? 1 : 0.15,
+                filter: tab === "rewards" ? "none" : "blur(2px)",
+                pointerEvents: tab === "rewards" ? "auto" : "none",
+              }}
+            >
+              {(() => {
+                const userTopEntry = leaderboard?.leaderboard.find((e) =>
+                  e.players.some((p) => p.name === name)
+                )
+                const finalRank = pid ? leaderboard?.player?.rank : userTopEntry?.rank
 
-            const hasWon = finalRank !== undefined && finalRank >= 1 && finalRank <= 3
-            const dbReward = tournament?.rewards?.find((r) => r.rank === finalRank)
+                const hasWon = finalRank !== undefined && finalRank >= 1 && finalRank <= 3
+                const dbReward = tournament?.rewards?.find((r) => r.rank === finalRank)
 
-            let prizeAmount = dbReward?.prize_money ?? ""
-            let medalEmoji = ""
-            let rankTitle = dbReward?.title ?? ""
+                let prizeAmount = dbReward?.prize_money ?? ""
+                let medalEmoji = ""
+                let rankTitle = dbReward?.title ?? ""
 
-            let bannerClass = ""
-            let congratsText = ""
-            if (finalRank === 1) {
-              if (!rankTitle) rankTitle = "Tournament Champion"
-              medalEmoji = "🥇"
-              bannerClass = "reward-banner-gold glass-pill-3d !bg-amber-200 border-2 border-amber-400 shadow-md shadow-amber-500/10"
-              congratsText = "CONGRATULATIONS CHAMPION!"
-            } else if (finalRank === 2) {
-              if (!rankTitle) rankTitle = "Runner-Up Prize"
-              medalEmoji = "🥈"
-              bannerClass = "reward-banner-silver glass-pill-3d !bg-slate-200 border-2 border-slate-300 shadow-md shadow-slate-500/10"
-              congratsText = "AWESOME PLAY, RUNNER-UP!"
-            } else if (finalRank === 3) {
-              if (!rankTitle) rankTitle = "Third Place Prize"
-              medalEmoji = "🥉"
-              bannerClass = "reward-banner-bronze glass-pill-3d !bg-indigo-200 border-2 border-indigo-300 shadow-md shadow-indigo-500/10"
-              congratsText = "FANTASTIC JOB, 3RD PLACE!"
-            }
+                let bannerClass = ""
+                let congratsText = ""
+                if (finalRank === 1) {
+                  if (!rankTitle) rankTitle = "Tournament Champion"
+                  medalEmoji = "🥇"
+                  bannerClass = "reward-banner-gold glass-pill-3d !bg-amber-200 border-2 border-amber-400 shadow-md shadow-amber-500/10"
+                  congratsText = "CONGRATULATIONS CHAMPION!"
+                } else if (finalRank === 2) {
+                  if (!rankTitle) rankTitle = "Runner-Up Prize"
+                  medalEmoji = "🥈"
+                  bannerClass = "reward-banner-silver glass-pill-3d !bg-slate-200 border-2 border-slate-300 shadow-md shadow-slate-500/10"
+                  congratsText = "AWESOME PLAY, RUNNER-UP!"
+                } else if (finalRank === 3) {
+                  if (!rankTitle) rankTitle = "Third Place Prize"
+                  medalEmoji = "🥉"
+                  bannerClass = "reward-banner-bronze glass-pill-3d !bg-indigo-200 border-2 border-indigo-300 shadow-md shadow-indigo-500/10"
+                  congratsText = "FANTASTIC JOB, 3RD PLACE!"
+                }
 
-            return (
-              <div className="space-y-2.5 select-none animate-none">
-                <style>{`
+                return (
+                  <div className="space-y-2.5 select-none animate-none">
+                    <style>{`
                 @keyframes rewardsPop {
                   0% { opacity: 0; transform: scale(0.95) translateY(15px); }
                   70% { transform: scale(1.01) translateY(-2px); }
@@ -709,79 +746,81 @@ export function TournamentView({
                 }
               `}</style>
 
-                {hasWon ? (
-                  <div className={`glass-pill-3d relative flex flex-row items-center justify-between rounded-3xl p-5 sm:p-7 overflow-hidden gap-4 w-full transition-all duration-200 ${bannerClass}`}>
-                    {/* Shimmer sweep */}
-                    <div className="absolute inset-0 reward-shimmer-effect pointer-events-none opacity-40" />
+                    {hasWon ? (
+                      <div className={`relative flex flex-row items-center justify-between rounded-3xl p-5 sm:p-7 overflow-hidden gap-4 w-full transition-all duration-200 border border-zinc-200 bg-white ${bannerClass}`}>
+                        {/* Shimmer sweep */}
+                        <div className="absolute inset-0 reward-shimmer-effect pointer-events-none opacity-40" />
 
-                    {/* Left Section: Medal & Clean Title */}
-                    <div className="flex flex-row items-center gap-4.5 z-10 min-w-0">
-                      {/* Mini Medal Container */}
-                      <div className="glass-pill-3d flex size-12 shrink-0 items-center justify-center rounded-2xl shadow-sm text-2xl select-none !bg-white/80 !border-white">
-                        {medalEmoji}
-                      </div>
+                        {/* Left Section: Medal & Clean Title */}
+                        <div className="flex flex-row items-center gap-4.5 z-10 min-w-0">
+                          {/* Mini Medal Container */}
+                          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl shadow-sm text-2xl select-none bg-white border border-zinc-100">
+                            {medalEmoji}
+                          </div>
 
-                      {/* Simple Title */}
-                      <div className="min-w-0 flex-1 text-left pr-2 sm:pr-3">
-                        <h2 className="font-sans text-sm min-[360px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 uppercase leading-snug tracking-tight break-normal">
-                          {tournament?.name || "EPIC Tournament"}
-                        </h2>
-                        <span className="font-mono text-[10px] sm:text-xs font-black tracking-widest text-[#6e635c]/90 uppercase block leading-none mt-1">
-                          {finalRank === 1 ? "1st Place Winner" : finalRank === 2 ? "2nd Place Winner" : "3rd Place Winner"}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Right Section: Large Prize Won Showcase */}
-                    <div className="shrink-0 z-10">
-                      {!dbReward?.image_url || dbReward.image_url === "" ? (
-                        <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex flex-col items-center justify-center glass-pill-3d rounded-2xl p-3 !bg-white/70 border border-white/90 shadow-md text-center">
-                          <span className="text-xl sm:text-2xl mb-1 sm:mb-1.5 select-none">💵</span>
-                          <span className="font-sans text-base sm:text-lg font-extrabold text-zinc-955 tracking-tight leading-none">
-                            {prizeAmount}
-                          </span>
+                          {/* Simple Title */}
+                          <div className="min-w-0 flex-1 text-left pr-2 sm:pr-3">
+                            <h2 className="font-sans text-sm min-[360px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 uppercase leading-snug tracking-tight break-normal">
+                              {tournament?.name || "EPIC Tournament"}
+                            </h2>
+                            <span className="font-mono text-[10px] sm:text-xs font-black tracking-widest text-[#6e635c]/90 uppercase block leading-none mt-1">
+                              {finalRank === 1 ? "1st Place Winner" : finalRank === 2 ? "2nd Place Winner" : "3rd Place Winner"}
+                            </span>
+                          </div>
                         </div>
-                      ) : (
-                        <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center glass-pill-3d rounded-2xl p-2 !bg-white/70 border border-white/90 shadow-md group/prize transition-transform duration-300 hover:scale-105">
-                          <img
-                            src={dbReward.image_url}
-                            alt="Prize Reward"
-                            className="max-w-full max-h-full object-contain rounded-xl drop-shadow-[0_6px_12px_rgba(0,0,0,0.12)]"
-                          />
+
+                        {/* Right Section: Large Prize Won Showcase */}
+                        <div className="shrink-0 z-10">
+                          {!dbReward?.image_url || dbReward.image_url === "" ? (
+                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center rounded-2xl p-3 bg-white border border-zinc-100 shadow-sm text-center">
+                              <span className="text-xl sm:text-2xl mb-1 sm:mb-1.5 select-none">💵</span>
+                              <span className="font-sans text-base sm:text-lg font-extrabold text-zinc-955 tracking-tight leading-none">
+                                {prizeAmount}
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center rounded-2xl p-2 bg-white border border-zinc-100 shadow-sm group/prize transition-transform duration-300 hover:scale-105">
+                              <img
+                                src={dbReward.image_url}
+                                alt="Prize Reward"
+                                className="max-w-full max-h-full object-contain rounded-xl drop-shadow-[0_4px_8px_rgba(0,0,0,0.06)]"
+                              />
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  /* Status Banner */
-                  <div className="glass-pill-3d relative overflow-hidden !bg-white/95 !border-zinc-350 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transition-all duration-200">
-                    <div className="flex items-center gap-4 min-w-0">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 border border-zinc-200 shadow-2xs">
-                        <Trophy size={18} className="text-zinc-400 fill-zinc-50" />
                       </div>
-                      <div className="min-w-0">
-                        <h3 className="font-sans text-lg sm:text-xl font-black text-zinc-900 leading-tight">
-                          No rewards won yet
-                        </h3>
-                        <p className="mt-1.5 font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 flex-wrap">
-                          <span>Current Rank:</span>
-                          <span className="px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-350 text-zinc-700 font-black">
-                            {finalRank != null ? `#${finalRank}` : "UNRANKED"}
-                          </span>
-                        </p>
+                    ) : (
+                      /* Status Banner */
+                      <div className="glass-pill-3d relative overflow-hidden !bg-white/95 !border-zinc-350 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transition-all duration-200">
+                        <div className="flex items-center gap-4 min-w-0">
+                          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 border border-zinc-200 shadow-2xs">
+                            <Trophy size={18} className="text-zinc-400 fill-zinc-50" />
+                          </div>
+                          <div className="min-w-0">
+                            <h3 className="font-sans text-lg sm:text-xl font-black text-zinc-900 leading-tight">
+                              No rewards won yet
+                            </h3>
+                            <p className="mt-1.5 font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 flex-wrap">
+                              <span>Current Rank:</span>
+                              <span className="px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-350 text-zinc-700 font-black">
+                                {finalRank != null ? `#${finalRank}` : "UNRANKED"}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setTab("leaderboard")}
+                          className="w-full sm:w-auto shrink-0 py-2.5 px-4 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 hover:border-zinc-400 active:scale-98 shadow-2xs text-[10px] font-bold text-zinc-700 uppercase tracking-wider transition-all cursor-pointer text-center"
+                        >
+                          View Leaderboard
+                        </button>
                       </div>
-                    </div>
-                    <button
-                      onClick={() => setTab("leaderboard")}
-                      className="w-full sm:w-auto shrink-0 py-2.5 px-4 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 hover:border-zinc-400 active:scale-98 shadow-2xs text-[10px] font-bold text-zinc-700 uppercase tracking-wider transition-all cursor-pointer text-center"
-                    >
-                      View Leaderboard
-                    </button>
+                    )}
                   </div>
-                )}
-              </div>
-            )
-          })()}
+                )
+              })()}
+            </div>
+          </div>
         </div>
 
       </main>

@@ -342,20 +342,20 @@ export default async function DashboardPage({
             <div className="flex flex-col justify-between h-full flex-grow relative z-20">
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30 w-full">
-                  <span className="font-sans text-[15px] sm:text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-1.5 min-w-0 shrink mr-2">
+                  <span className="font-sans text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-1.5 min-w-0 shrink mr-2">
                     <span className="relative flex size-2 shrink-0">
                       <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60"></span>
                       <span className="relative inline-flex rounded-full size-2 bg-pink-700"></span>
                     </span>
-                    <span className="whitespace-nowrap">
+                    <span className="whitespace-normal leading-tight">
                       {activeTournament?.name || "Active Tournament"}
                     </span>
                   </span>
-                  <span className="inline-flex items-center justify-center gap-1.5 pl-3 pr-2 py-1 sm:pl-3.5 sm:pr-2 sm:py-1.5 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
-                    <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider">
+                  <span className="inline-flex items-center justify-center gap-1 pl-2 pr-1.5 py-0.5 sm:pl-3.5 sm:pr-2 sm:py-1.5 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                    <span className="font-mono text-[9px] sm:text-xs font-black uppercase tracking-wider">
                       ENTER ARENA
                     </span>
-                    <ChevronRight size={10} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
+                    <ChevronRight size={9.5} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
                   </span>
                 </div>
 
@@ -397,7 +397,7 @@ export default async function DashboardPage({
 
                           let cardClass = "glass-pill-3d !bg-[#FFF0FA] md:hover:!bg-[#FFF5FC] md:active:scale-[0.99] border-pink-200/90 shadow-[0_4px_15px_rgba(232,121,249,0.06)] transition-all duration-300"
                           let rankWidget = (
-                            <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
+                            <div className={`font-mono text-base font-black shrink-0 w-6 sm:w-8 flex items-center justify-center ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
                               {entry.rank}
                             </div>
                           )
@@ -406,7 +406,7 @@ export default async function DashboardPage({
                           if (isRank1) {
                             cardClass = "glass-pill-3d !bg-none !bg-[#FFDEB3] md:hover:!bg-[#FFD59E] md:active:scale-[0.99] border-[#FFA726] shadow-[0_8px_30px_rgba(249,115,22,0.22)] border-l-4 border-l-orange-500 scale-[1.02] md:transition-transform md:duration-200 z-10"
                             rankWidget = (
-                              <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
+                              <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
                                 🥇
                               </div>
                             )
@@ -414,7 +414,7 @@ export default async function DashboardPage({
                           } else if (isRank2) {
                             cardClass = "glass-pill-3d !bg-none !bg-[#CBE6FF] md:hover:!bg-[#B3D7FF] md:active:scale-[0.99] border-[#4FC3F7] shadow-[0_8px_30px_rgba(3,169,244,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
                             rankWidget = (
-                              <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
+                              <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
                                 🥈
                               </div>
                             )
@@ -422,7 +422,7 @@ export default async function DashboardPage({
                           } else if (isRank3) {
                             cardClass = "glass-pill-3d !bg-none !bg-[#E5DFFF] md:hover:!bg-[#D1C9FF] md:active:scale-[0.99] border-[#9FA8DA] shadow-[0_8px_30px_rgba(99,102,241,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
                             rankWidget = (
-                              <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
+                              <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
                                 🥉
                               </div>
                             )
@@ -440,7 +440,7 @@ export default async function DashboardPage({
                           return (
                             <div
                               key={entry.rank}
-                              className={`relative flex items-center gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 text-left ${cardClass}`}
+                              className={`relative flex items-center gap-2.5 sm:gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 text-left ${cardClass}`}
                             >
                               {isMe && (
                                 <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
@@ -462,22 +462,28 @@ export default async function DashboardPage({
                               </div>
 
                               {/* Name */}
-                              <p className={`flex items-center flex-1 truncate text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
-                                <span className="truncate">
-                                  {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
-                                </span>
-                                {isRank1 && (
-                                  <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
-                                )}
-                              </p>
+                              <div className="flex-1 min-w-0 pr-1">
+                                <p className={`text-base font-bold leading-tight flex items-center gap-1 flex-wrap ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
+                                  <span>
+                                    {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
+                                  </span>
+                                  {isRank1 && (
+                                    <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 mb-0.5" />
+                                  )}
+                                </p>
+                              </div>
 
                               {/* Score */}
-                              <p className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
-                                {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0 mb-0.5" />}
-                                {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0 mb-0.5" />}
-                                {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0 mb-0.5" />}
-                                {entry.score.toLocaleString()}
-                              </p>
+                              <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-start gap-0.5 w-[68px] shrink-0`}>
+                                <div className="w-3.5 flex items-center justify-start shrink-0">
+                                  {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0" />}
+                                  {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0" />}
+                                  {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0" />}
+                                </div>
+                                <span className="text-left flex-grow">
+                                  {entry.score.toLocaleString()}
+                                </span>
+                              </div>
                             </div>
                           )
                         })
@@ -568,7 +574,7 @@ export default async function DashboardPage({
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                           <p className="font-mono text-sm text-zinc-500">
-                            {new Date(g.played_at).toLocaleTimeString(undefined, {
+                            {new Date(g.played_at).toLocaleTimeString("en-US", {
                               hour: "2-digit", minute: "2-digit",
                             })}
                           </p>
@@ -583,7 +589,7 @@ export default async function DashboardPage({
                         <p className="mt-0.5 font-mono text-sm text-[#6e635c] uppercase tracking-widest flex items-center gap-0.5 justify-end">
                           <ShieldCheck size={12} className="text-emerald-600 shrink-0" />
                           <span>
-                            {new Date(g.played_at).toLocaleDateString(undefined, {
+                            {new Date(g.played_at).toLocaleDateString("en-US", {
                               month: "short", day: "numeric", year: "numeric",
                             })}
                           </span>

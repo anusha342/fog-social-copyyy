@@ -31,10 +31,10 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   const isActive = t.status === "active"
 
   const activePalette = {
-    card: "glass-pill-3d !bg-orange-200 border border-orange-300 border-l-4 border-l-orange-500 shadow-sm transition-all duration-200",
-    icon: "bg-orange-200/50 text-orange-700 shadow-xs border border-orange-300",
-    badge: "text-orange-700 bg-orange-50/70 border border-orange-200/40 font-bold",
-    badgeIcon: "text-orange-500",
+    card: "glass-pill-3d !bg-gradient-to-br !from-amber-100/75 !to-orange-200/70 border border-orange-300 border-l-4 border-l-orange-500 shadow-[0_8px_24px_rgba(249,115,22,0.12)] scale-[1.01] hover:scale-[1.02] active:scale-[0.99] hover:shadow-[0_8px_30px_rgba(249,115,22,0.2)] z-10 transition-all duration-300",
+    icon: "bg-orange-200/60 text-orange-700 shadow-sm border border-orange-300/50",
+    badge: "text-orange-800 bg-orange-100/50 border border-orange-200/50 font-bold",
+    badgeIcon: "text-orange-600",
   }
 
   const COLOR_PALETTES = [
@@ -74,7 +74,7 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
 
   const label =
     t.name ??
-    new Date(t.started_at).toLocaleDateString(undefined, {
+    new Date(t.started_at).toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
@@ -89,16 +89,16 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   let dateRangeStr = ""
   if (endDate) {
     if (startYear === endYear) {
-      const startStr = startDate.toLocaleDateString(undefined, { month: "short", day: "numeric" })
-      const endStr = endDate.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+      const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+      const endStr = endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
       dateRangeStr = `${startStr} — ${endStr}`
     } else {
-      const startStr = startDate.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
-      const endStr = endDate.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+      const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+      const endStr = endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
       dateRangeStr = `${startStr} — ${endStr}`
     }
   } else {
-    const startStr = startDate.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+    const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     dateRangeStr = `${startStr} — Active`
   }
 
@@ -119,7 +119,7 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
         {/* Info */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="text-base sm:text-lg font-bold text-zinc-900 truncate shrink">
+            <span className="text-[15px] sm:text-base md:text-lg font-black text-zinc-955 whitespace-normal break-words leading-tight shrink">
               {label}
             </span>
           </div>
