@@ -348,7 +348,7 @@ export default async function DashboardPage() {
                     <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider">
                       ENTER ARENA
                     </span>
-                    <ChevronRight size={12} strokeWidth={3} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
+                    <ChevronRight size={10} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
                   </span>
                 </div>
 
