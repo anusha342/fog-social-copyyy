@@ -46,16 +46,16 @@ export function Navbar({ name, image }: Props) {
     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 select-none">
       {/* Clickable FOG SOCIAL Logo Link */}
       <Link href="/dashboard" className="group flex items-center gap-2 cursor-pointer select-none">
-        <div className="relative size-6 shrink-0 overflow-hidden flex items-center justify-center">
+        <div className="relative size-8 shrink-0 overflow-hidden flex items-center justify-center">
           <Image 
             src="/company_logo.png" 
             alt="FOG Technologies" 
-            width={24} 
-            height={24} 
+            width={32} 
+            height={32} 
             className="size-full object-contain group-hover:scale-110 transition-transform duration-300"
           />
         </div>
-        <span className="text-sm font-black tracking-tight uppercase">
+        <span className="text-lg sm:text-xl font-black tracking-tight uppercase">
           <span className="text-foreground">FOG</span>
           <span className="text-primary"> SOCIAL</span>
         </span>
@@ -65,14 +65,14 @@ export function Navbar({ name, image }: Props) {
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="flex items-center gap-2.5 hover:opacity-80 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+          className="flex items-center gap-3 hover:opacity-80 active:scale-[0.98] transition-all duration-200 cursor-pointer"
         >
-          <span className="hidden text-sm font-bold text-zinc-700 sm:block">{name}</span>
-          <div className="size-8 overflow-hidden rounded-full bg-primary/20 border border-primary/10 shadow-sm">
+          <span className="hidden text-base font-bold text-zinc-700 sm:block">{name}</span>
+          <div className="size-10 overflow-hidden rounded-full bg-primary/20 border border-primary/10 shadow-sm">
             {image ? (
-              <Image src={image} alt="" width={32} height={32} className="size-full object-cover" />
+              <Image src={image} alt="" width={40} height={40} className="size-full object-cover" />
             ) : (
-              <span className="flex size-full items-center justify-center text-xs font-black text-primary">
+              <span className="flex size-full items-center justify-center text-sm font-black text-primary">
                 {name?.charAt(0).toUpperCase()}
               </span>
             )}

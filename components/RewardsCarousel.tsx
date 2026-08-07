@@ -152,7 +152,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                 {/* Bottom Photos Content (Clean Side-by-Side Podium Row) */}
                 <div className="flex items-center justify-center gap-3 sm:gap-4.5 w-full h-[95px] sm:h-[120px] mt-1 sm:mt-1.5 z-20">
                   {r3 && (
-                    <div className="relative h-[80%] sm:h-[88%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/45 !border-white/80 p-1.5 rounded-xl shadow-md text-center">
+                    <div className="relative h-[80%] sm:h-[88%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/95 !border-white/90 p-1.5 rounded-xl shadow-md text-center">
                       {r3.image_url ? (
                         <img
                           src={r3.image_url}
@@ -170,7 +170,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                     </div>
                   )}
                   {r1 && (
-                    <div className="relative h-[95%] sm:h-[100%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/55 !border-white/90 p-1.5 rounded-xl shadow-lg z-10 animate-[float_4s_ease-in-out_infinite] text-center">
+                    <div className="relative h-[95%] sm:h-[100%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/98 !border-white/95 p-1.5 rounded-xl shadow-lg z-10 animate-[float_4s_ease-in-out_infinite] text-center">
                       {r1.image_url ? (
                         <img
                           src={r1.image_url}
@@ -188,7 +188,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                     </div>
                   )}
                   {r2 && (
-                    <div className="relative h-[85%] sm:h-[92%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/45 !border-white/80 p-1.5 rounded-xl shadow-md text-center">
+                    <div className="relative h-[85%] sm:h-[92%] aspect-square flex flex-col items-center justify-center glass-pill-3d !bg-white/95 !border-white/90 p-1.5 rounded-xl shadow-md text-center">
                       {r2.image_url ? (
                         <img
                           src={r2.image_url}
@@ -224,7 +224,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                 {/* Right side floating/hovering content */}
                 <div className="relative h-full w-[42%] flex items-center justify-center z-20 animate-[float_4s_ease-in-out_infinite]">
                   {slide.url === "cash-reward" ? (
-                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center glass-pill-3d rounded-2xl p-3 bg-white/45 border-white shadow-md text-center">
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center glass-pill-3d rounded-2xl p-3 !bg-white/95 border-white shadow-md text-center">
                       <span className="text-2xl sm:text-3xl mb-1 sm:mb-1.5 select-none">
                         {slide.title.includes("1st") ? "🥇" : slide.title.includes("2nd") ? "🥈" : "🥉"}
                       </span>

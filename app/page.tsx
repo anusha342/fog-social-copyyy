@@ -52,10 +52,10 @@ export default async function Home() {
       {/* Page-wide subtle grid backdrop */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        className="pointer-events-none absolute inset-0 opacity-[0.6]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+            "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
         }}
       />

@@ -282,10 +282,10 @@ export default async function DashboardPage() {
       {/* Page-wide subtle grid backdrop */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        className="pointer-events-none absolute inset-0 opacity-[0.6]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+            "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
         }}
       />
@@ -331,195 +331,195 @@ export default async function DashboardPage() {
             className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-700 shadow-[0_4px_20px_rgba(190,24,74,0.15)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-700 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(190,24,74,0.18)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
-            <div className="hover-shine-sweep opacity-0 group-hover/leaderboardcard:opacity-100 group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/leaderboardcard:opacity-100 group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+            <div className="hover-shine-sweep opacity-0 md:group-hover/leaderboardcard:opacity-100 md:group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards] md:group-active/leaderboardcard:opacity-100 md:group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="flex flex-col justify-between h-full flex-grow relative z-20">
               <div>
-                <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30">
-                <span className="font-sans text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-2 min-w-0">
-                  <span className="relative flex size-2 shrink-0">
-                    <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60"></span>
-                    <span className="relative inline-flex rounded-full size-2 bg-pink-700"></span>
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30 w-full">
+                  <span className="font-sans text-[15px] sm:text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-1.5 min-w-0 shrink mr-2">
+                    <span className="relative flex size-2 shrink-0">
+                      <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60"></span>
+                      <span className="relative inline-flex rounded-full size-2 bg-pink-700"></span>
+                    </span>
+                    <span className="whitespace-nowrap">
+                      {activeTournament?.name || "Active Tournament"}
+                    </span>
                   </span>
-                  <span className="truncate">
-                    {activeTournament?.name || "Active Tournament"}
+                  <span className="inline-flex items-center justify-center gap-1.5 pl-3 pr-2 py-1 sm:pl-3.5 sm:pr-2 sm:py-1.5 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                    <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider">
+                      ENTER ARENA
+                    </span>
+                    <ChevronRight size={12} strokeWidth={3} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
                   </span>
-                </span>
-                <span className="inline-flex items-center justify-center gap-1.5 pl-3.5 pr-2 py-1.5 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
-                  <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest">
-                    ENTER ARENA
-                  </span>
-                  <ChevronRight size={11} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
-                </span>
-              </div>
+                </div>
 
-              <div className="w-full text-center">
-                <h3 className="text-lg font-bold text-zinc-800 transition-colors duration-300">
-                  Tournament Leaderboard
-                </h3>
-                {leaderboardData && leaderboardData.leaderboard.length > 0 ? (
-                  <div className="mt-3.5 flex flex-col gap-2.5 w-full max-w-md mx-auto">
-                    {(() => {
-                      const top5 = leaderboardData.leaderboard.slice(0, 5)
-                      const playerRank = leaderboardData.player?.rank
-                      const isPlayerInTop5 = playerRank != null && top5.some((e) => e.rank === playerRank)
+                <div className="w-full text-center">
+                  <h3 className="text-lg font-black tracking-wide text-pink-700 transition-colors duration-300">
+                    Leaderboard
+                  </h3>
+                  {leaderboardData && leaderboardData.leaderboard.length > 0 ? (
+                    <div className="mt-3.5 flex flex-col gap-2.5 w-full max-w-md mx-auto">
+                      {(() => {
+                        const top5 = leaderboardData.leaderboard.slice(0, 5)
+                        const playerRank = leaderboardData.player?.rank
+                        const isPlayerInTop5 = playerRank != null && top5.some((e) => e.rank === playerRank)
 
-                      const displayedEntries = [...top5]
-                      if (playerRank != null && !isPlayerInTop5) {
-                        const bestGameplay = gameplays.find((g) => g.score === leaderboardData.player!.best_score)
-                        const playerCenterName = bestGameplay?.center_name
+                        const displayedEntries = [...top5]
+                        if (playerRank != null && !isPlayerInTop5) {
+                          const bestGameplay = gameplays.find((g) => g.score === leaderboardData.player!.best_score)
+                          const playerCenterName = bestGameplay?.center_name
 
-                        displayedEntries.push({
-                          rank: playerRank,
-                          score: leaderboardData.player!.best_score,
-                          played_at: "",
-                          center: playerCenterName ? { _id: "", name: playerCenterName } : undefined,
-                          players: [
-                            {
-                              name: resolvedName ?? "You",
-                              avatar_url: image ?? "",
-                            },
-                          ],
-                        })
-                      }
-
-                      return displayedEntries.map((entry) => {
-                        const isRank1 = entry.rank === 1
-                        const isRank2 = entry.rank === 2
-                        const isRank3 = entry.rank === 3
-                        const isMe = playerRank != null && entry.rank === playerRank
-
-                        let cardClass = "glass-pill-3d !bg-white/95 hover:!bg-white active:!bg-white/95 active:scale-[0.99] border-zinc-300 shadow-xs hover:shadow-md hover:border-zinc-400 transition-all duration-300"
-                        let rankWidget = (
-                          <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
-                            {entry.rank}
-                          </div>
-                        )
-                        let scoreColor = "text-zinc-600 font-extrabold"
-
-                        if (isRank1) {
-                          cardClass = "glass-pill-3d !bg-orange-100/95 hover:!bg-orange-200/95 active:!bg-orange-200/90 active:scale-[0.99] border-orange-400 shadow-[0_6px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_10px_30px_rgba(249,115,22,0.25)] hover:border-orange-500/90 border-l-4 border-l-orange-500 transition-all duration-300"
-                          rankWidget = (
-                            <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
-                              🥇
-                            </div>
-                          )
-                          scoreColor = "text-orange-700 font-extrabold"
-                        } else if (isRank2) {
-                          cardClass = "glass-pill-3d !bg-sky-100/95 hover:!bg-sky-200/95 active:!bg-sky-200/90 active:scale-[0.99] border-sky-400 shadow-[0_6px_20px_rgba(56,189,248,0.12)] hover:shadow-[0_10px_30px_rgba(56,189,248,0.22)] hover:border-sky-500/90 transition-all duration-300"
-                          rankWidget = (
-                            <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
-                              🥈
-                            </div>
-                          )
-                          scoreColor = "text-sky-700 font-extrabold"
-                        } else if (isRank3) {
-                          cardClass = "glass-pill-3d !bg-indigo-100/95 hover:!bg-indigo-200/95 active:!bg-indigo-200/90 active:scale-[0.99] border-indigo-400 shadow-[0_6px_20px_rgba(99,102,241,0.12)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.22)] hover:border-indigo-500/90 transition-all duration-300"
-                          rankWidget = (
-                            <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
-                              🥉
-                            </div>
-                          )
-                          scoreColor = "text-indigo-700 font-extrabold"
+                          displayedEntries.push({
+                            rank: playerRank,
+                            score: leaderboardData.player!.best_score,
+                            played_at: "",
+                            center: playerCenterName ? { _id: "", name: playerCenterName } : undefined,
+                            players: [
+                              {
+                                name: resolvedName ?? "You",
+                                avatar_url: image ?? "",
+                              },
+                            ],
+                          })
                         }
 
-                        if (isMe) {
-                          if (!isRank1 && !isRank2 && !isRank3) {
-                            cardClass = "glass-pill-3d !bg-emerald-100/95 hover:!bg-emerald-200/95 active:!bg-emerald-200/90 active:scale-[0.99] border-emerald-500 shadow-md border-2 transition-all duration-300"
-                          } else {
-                            cardClass = `${cardClass} border-emerald-500 border-2`
+                        return displayedEntries.map((entry) => {
+                          const isRank1 = entry.rank === 1
+                          const isRank2 = entry.rank === 2
+                          const isRank3 = entry.rank === 3
+                          const isMe = playerRank != null && entry.rank === playerRank
+
+                          let cardClass = "glass-pill-3d !bg-[#FFF0FA] md:hover:!bg-[#FFF5FC] md:active:scale-[0.99] border-pink-200/90 shadow-[0_4px_15px_rgba(232,121,249,0.06)] transition-all duration-300"
+                          let rankWidget = (
+                            <div className={`font-mono text-base font-black shrink-0 w-8 sm:w-10 text-left pl-1.5 ${isMe ? "text-orange-700" : "text-zinc-500"}`}>
+                              {entry.rank}
+                            </div>
+                          )
+                          let scoreColor = "text-zinc-600 font-extrabold"
+
+                          if (isRank1) {
+                            cardClass = "glass-pill-3d !bg-none !bg-[#FFDEB3] md:hover:!bg-[#FFD59E] md:active:scale-[0.99] border-[#FFA726] shadow-[0_8px_30px_rgba(249,115,22,0.22)] border-l-4 border-l-orange-500 scale-[1.02] md:transition-transform md:duration-200 z-10"
+                            rankWidget = (
+                              <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
+                                🥇
+                              </div>
+                            )
+                            scoreColor = "text-orange-700 font-extrabold"
+                          } else if (isRank2) {
+                            cardClass = "glass-pill-3d !bg-none !bg-[#CBE6FF] md:hover:!bg-[#B3D7FF] md:active:scale-[0.99] border-[#4FC3F7] shadow-[0_8px_30px_rgba(3,169,244,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
+                            rankWidget = (
+                              <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
+                                🥈
+                              </div>
+                            )
+                            scoreColor = "text-sky-700 font-extrabold"
+                          } else if (isRank3) {
+                            cardClass = "glass-pill-3d !bg-none !bg-[#E5DFFF] md:hover:!bg-[#D1C9FF] md:active:scale-[0.99] border-[#9FA8DA] shadow-[0_8px_30px_rgba(99,102,241,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
+                            rankWidget = (
+                              <div className="text-xl shrink-0 w-8 sm:w-10 text-left select-none">
+                                🥉
+                              </div>
+                            )
+                            scoreColor = "text-indigo-700 font-extrabold"
                           }
-                        }
 
-                        return (
-                          <div
-                            key={entry.rank}
-                            className={`relative flex items-center gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 text-left ${cardClass}`}
-                          >
-                            {isMe && (
-                              <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
-                                YOU
-                              </span>
-                            )}
-                            {/* Rank Widget */}
-                            {rankWidget}
+                          if (isMe) {
+                            if (!isRank1 && !isRank2 && !isRank3) {
+                              cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-emerald-500 shadow-md border-2 transition-all duration-300"
+                            } else {
+                              cardClass = `${cardClass} border-emerald-500 border-2`
+                            }
+                          }
 
-                            {/* Avatar */}
-                            <div className="size-8 shrink-0 overflow-hidden rounded-full bg-zinc-200 border border-zinc-300/60 shadow-sm relative">
+                          return (
+                            <div
+                              key={entry.rank}
+                              className={`relative flex items-center gap-3.5 rounded-xl px-4 py-4 sm:py-4.5 sm:px-5 transition-all duration-200 text-left ${cardClass}`}
+                            >
                               {isMe && (
-                                <span className="absolute inset-0 rounded-full border-2 border-emerald-500/80 animate-pulse pointer-events-none" />
+                                <span className="absolute -top-2.5 left-14 px-2 py-0.5 rounded bg-emerald-500 text-white font-mono text-xs font-black uppercase tracking-wider shadow-sm z-10 leading-none">
+                                  YOU
+                                </span>
                               )}
-                              <Avatar
-                                src={entry.players[0]?.avatar_url ?? ""}
-                                name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
-                              />
+                              {/* Rank Widget */}
+                              {rankWidget}
+
+                              {/* Avatar */}
+                              <div className="size-8 shrink-0 overflow-hidden rounded-full bg-zinc-200 border border-zinc-300/60 shadow-sm relative">
+                                {isMe && (
+                                  <span className="absolute inset-0 rounded-full border-2 border-emerald-500/80 animate-pulse pointer-events-none" />
+                                )}
+                                <Avatar
+                                  src={entry.players[0]?.avatar_url ?? ""}
+                                  name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
+                                />
+                              </div>
+
+                              {/* Name */}
+                              <p className={`flex items-center flex-1 truncate text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
+                                <span className="truncate">
+                                  {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
+                                </span>
+                                {isRank1 && (
+                                  <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
+                                )}
+                              </p>
+
+                              {/* Score */}
+                              <p className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
+                                {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0 mb-0.5" />}
+                                {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0 mb-0.5" />}
+                                {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0 mb-0.5" />}
+                                {entry.score.toLocaleString()}
+                              </p>
                             </div>
+                          )
+                        })
+                      })()}
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-xs text-zinc-500 leading-normal font-medium max-w-xs mx-auto">
+                      No active standings yet. Sync scores to start the ladder.
+                    </p>
+                  )}
+                </div>
 
-                            {/* Name */}
-                            <p className={`flex items-center flex-1 truncate text-base font-bold ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
-                              <span className="truncate">
-                                {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
-                              </span>
-                              {isRank1 && (
-                                <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 ml-1.5 align-middle mb-0.5" />
-                              )}
-                            </p>
-
-                            {/* Score */}
-                            <p className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center gap-1.5`}>
-                              {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0 mb-0.5" />}
-                              {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0 mb-0.5" />}
-                              {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0 mb-0.5" />}
-                              {entry.score.toLocaleString()}
-                            </p>
-                          </div>
-                        )
-                      })
-                    })()}
-                  </div>
-                ) : (
-                  <p className="mt-2 text-xs text-zinc-500 leading-normal font-medium max-w-xs mx-auto">
-                    No active standings yet. Sync scores to start the ladder.
-                  </p>
-                )}
+                {/* Divider */}
+                <div className="my-4 sm:my-6 border-t border-pink-200/30" />
               </div>
 
-              {/* Divider */}
-              <div className="my-4 sm:my-6 border-t border-pink-200/30" />
-            </div>
-
-            {/* Performance Telemetry Block */}
-            <div>
+              {/* Performance Telemetry Block */}
+              <div>
                 <p className="font-sans text-sm font-black tracking-widest text-pink-700 uppercase mb-2.5 text-center">
-                  Your Performance Telemetry
+                  Your Performance Status
                 </p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   {/* Games Played */}
-                  <div className="glass-pill-3d !bg-cyan-100/45 border-cyan-300/80 shadow-[0_4px_12px_rgba(6,182,212,0.12)] flex flex-col items-center justify-center text-center rounded-xl p-2 sm:p-3">
-                    <p className="text-xl font-black tracking-tight leading-tight text-cyan-950">
+                  <div className="glass-pill-3d !bg-cyan-200 border border-cyan-300 shadow-[0_4px_12px_rgba(6,182,212,0.08)] flex flex-col items-center justify-start text-center rounded-xl p-3 sm:p-4 w-full">
+                    <p className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-cyan-955">
                       {stats?.games_played != null ? stats.games_played.toLocaleString() : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-xs font-bold tracking-wider text-cyan-800 uppercase">
-                      Games Played
+                    <p className="mt-1 font-mono text-sm font-bold tracking-wider text-cyan-800 uppercase leading-snug">
+                      Games<br />Played
                     </p>
                   </div>
 
                   {/* Best Score */}
-                  <div className="glass-pill-3d !bg-amber-100/45 border-amber-300/80 shadow-[0_4px_12px_rgba(245,158,11,0.12)] flex flex-col items-center justify-center text-center rounded-xl p-2 sm:p-3">
-                    <p className="text-xl font-black tracking-tight leading-tight text-amber-955">
+                  <div className="glass-pill-3d !bg-amber-200 border border-amber-300 shadow-[0_4px_12px_rgba(245,158,11,0.08)] flex flex-col items-center justify-start text-center rounded-xl p-3 sm:p-4 w-full">
+                    <p className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-amber-955">
                       {stats?.best_score != null ? stats.best_score.toLocaleString() : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-xs font-bold tracking-wider text-amber-800 uppercase">
-                      Best Score
+                    <p className="mt-1 font-mono text-sm font-bold tracking-wider text-amber-800 uppercase leading-snug">
+                      Best<br />Score
                     </p>
                   </div>
 
                   {/* Global Rank */}
-                  <div className="glass-pill-3d !bg-indigo-100/45 border-indigo-300/80 shadow-[0_4px_12px_rgba(99,102,241,0.12)] flex flex-col items-center justify-center text-center rounded-xl p-2 sm:p-3">
-                    <p className="text-xl font-black tracking-tight leading-tight text-indigo-950">
+                  <div className="glass-pill-3d !bg-indigo-200 border border-indigo-300 shadow-[0_4px_12px_rgba(99,102,241,0.08)] flex flex-col items-center justify-start text-center rounded-xl p-3 sm:p-4 w-full">
+                    <p className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-indigo-950">
                       {stats?.global_rank != null ? `# ${stats.global_rank}` : "—"}
                     </p>
-                    <p className="mt-1 font-mono text-xs font-bold tracking-wider text-indigo-800 uppercase">
-                      Global Rank
+                    <p className="mt-1 font-mono text-sm font-bold tracking-wider text-indigo-800 uppercase leading-snug">
+                      Global<br />Rank
                     </p>
                   </div>
                 </div>
@@ -529,9 +529,7 @@ export default async function DashboardPage() {
           </Link>
 
           {/* 3. Cabinet Session History Card */}
-          <div className="group/historycard glass-panel-3d relative flex flex-col justify-start overflow-hidden !bg-stone-50/45 !border-stone-400/80 p-4 sm:p-6 transition-all duration-300 hover:!border-stone-500 hover:!bg-stone-50/65 hover:-translate-y-0.5 h-full min-h-[220px] w-full shadow-[0_6px_20px_rgba(120,113,108,0.08)] hover:shadow-[0_12px_32px_rgba(120,113,108,0.18)]">
-            {/* Hover Shine Sweep Overlay */}
-            <div className="hover-shine-sweep opacity-0 group-hover/historycard:opacity-100 group-hover/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/historycard:opacity-100 group-active/historycard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+          <div className="glass-panel-3d relative flex flex-col justify-start overflow-hidden !bg-white/40 !border-[#D9CFC7]/60 p-4 sm:p-6 h-full min-h-[220px] w-full shadow-xs">
             <div className="mb-4 sm:mb-6 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
               <p className="font-mono text-base font-black tracking-wide sm:tracking-[0.25em] text-muted-foreground/60 uppercase">
                 Session History
@@ -554,7 +552,7 @@ export default async function DashboardPage() {
                   {sortedGameplays.map((g, index) => (
                     <div
                       key={`${g.gameplay_id}-${index}`}
-                      className="glass-pill-3d !bg-[#D9CFC7]/45 hover:!bg-[#D9CFC7]/65 active:!bg-[#D9CFC7]/55 active:scale-[0.99] border-zinc-300/80 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-300 shadow-sm hover:border-zinc-400 hover:shadow-md"
+                      className="glass-pill-3d !bg-gradient-to-br !from-pink-200/40 !to-violet-200/40 border border-pink-300/60 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-200 shadow-xs"
                     >
                       {/* Date / Time */}
                       <div className="min-w-0 flex-1 text-left">

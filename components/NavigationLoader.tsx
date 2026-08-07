@@ -69,7 +69,7 @@ export function NavigationLoader() {
   if (!isLoading) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white/40 backdrop-blur-[1.5px] transition-all duration-300">
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white/10 transition-all duration-300">
       <div className="flex flex-col items-center gap-4.5 animate-in fade-in zoom-in-95 duration-200">
         <Loader2 className="animate-spin text-orange-500 size-11 sm:size-14" strokeWidth={2.5} />
         <span className="font-mono text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-zinc-600/90 select-none">

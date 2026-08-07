@@ -31,39 +31,39 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   const isActive = t.status === "active"
 
   const activePalette = {
-    card: "glass-pill-3d !bg-orange-100/55 hover:!bg-orange-100/75 active:!bg-orange-100/65 border-orange-400/80 border-l-4 border-l-orange-500 shadow-[0_6px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_10px_30px_rgba(249,115,22,0.25)] hover:border-orange-500/90 active:scale-[0.99] transition-all duration-300",
-    icon: "bg-orange-100 text-orange-600 shadow-[0_2px_8px_rgba(249,115,22,0.15)]",
-    badge: "text-orange-700 bg-orange-100/50 border-orange-200/40 font-bold",
+    card: "glass-pill-3d !bg-orange-200 border border-orange-300 border-l-4 border-l-orange-500 shadow-sm transition-all duration-200",
+    icon: "bg-orange-200/50 text-orange-700 shadow-xs border border-orange-300",
+    badge: "text-orange-700 bg-orange-50/70 border border-orange-200/40 font-bold",
     badgeIcon: "text-orange-500",
   }
 
   const COLOR_PALETTES = [
     // Cyan / Blue
     {
-      card: "glass-pill-3d !bg-cyan-100/55 hover:!bg-cyan-100/75 active:scale-[0.99] border-cyan-400/80 shadow-[0_6px_20px_rgba(6,182,212,0.12)] hover:shadow-[0_10px_30px_rgba(6,182,212,0.22)] hover:border-cyan-500/90 transition-all duration-300",
-      icon: "bg-cyan-100 text-cyan-600 shadow-[0_2px_8px_rgba(6,182,212,0.15)]",
-      badge: "text-cyan-700 bg-cyan-100/50 border-cyan-200/40 font-bold",
+      card: "glass-pill-3d !bg-cyan-200 border border-cyan-300 shadow-sm transition-all duration-200",
+      icon: "bg-cyan-200/50 text-cyan-700 shadow-xs border border-cyan-300",
+      badge: "text-cyan-700 bg-cyan-50/70 border border-cyan-200/40 font-bold",
       badgeIcon: "text-cyan-500",
     },
     // Violet / Indigo
     {
-      card: "glass-pill-3d !bg-indigo-100/55 hover:!bg-indigo-100/75 active:scale-[0.99] border-indigo-400/80 shadow-[0_6px_20px_rgba(99,102,241,0.12)] hover:shadow-[0_10px_30px_rgba(99,102,241,0.22)] hover:border-indigo-500/90 transition-all duration-300",
-      icon: "bg-indigo-100 text-indigo-600 shadow-[0_2px_8px_rgba(99,102,241,0.15)]",
-      badge: "text-indigo-700 bg-indigo-100/50 border-indigo-200/40 font-bold",
+      card: "glass-pill-3d !bg-indigo-200 border border-indigo-300 shadow-sm transition-all duration-200",
+      icon: "bg-indigo-200/50 text-indigo-700 shadow-xs border border-indigo-300",
+      badge: "text-indigo-700 bg-indigo-50/70 border border-indigo-200/40 font-bold",
       badgeIcon: "text-indigo-500",
     },
     // Pink / Rose
     {
-      card: "glass-pill-3d !bg-pink-100/55 hover:!bg-pink-100/75 active:scale-[0.99] border-pink-400/80 shadow-[0_6px_20px_rgba(244,63,94,0.12)] hover:shadow-[0_10px_30px_rgba(244,63,94,0.22)] hover:border-pink-500/90 transition-all duration-300",
-      icon: "bg-pink-100 text-pink-600 shadow-[0_2px_8px_rgba(244,63,94,0.15)]",
-      badge: "text-pink-700 bg-pink-100/50 border-pink-200/40 font-bold",
+      card: "glass-pill-3d !bg-pink-200 border border-pink-300 shadow-sm transition-all duration-200",
+      icon: "bg-pink-200/50 text-pink-700 shadow-xs border border-pink-300",
+      badge: "text-pink-700 bg-pink-50/70 border border-pink-200/40 font-bold",
       badgeIcon: "text-pink-500",
     },
     // Emerald / Green
     {
-      card: "glass-pill-3d !bg-emerald-100/55 hover:!bg-emerald-100/75 active:scale-[0.99] border-emerald-400/80 shadow-[0_6px_20px_rgba(16,185,129,0.12)] hover:shadow-[0_10px_30px_rgba(16,185,129,0.22)] hover:border-emerald-500/90 transition-all duration-300",
-      icon: "bg-emerald-100 text-emerald-600 shadow-[0_2px_8px_rgba(16,185,129,0.15)]",
-      badge: "text-emerald-700 bg-emerald-100/50 border-emerald-200/40 font-bold",
+      card: "glass-pill-3d !bg-emerald-200 border border-emerald-300 shadow-sm transition-all duration-200",
+      icon: "bg-emerald-200/50 text-emerald-700 shadow-xs border border-emerald-300",
+      badge: "text-emerald-700 bg-emerald-50/70 border border-emerald-200/40 font-bold",
       badgeIcon: "text-emerald-500",
     },
   ]
@@ -105,13 +105,13 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   return (
     <Link
       href={href}
-      className={`group relative flex items-center justify-between rounded-xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden transition-all duration-300 hover:shadow-sm hover:-translate-y-1 ${palette.card}`}
+      className={`relative flex items-center justify-between rounded-xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden ${palette.card}`}
     >
 
       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1 mr-2">
         {/* Icon */}
         <div
-          className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105 ${palette.icon}`}
+          className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl ${palette.icon}`}
         >
           <Trophy size={18} className="sm:size-[20px]" />
         </div>
@@ -148,7 +148,7 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
             </p>
           </div>
         )}
-        <ChevronRight size={16} className="text-[#8a7f77] group-hover:translate-x-0.5 transition-transform" />
+        <ChevronRight size={16} className="text-[#8a7f77]" />
       </div>
     </Link>
   )
@@ -193,10 +193,10 @@ export default async function TournamentsPage() {
       {/* Page-wide subtle grid backdrop */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        className="pointer-events-none absolute inset-0 opacity-[0.6]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
+            "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
         }}
       />
@@ -238,8 +238,7 @@ export default async function TournamentsPage() {
 
             {/* Active Arenas Panel Wrap Container */}
             {active.length > 0 && (
-              <div className="group/activepanel glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
-                <div className="hover-shine-sweep opacity-0 group-hover/activepanel:opacity-100 group-hover/activepanel:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/activepanel:opacity-100 group-active/activepanel:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+              <div className="glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
                 <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
                   <p className="font-mono text-base font-black tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping"></span>
@@ -261,8 +260,7 @@ export default async function TournamentsPage() {
 
             {/* All Tournaments Panel Wrap Container */}
             {past.length > 0 && (
-              <div className="group/pastpanel glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
-                <div className="hover-shine-sweep opacity-0 group-hover/pastpanel:opacity-100 group-hover/pastpanel:animate-[hoverShineSweep_0.8s_ease-out_forwards] group-active/pastpanel:opacity-100 group-active/pastpanel:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+              <div className="glass-panel-3d relative flex flex-col overflow-hidden !bg-white/10 !border-[#D9CFC7]/50 p-4 sm:p-6 transition-all duration-300">
                 <div className="mb-4 flex items-center justify-between border-b border-[#D9CFC7]/40 pb-3">
                   <p className="font-mono text-base font-black tracking-wide sm:tracking-[0.25em] text-[#6e635c] uppercase flex items-center gap-2">
                     <Clock size={14} className="text-[#8a7f77]" />
