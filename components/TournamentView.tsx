@@ -46,14 +46,28 @@ interface Props {
   pid?: string
   name?: string | null
   image?: string | null
+  initialTournament?: any | null
+  initialLeaderboard?: any | null
+  initialPlays?: any[] | null
 }
 
-export function TournamentView({ tournamentId, googleId, env, pid, name, image }: Props) {
+export function TournamentView({
+  tournamentId,
+  googleId,
+  env,
+  pid,
+  name,
+  image,
+  initialTournament = null,
+  initialLeaderboard = null,
+  initialPlays = null,
+}: Props) {
   const [tab, setTab] = useState<"leaderboard" | "plays" | "rewards">("leaderboard")
-  const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null)
-  const [plays, setPlays] = useState<Gameplay[] | null>(null)
-  const [playsLoaded, setPlaysLoaded] = useState(false)
-  const [tournament, setTournament] = useState<Tournament | null>(null)
+  const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(initialLeaderboard)
+  const [plays, setPlays] = useState<Gameplay[] | null>(initialPlays)
+  const [playsLoaded, setPlaysLoaded] = useState(!!initialPlays)
+  const [tournament, setTournament] = useState<Tournament | null>(initialTournament)
+  const [isServerOffline, setIsServerOffline] = useState(false)
 
   // Swipe navigation logic for mobile users
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
@@ -94,6 +108,7 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
 
   // ── Fetch single tournament details ────────────────────────────────────────
   useEffect(() => {
+    if (isServerOffline) return
     async function getTournamentDetails() {
       try {
         const url = getUrlForEnv(`${SYNC}/api/v1/tournaments?limit=50`, env)
@@ -105,14 +120,16 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
           setTournament(found)
         }
       } catch (err) {
-        console.error("Error fetching tournament details", err)
+        setIsServerOffline(true)
+        console.warn("Could not load tournament details:", err)
       }
     }
     getTournamentDetails()
-  }, [tournamentId, env])
+  }, [tournamentId, env, isServerOffline])
 
   // ── Leaderboard polling ────────────────────────────────────────────────────
   const pollLeaderboard = useCallback(async () => {
+    if (isServerOffline) return
     try {
       const url = pid
         ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${pid}`, env)
@@ -122,9 +139,9 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
       const data: LeaderboardData = await res.json()
       setLeaderboard(data)
     } catch {
-      // Ignore error
+      setIsServerOffline(true)
     }
-  }, [tournamentId, pid, env])
+  }, [tournamentId, pid, env, isServerOffline])
 
   useEffect(() => {
     pollLeaderboard()
@@ -337,6 +354,18 @@ export function TournamentView({ tournamentId, googleId, env, pid, name, image }
             <div className="flex flex-col items-center gap-3 py-20">
               <Loader2 size={22} className="animate-spin text-primary" aria-hidden />
               <p className="text-xs text-muted-foreground">Loading leaderboard…</p>
+            </div>
+          ) : leaderboard.leaderboard.length === 0 ? (
+            <div className="flex flex-col items-center gap-4 py-20 text-center select-none animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex size-14 items-center justify-center rounded-2xl bg-orange-100/50 border border-orange-200/30 shadow-sm">
+                <Trophy size={26} className="text-primary animate-pulse" aria-hidden />
+              </div>
+              <div>
+                <p className="text-base font-black text-zinc-900 tracking-tight">No rankings yet</p>
+                <p className="mt-2 max-w-[280px] text-sm leading-relaxed text-zinc-500 mx-auto">
+                  No scores have been submitted for this tournament. Play a game to claim your spot on the leaderboard!
+                </p>
+              </div>
             </div>
           ) : (
             <>

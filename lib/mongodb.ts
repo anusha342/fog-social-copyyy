@@ -67,8 +67,8 @@ async function resolveSrvUri(uri: string): Promise<string> {
   return `mongodb://${credentials}${hosts}${path}${mergedQuery}`
 }
 
-const uri = process.env.NODE_ENV === "production" 
-  ? process.env.MONGODB_URI_PROD 
+const uri = process.env.NODE_ENV === "production"
+  ? process.env.MONGODB_URI_PROD
   : process.env.MONGODB_URI_DEV
 
 if (!uri) throw new Error("MONGODB_URI is not set")

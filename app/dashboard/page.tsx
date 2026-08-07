@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Gamepad2, Trophy, Star, ChevronRight, Crown, ShieldCheck, QrCode } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
-import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
+import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
 import { getPlayerByGoogleId, getPlayerByEmail } from "@/lib/players"
 import { RewardsCarousel } from "@/components/RewardsCarousel"
 
@@ -30,11 +30,31 @@ interface PlayerGameplay {
 
 // ── Fetchers ──────────────────────────────────────────────────────────────────
 
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 300) {
+  if (getSyncOfflineStatus()) {
+    throw new Error("Sync server is offline")
+  }
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const res = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+    clearTimeout(id)
+    return res
+  } catch (err) {
+    clearTimeout(id)
+    setSyncOffline(true)
+    throw err
+  }
+}
+
 async function fetchStats(googleId: string): Promise<PlayerStats | null> {
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/stats`, SYNC_ENV),
-      { cache: "no-store" }
+      { next: { revalidate: 3 } }
     )
     if (!res.ok) return null
     return res.json()
@@ -45,9 +65,9 @@ async function fetchStats(googleId: string): Promise<PlayerStats | null> {
 
 async function fetchGameplays(googleId: string): Promise<PlayerGameplay[]> {
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?limit=10`, SYNC_ENV),
-      { cache: "no-store" }
+      { next: { revalidate: 3 } }
     )
     if (!res.ok) return []
     const data = await res.json()
@@ -81,9 +101,9 @@ interface LeaderboardData {
 
 async function fetchActiveTournament(): Promise<any | null> {
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       getUrlForEnv(`${SYNC}/api/v1/tournaments?limit=10`, SYNC_ENV),
-      { cache: "no-store" }
+      { next: { revalidate: 3 } }
     )
     if (!res.ok) return null
     const data = await res.json()
@@ -99,7 +119,7 @@ async function fetchLeaderboard(tournamentId: string, playerId?: string): Promis
     const url = playerId
       ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${playerId}`, SYNC_ENV)
       : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=5`, SYNC_ENV)
-    const res = await fetch(url, { cache: "no-store" })
+    const res = await fetchWithTimeout(url, { next: { revalidate: 3 } })
     if (!res.ok) return null
     return res.json()
   } catch {

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
+import { NavigationLoader } from "@/components/NavigationLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +45,9 @@ export default function RootLayout({
         <div className="relative z-10 flex flex-col flex-grow">
           {children}
         </div>
+        <Suspense fallback={null}>
+          <NavigationLoader />
+        </Suspense>
       </body>
     </html>
   );
