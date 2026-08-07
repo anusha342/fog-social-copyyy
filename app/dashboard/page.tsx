@@ -30,7 +30,7 @@ interface PlayerGameplay {
 
 // ── Fetchers ──────────────────────────────────────────────────────────────────
 
-async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 300) {
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 5000) {
   if (getSyncOfflineStatus()) {
     throw new Error("Sync server is offline")
   }
@@ -50,10 +50,10 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutM
   }
 }
 
-async function fetchStats(googleId: string): Promise<PlayerStats | null> {
+async function fetchStats(googleId: string, env: string): Promise<PlayerStats | null> {
   try {
     const res = await fetchWithTimeout(
-      getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/stats`, SYNC_ENV),
+      getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/stats`, env),
       { next: { revalidate: 3 } }
     )
     if (!res.ok) return null
@@ -63,10 +63,10 @@ async function fetchStats(googleId: string): Promise<PlayerStats | null> {
   }
 }
 
-async function fetchGameplays(googleId: string): Promise<PlayerGameplay[]> {
+async function fetchGameplays(googleId: string, env: string): Promise<PlayerGameplay[]> {
   try {
     const res = await fetchWithTimeout(
-      getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?limit=10`, SYNC_ENV),
+      getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?limit=10`, env),
       { next: { revalidate: 3 } }
     )
     if (!res.ok) return []
@@ -99,10 +99,10 @@ interface LeaderboardData {
   } | null
 }
 
-async function fetchActiveTournament(): Promise<any | null> {
+async function fetchActiveTournament(env: string): Promise<any | null> {
   try {
     const res = await fetchWithTimeout(
-      getUrlForEnv(`${SYNC}/api/v1/tournaments?limit=10`, SYNC_ENV),
+      getUrlForEnv(`${SYNC}/api/v1/tournaments?limit=10`, env),
       { next: { revalidate: 3 } }
     )
     if (!res.ok) return null
@@ -114,11 +114,11 @@ async function fetchActiveTournament(): Promise<any | null> {
   }
 }
 
-async function fetchLeaderboard(tournamentId: string, playerId?: string): Promise<LeaderboardData | null> {
+async function fetchLeaderboard(tournamentId: string, env: string, playerId?: string): Promise<LeaderboardData | null> {
   try {
     const url = playerId
-      ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${playerId}`, SYNC_ENV)
-      : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=5`, SYNC_ENV)
+      ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${playerId}`, env)
+      : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=5`, env)
     const res = await fetchWithTimeout(url, { next: { revalidate: 3 } })
     if (!res.ok) return null
     return res.json()
@@ -189,9 +189,16 @@ function ShimmerEdge({ background, onlyTop = false }: { background?: string; onl
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const session = await getServerSession(authOptions)
   if (!session) redirect("/")
+
+  const sp = await searchParams
+  const env = Array.isArray(sp.env) ? sp.env[0] : (sp.env ?? SYNC_ENV)
 
   const { name, email, image, google_id } = session.user
 
@@ -203,16 +210,16 @@ export default async function DashboardPage() {
 
   const resolvedName = dbPlayer?.name ?? name
   const firstName = resolvedName?.split(" ")[0] ?? "Player"
-  const resolvedGoogleId = dbPlayer ? dbPlayer.google_id : google_id
+  const resolvedGoogleId = dbPlayer?.google_id || google_id
 
   const [stats, gameplays, activeTournament] = await Promise.all([
-    fetchStats(resolvedGoogleId),
-    fetchGameplays(resolvedGoogleId),
-    fetchActiveTournament(),
+    fetchStats(resolvedGoogleId, env),
+    fetchGameplays(resolvedGoogleId, env),
+    fetchActiveTournament(env),
   ])
 
   const pid = dbPlayer ? dbPlayer._id.toString() : undefined
-  const leaderboardData = activeTournament ? await fetchLeaderboard(activeTournament._id, pid) : null
+  const leaderboardData = activeTournament ? await fetchLeaderboard(activeTournament._id, env, pid) : null
 
   // Sort gameplays by date descending (newest first) so that new play gets added on top
   const sortedGameplays = [...gameplays].sort((a, b) => new Date(b.played_at).getTime() - new Date(a.played_at).getTime())
@@ -327,7 +334,7 @@ export default async function DashboardPage() {
 
           {/* 2. Tournament Leaderboard Card */}
           <Link
-            href="/tournaments"
+            href={env ? `/tournaments?env=${env}` : "/tournaments"}
             className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-700 shadow-[0_4px_20px_rgba(190,24,74,0.15)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-700 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(190,24,74,0.18)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}

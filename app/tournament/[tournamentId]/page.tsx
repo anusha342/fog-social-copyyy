@@ -7,7 +7,7 @@ import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
-async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 300) {
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = 5000) {
   if (getSyncOfflineStatus()) {
     throw new Error("Sync server is offline")
   }
@@ -86,7 +86,7 @@ export default async function TournamentPage({
     dbPlayer = await getPlayerByGoogleId(session.user.google_id)
   }
 
-  const resolvedGoogleId = dbPlayer ? dbPlayer.google_id : session.user.google_id
+  const resolvedGoogleId = dbPlayer?.google_id || session.user.google_id
   const resolvedPid = pid || (dbPlayer ? dbPlayer._id.toString() : undefined)
 
   const [tournamentData, leaderboardData, playsData] = await Promise.all([
