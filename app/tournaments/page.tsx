@@ -24,9 +24,11 @@ async function fetchTournaments(): Promise<Tournament[]> {
   }
 }
 
-function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?: number }) {
+function TournamentCard({ t, env, mock, index }: { t: Tournament; env: string; mock?: boolean; index?: number }) {
   const href =
-    env === "prod" ? `/tournament/${t._id}` : `/tournament/${t._id}?env=${env}`
+    env === "prod"
+      ? `/tournament/${t._id}${mock ? "?mock=true" : ""}`
+      : `/tournament/${t._id}?env=${env}${mock ? "&mock=true" : ""}`
 
   const isActive = t.status === "active"
 
@@ -154,9 +156,18 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   )
 }
 
-export default async function TournamentsPage() {
+export default async function TournamentsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const session = await getServerSession(authOptions)
   if (!session) redirect("/")
+
+  const sp = await searchParams
+  const env = Array.isArray(sp.env) ? sp.env[0] : (sp.env ?? SYNC_ENV)
+  const mockParam = Array.isArray(sp.mock) ? sp.mock[0] : sp.mock
+  const isMockEnabled = mockParam !== "false"
 
   const tournaments = await fetchTournaments()
   const active = tournaments.filter((t) => t.status === "active")
@@ -252,7 +263,7 @@ export default async function TournamentsPage() {
 
                 <div className="space-y-3">
                   {active.map((t) => (
-                    <TournamentCard key={t._id} t={t} env={SYNC_ENV} />
+                    <TournamentCard key={t._id} t={t} env={env} mock={isMockEnabled} />
                   ))}
                 </div>
               </div>
@@ -273,7 +284,7 @@ export default async function TournamentsPage() {
 
                 <div className="space-y-3">
                   {past.map((t, idx) => (
-                    <TournamentCard key={t._id} t={t} env={SYNC_ENV} index={idx} />
+                    <TournamentCard key={t._id} t={t} env={env} mock={isMockEnabled} index={idx} />
                   ))}
                 </div>
               </div>

@@ -9,6 +9,7 @@ import { Navbar } from "@/components/Navbar"
 import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
 import { getPlayerByGoogleId, getPlayerByEmail } from "@/lib/players"
 import { RewardsCarousel } from "@/components/RewardsCarousel"
+import { MockToggle } from "@/components/MockToggle"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
@@ -199,6 +200,8 @@ export default async function DashboardPage({
 
   const sp = await searchParams
   const env = Array.isArray(sp.env) ? sp.env[0] : (sp.env ?? SYNC_ENV)
+  const mockParam = Array.isArray(sp.mock) ? sp.mock[0] : sp.mock
+  const isMockEnabled = mockParam !== "false"
 
   const { name, email, image, google_id } = session.user
 
@@ -212,14 +215,153 @@ export default async function DashboardPage({
   const firstName = resolvedName?.split(" ")[0] ?? "Player"
   const resolvedGoogleId = dbPlayer?.google_id || google_id
 
-  const [stats, gameplays, activeTournament] = await Promise.all([
+  const [stats, rawGameplays, fetchedActiveTournament] = await Promise.all([
     fetchStats(resolvedGoogleId, env),
     fetchGameplays(resolvedGoogleId, env),
     fetchActiveTournament(env),
   ])
 
+  const activeTournament = fetchedActiveTournament || (isMockEnabled ? {
+    _id: "mock-tournament-id",
+    name: "EPIC Tournament",
+    status: "active",
+    rewards: [
+      { rank_range: "1", reward: "₹5000 Cash + Gold Cup" },
+      { rank_range: "2-3", reward: "₹2500 Cash + Silver Cup" },
+      { rank_range: "4-10", reward: "₹1000 Cash Voucher" }
+    ],
+    banner_url: ""
+  } : null)
+
   const pid = dbPlayer ? dbPlayer._id.toString() : undefined
-  const leaderboardData = activeTournament ? await fetchLeaderboard(activeTournament._id, env, pid) : null
+  const rawLeaderboardData = activeTournament ? await fetchLeaderboard(activeTournament._id, env, pid) : null
+
+  const mockLeaderboardEntries = [
+    {
+      rank: 1,
+      score: 18450,
+      played_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+      players: [{ name: "Aarav Mehta", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aarav" }],
+      center: { _id: "c1", name: "Smaash Mumbai" }
+    },
+    {
+      rank: 2,
+      score: 17200,
+      played_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+      players: [{ name: "Vihaan Sharma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vihaan" }],
+      center: { _id: "c2", name: "Timezone Noida" }
+    },
+    {
+      rank: 3,
+      score: 16950,
+      played_at: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+      players: [{ name: "Aditya Patel", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aditya" }],
+      center: { _id: "c3", name: "Shinde Ground Pune" }
+    },
+    {
+      rank: 4,
+      score: 15800,
+      played_at: new Date(Date.now() - 1000 * 3600 * 2).toISOString(),
+      players: [{ name: "Ananya Iyer", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Ananya" }],
+      center: { _id: "c1", name: "Smaash Mumbai" }
+    },
+    {
+      rank: 5,
+      score: 14500,
+      played_at: new Date(Date.now() - 1000 * 3600 * 4).toISOString(),
+      players: [{ name: "Kabir Malhotra", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Kabir" }],
+      center: { _id: "c4", name: "Timezone Bangalore" }
+    },
+    {
+      rank: 6,
+      score: 13900,
+      played_at: new Date(Date.now() - 1000 * 3600 * 6).toISOString(),
+      players: [{ name: "Ishaan Verma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Ishaan" }],
+      center: { _id: "c2", name: "Timezone Noida" }
+    },
+    {
+      rank: 7,
+      score: 13200,
+      played_at: new Date(Date.now() - 1000 * 3600 * 12).toISOString(),
+      players: [{ name: "Priya Nair", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Priya" }],
+      center: { _id: "c3", name: "Shinde Ground Pune" }
+    },
+    {
+      rank: 8,
+      score: 12800,
+      played_at: new Date(Date.now() - 1000 * 3600 * 18).toISOString(),
+      players: [{ name: "Rahul Sen", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rahul" }],
+      center: { _id: "c4", name: "Timezone Bangalore" }
+    },
+    {
+      rank: 9,
+      score: 12100,
+      played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(),
+      players: [{ name: "Rohan Das", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rohan" }],
+      center: { _id: "c1", name: "Smaash Mumbai" }
+    },
+    {
+      rank: 10,
+      score: 11500,
+      played_at: new Date(Date.now() - 1000 * 3600 * 30).toISOString(),
+      players: [{ name: "Sneha Rao", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Sneha" }],
+      center: { _id: "c2", name: "Timezone Noida" }
+    },
+    {
+      rank: 11,
+      score: 10800,
+      played_at: new Date(Date.now() - 1000 * 3600 * 36).toISOString(),
+      players: [{ name: "Amit Joshi", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Amit" }],
+      center: { _id: "c3", name: "Shinde Ground Pune" }
+    },
+    {
+      rank: 12,
+      score: 10200,
+      played_at: new Date(Date.now() - 1000 * 3600 * 42).toISOString(),
+      players: [{ name: "Vikram Singh", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vikram" }],
+      center: { _id: "c4", name: "Timezone Bangalore" }
+    },
+    {
+      rank: 13,
+      score: 9500,
+      played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(),
+      players: [{ name: "Neha Gupta", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Neha" }],
+      center: { _id: "c1", name: "Smaash Mumbai" }
+    },
+    {
+      rank: 14,
+      score: 8900,
+      played_at: new Date(Date.now() - 1000 * 3600 * 54).toISOString(),
+      players: [{ name: "Sanjay Mishra", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Sanjay" }],
+      center: { _id: "c2", name: "Timezone Noida" }
+    },
+    {
+      rank: 15,
+      score: 8200,
+      played_at: new Date(Date.now() - 1000 * 3600 * 60).toISOString(),
+      players: [{ name: resolvedName || "Anusha Sharma", avatar_url: image || "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }],
+      center: { _id: "c3", name: "Shinde Ground Pune" }
+    }
+  ]
+
+  const leaderboardData = isMockEnabled
+    ? {
+        leaderboard: mockLeaderboardEntries,
+        player: {
+          rank: 15,
+          best_score: 8200
+        }
+      }
+    : (rawLeaderboardData || { leaderboard: [], player: null })
+
+  const gameplays = isMockEnabled
+    ? [
+        { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
+        { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
+        { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
+        { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
+      ]
+    : (rawGameplays || [])
 
   // Sort gameplays by date descending (newest first) so that new play gets added on top
   const sortedGameplays = [...gameplays].sort((a, b) => new Date(b.played_at).getTime() - new Date(a.played_at).getTime())
@@ -313,10 +455,14 @@ export default async function DashboardPage({
       <main className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:py-12 space-y-6 sm:space-y-8 flex-grow w-full">
 
         {/* ── Simple Welcome Header (Clean text, no card) ── */}
-        <div className="border-b border-zinc-200/60 pb-5 mb-2">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-center">
+        <div className="border-b border-zinc-200/60 pb-5 mb-2 flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-center sm:text-left">
             Welcome Back, {firstName}!
           </h1>
+          <div className="flex items-center gap-3 bg-zinc-100/80 px-4 py-2 rounded-2xl border border-zinc-200 shadow-xs shrink-0">
+            <span className="text-xs font-bold text-zinc-700 tracking-wide uppercase">Mock Data</span>
+            <MockToggle initialMock={isMockEnabled} />
+          </div>
         </div>
 
         {/* ── Flat Responsive Layout: History -> Leaderboard -> Rewards ── */}
@@ -334,7 +480,7 @@ export default async function DashboardPage({
 
           {/* 2. Tournament Leaderboard Card */}
           <Link
-            href={env ? `/tournaments?env=${env}` : "/tournaments"}
+            href={env ? `/tournaments?env=${env}&mock=${isMockEnabled}` : `/tournaments?mock=${isMockEnabled}`}
             className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-700 shadow-[0_4px_20px_rgba(190,24,74,0.15)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-700 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(190,24,74,0.18)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
@@ -561,8 +707,8 @@ export default async function DashboardPage({
                   </p>
                 </div>
               ) : (
-                <div className="space-y-2.5 sm:space-y-3 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin">
-                  {sortedGameplays.map((g, index) => (
+                <div className="space-y-2.5 sm:space-y-3 max-h-[300px] overflow-y-auto pr-3 scrollbar-thin">
+                  {sortedGameplays.slice(0, 10).map((g, index) => (
                     <div
                       key={`${g.gameplay_id}-${index}`}
                       className="glass-pill-3d !bg-gradient-to-br !from-pink-200/40 !to-violet-200/40 border border-pink-300/60 relative flex items-center justify-between rounded-xl p-4 sm:p-5 transition-all duration-200 shadow-xs"

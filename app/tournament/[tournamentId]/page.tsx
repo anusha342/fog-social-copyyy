@@ -43,7 +43,7 @@ async function fetchLeaderboard(tournamentId: string, env: string, playerId?: st
   try {
     const url = playerId
       ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${playerId}`, env)
-      : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=15`, env)
+      : getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard?page=1&limit=10`, env)
     const res = await fetchWithTimeout(url, { next: { revalidate: 3 } })
     if (!res.ok) return null
     return res.json()

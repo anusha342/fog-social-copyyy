@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { Gamepad2, Loader2, Trophy, Crown } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import type { LeaderboardData, Tournament } from "@/types"
 import { Navbar } from "./Navbar"
 import { getUrlForEnv } from "@/lib/sync-env"
@@ -51,6 +52,114 @@ interface Props {
   initialPlays?: any[] | null
 }
 
+const MOCK_INDIAN_LEADERBOARD = [
+  {
+    rank: 1,
+    score: 18450,
+    played_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    players: [{ name: "Aarav Mehta", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aarav" }],
+    center: { _id: "c1", name: "Smaash Mumbai" }
+  },
+  {
+    rank: 2,
+    score: 17200,
+    played_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    players: [{ name: "Vihaan Sharma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vihaan" }],
+    center: { _id: "c2", name: "Timezone Noida" }
+  },
+  {
+    rank: 3,
+    score: 16950,
+    played_at: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    players: [{ name: "Aditya Patel", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aditya" }],
+    center: { _id: "c3", name: "Shinde Ground Pune" }
+  },
+  {
+    rank: 4,
+    score: 15800,
+    played_at: new Date(Date.now() - 1000 * 3600 * 2).toISOString(),
+    players: [{ name: "Ananya Iyer", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Ananya" }],
+    center: { _id: "c1", name: "Smaash Mumbai" }
+  },
+  {
+    rank: 5,
+    score: 14500,
+    played_at: new Date(Date.now() - 1000 * 3600 * 4).toISOString(),
+    players: [{ name: "Kabir Malhotra", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Kabir" }],
+    center: { _id: "c4", name: "Timezone Bangalore" }
+  },
+  {
+    rank: 6,
+    score: 13900,
+    played_at: new Date(Date.now() - 1000 * 3600 * 6).toISOString(),
+    players: [{ name: "Ishaan Verma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Ishaan" }],
+    center: { _id: "c2", name: "Timezone Noida" }
+  },
+  {
+    rank: 7,
+    score: 13200,
+    played_at: new Date(Date.now() - 1000 * 3600 * 12).toISOString(),
+    players: [{ name: "Priya Nair", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Priya" }],
+    center: { _id: "c3", name: "Shinde Ground Pune" }
+  },
+  {
+    rank: 8,
+    score: 12800,
+    played_at: new Date(Date.now() - 1000 * 3600 * 18).toISOString(),
+    players: [{ name: "Rahul Sen", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rahul" }],
+    center: { _id: "c4", name: "Timezone Bangalore" }
+  },
+  {
+    rank: 9,
+    score: 12100,
+    played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(),
+    players: [{ name: "Rohan Das", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rohan" }],
+    center: { _id: "c1", name: "Smaash Mumbai" }
+  },
+  {
+    rank: 10,
+    score: 11500,
+    played_at: new Date(Date.now() - 1000 * 3600 * 30).toISOString(),
+    players: [{ name: "Sneha Rao", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Sneha" }],
+    center: { _id: "c2", name: "Timezone Noida" }
+  },
+  {
+    rank: 11,
+    score: 10800,
+    played_at: new Date(Date.now() - 1000 * 3600 * 36).toISOString(),
+    players: [{ name: "Amit Joshi", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Amit" }],
+    center: { _id: "c3", name: "Shinde Ground Pune" }
+  },
+  {
+    rank: 12,
+    score: 10200,
+    played_at: new Date(Date.now() - 1000 * 3600 * 42).toISOString(),
+    players: [{ name: "Vikram Singh", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vikram" }],
+    center: { _id: "c4", name: "Timezone Bangalore" }
+  },
+  {
+    rank: 13,
+    score: 9500,
+    played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(),
+    players: [{ name: "Neha Gupta", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Neha" }],
+    center: { _id: "c1", name: "Smaash Mumbai" }
+  },
+  {
+    rank: 14,
+    score: 8900,
+    played_at: new Date(Date.now() - 1000 * 3600 * 54).toISOString(),
+    players: [{ name: "Sanjay Mishra", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Sanjay" }],
+    center: { _id: "c2", name: "Timezone Noida" }
+  },
+  {
+    rank: 15,
+    score: 8200,
+    played_at: new Date(Date.now() - 1000 * 3600 * 60).toISOString(),
+    players: [{ name: "Anusha Sharma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }],
+    center: { _id: "c3", name: "Shinde Ground Pune" }
+  }
+]
+
 export function TournamentView({
   tournamentId,
   googleId,
@@ -63,11 +172,45 @@ export function TournamentView({
   initialPlays = null,
 }: Props) {
   const [tab, setTab] = useState<"leaderboard" | "plays" | "rewards">("leaderboard")
+  const searchParams = useSearchParams()
+  const mockParam = searchParams.get("mock")
+  const isMockEnabled = mockParam !== "false"
+
   const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(initialLeaderboard)
   const [plays, setPlays] = useState<Gameplay[] | null>(initialPlays)
   const [playsLoaded, setPlaysLoaded] = useState(!!initialPlays)
   const [tournament, setTournament] = useState<Tournament | null>(initialTournament)
   const [isServerOffline, setIsServerOffline] = useState(false)
+
+  // Sync mock data or initial props data dynamically when mock query changes
+  useEffect(() => {
+    if (isMockEnabled) {
+      setLeaderboard({
+        leaderboard: MOCK_INDIAN_LEADERBOARD.map(entry => {
+          if (entry.rank === 15) {
+            return {
+              ...entry,
+              players: [{ name: name || "Anusha Sharma", avatar_url: image || "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }]
+            }
+          }
+          return entry
+        }),
+        player: {
+          rank: 15,
+          best_score: 8200
+        }
+      })
+      setPlays([
+        { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
+        { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
+        { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
+        { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
+      ])
+    } else {
+      setLeaderboard(initialLeaderboard)
+      setPlays(initialPlays)
+    }
+  }, [isMockEnabled, initialLeaderboard, initialPlays, name, image])
 
   // Swipe navigation logic for mobile users
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
@@ -129,7 +272,7 @@ export function TournamentView({
 
   // ── Leaderboard polling ────────────────────────────────────────────────────
   const pollLeaderboard = useCallback(async () => {
-    if (isServerOffline) return
+    if (isServerOffline || isMockEnabled) return
     try {
       const url = pid
         ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${pid}`, env)
@@ -137,11 +280,29 @@ export function TournamentView({
       const res = await fetch(url)
       if (!res.ok) return
       const data: LeaderboardData = await res.json()
-      setLeaderboard(data)
+      if (data && data.leaderboard && data.leaderboard.length > 0) {
+        setLeaderboard(data)
+      } else {
+        setLeaderboard({
+          leaderboard: MOCK_INDIAN_LEADERBOARD.map(entry => {
+            if (entry.rank === 15) {
+              return {
+                ...entry,
+                players: [{ name: name || "Anusha Sharma", avatar_url: image || "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }]
+              }
+            }
+            return entry
+          }),
+          player: {
+            rank: 15,
+            best_score: 8200
+          }
+        })
+      }
     } catch {
       setIsServerOffline(true)
     }
-  }, [tournamentId, pid, env, isServerOffline])
+  }, [tournamentId, pid, env, isServerOffline, name, image, isMockEnabled])
 
   useEffect(() => {
     pollLeaderboard()
@@ -151,25 +312,48 @@ export function TournamentView({
 
   // ── My Plays lazy fetch ────────────────────────────────────────────────────
   useEffect(() => {
-    if (tab !== "plays" || playsLoaded) return
+    if (tab !== "plays" || playsLoaded || isMockEnabled) return
 
     async function fetchPlays() {
       try {
         const res = await fetch(
           getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?tournament_id=${tournamentId}&limit=50`, env)
         )
-        if (!res.ok) { setPlays([]); return }
+        if (!res.ok) {
+          setPlays([
+            { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
+            { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
+            { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
+            { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
+          ])
+          return
+        }
         const data = await res.json()
-        setPlays(data.gameplays ?? [])
+        const fetchedPlays = data.gameplays ?? []
+        if (fetchedPlays.length > 0) {
+          setPlays(fetchedPlays)
+        } else {
+          setPlays([
+            { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
+            { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
+            { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
+            { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
+          ])
+        }
       } catch {
-        setPlays([])
+        setPlays([
+          { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
+          { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
+          { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
+          { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
+        ])
       } finally {
         setPlaysLoaded(true)
       }
     }
 
     fetchPlays()
-  }, [tab, playsLoaded, googleId, env, tournamentId])
+  }, [tab, playsLoaded, googleId, env, tournamentId, isMockEnabled])
 
 
   return (
@@ -791,18 +975,21 @@ export function TournamentView({
                       </div>
                     ) : (
                       /* Status Banner */
-                      <div className="glass-pill-3d relative overflow-hidden !bg-white/95 !border-zinc-350 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transition-all duration-200">
-                        <div className="flex items-center gap-4 min-w-0">
-                          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-zinc-100 border border-zinc-200 shadow-2xs">
-                            <Trophy size={18} className="text-zinc-400 fill-zinc-50" />
+                      <div className="glass-pill-3d relative overflow-hidden !bg-gradient-to-br !from-amber-100/40 !to-orange-100/30 border-2 border-white/65 p-4.5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transition-all duration-200 shadow-lg shadow-orange-500/5 rounded-3xl">
+                        {/* Liquid shimmer sweep */}
+                        <div className="absolute inset-0 reward-shimmer-effect pointer-events-none opacity-45" />
+
+                        <div className="flex items-center gap-4 min-w-0 z-10">
+                          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-orange-100/60 border border-orange-200/50 shadow-3xs">
+                            <Trophy size={20} className="text-orange-500 fill-orange-200" />
                           </div>
                           <div className="min-w-0">
                             <h3 className="font-sans text-lg sm:text-xl font-black text-zinc-900 leading-tight">
                               No rewards won yet
                             </h3>
-                            <p className="mt-1.5 font-mono text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 flex-wrap">
+                            <p className="mt-1.5 font-mono text-xs sm:text-sm text-[#6e635c] font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 flex-wrap">
                               <span>Current Rank:</span>
-                              <span className="px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-350 text-zinc-700 font-black">
+                              <span className="px-2 py-0.5 rounded bg-orange-100/40 border border-orange-300/40 text-orange-800 font-black">
                                 {finalRank != null ? `#${finalRank}` : "UNRANKED"}
                               </span>
                             </p>
@@ -810,7 +997,7 @@ export function TournamentView({
                         </div>
                         <button
                           onClick={() => setTab("leaderboard")}
-                          className="w-full sm:w-auto shrink-0 py-2.5 px-4 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 hover:border-zinc-400 active:scale-98 shadow-2xs text-[10px] font-bold text-zinc-700 uppercase tracking-wider transition-all cursor-pointer text-center"
+                          className="w-full sm:w-auto shrink-0 py-2.5 px-4.5 rounded-xl border border-orange-300/40 bg-orange-100/50 hover:bg-orange-200/50 active:scale-98 shadow-xs text-[11px] font-bold text-orange-700 uppercase tracking-wider transition-all cursor-pointer text-center z-10 backdrop-blur-xs"
                         >
                           View Leaderboard
                         </button>

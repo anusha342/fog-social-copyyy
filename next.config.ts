@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com", // Google profile avatars
       },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com", // Dicebear avatars for mock data
+      },
     ],
   },
   allowedDevOrigins: ["192.168.1.30"],
