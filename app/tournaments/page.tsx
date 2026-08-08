@@ -24,11 +24,11 @@ async function fetchTournaments(): Promise<Tournament[]> {
   }
 }
 
-function TournamentCard({ t, env, mock, index }: { t: Tournament; env: string; mock?: boolean; index?: number }) {
+function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?: number }) {
   const href =
     env === "prod"
-      ? `/tournament/${t._id}${mock ? "?mock=true" : ""}`
-      : `/tournament/${t._id}?env=${env}${mock ? "&mock=true" : ""}`
+      ? `/tournament/${t._id}`
+      : `/tournament/${t._id}?env=${env}`
 
   const isActive = t.status === "active"
 
@@ -166,8 +166,6 @@ export default async function TournamentsPage({
 
   const sp = await searchParams
   const env = Array.isArray(sp.env) ? sp.env[0] : (sp.env ?? SYNC_ENV)
-  const mockParam = Array.isArray(sp.mock) ? sp.mock[0] : sp.mock
-  const isMockEnabled = mockParam !== "false"
 
   const tournaments = await fetchTournaments()
   const active = tournaments.filter((t) => t.status === "active")
@@ -263,7 +261,7 @@ export default async function TournamentsPage({
 
                 <div className="space-y-3">
                   {active.map((t) => (
-                    <TournamentCard key={t._id} t={t} env={env} mock={isMockEnabled} />
+                    <TournamentCard key={t._id} t={t} env={env} />
                   ))}
                 </div>
               </div>
@@ -284,7 +282,7 @@ export default async function TournamentsPage({
 
                 <div className="space-y-3">
                   {past.map((t, idx) => (
-                    <TournamentCard key={t._id} t={t} env={env} mock={isMockEnabled} index={idx} />
+                    <TournamentCard key={t._id} t={t} env={env} index={idx} />
                   ))}
                 </div>
               </div>

@@ -52,113 +52,6 @@ interface Props {
   initialPlays?: any[] | null
 }
 
-const MOCK_INDIAN_LEADERBOARD = [
-  {
-    rank: 1,
-    score: 18450,
-    played_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-    players: [{ name: "Aarav Mehta", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aarav" }],
-    center: { _id: "c1", name: "Smaash Mumbai" }
-  },
-  {
-    rank: 2,
-    score: 17200,
-    played_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-    players: [{ name: "Vihaan Sharma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vihaan" }],
-    center: { _id: "c2", name: "Timezone Noida" }
-  },
-  {
-    rank: 3,
-    score: 16950,
-    played_at: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-    players: [{ name: "Aditya Patel", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aditya" }],
-    center: { _id: "c3", name: "Shinde Ground Pune" }
-  },
-  {
-    rank: 4,
-    score: 15800,
-    played_at: new Date(Date.now() - 1000 * 3600 * 2).toISOString(),
-    players: [{ name: "Ananya Iyer", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Ananya" }],
-    center: { _id: "c1", name: "Smaash Mumbai" }
-  },
-  {
-    rank: 5,
-    score: 14500,
-    played_at: new Date(Date.now() - 1000 * 3600 * 4).toISOString(),
-    players: [{ name: "Kabir Malhotra", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Kabir" }],
-    center: { _id: "c4", name: "Timezone Bangalore" }
-  },
-  {
-    rank: 6,
-    score: 13900,
-    played_at: new Date(Date.now() - 1000 * 3600 * 6).toISOString(),
-    players: [{ name: "Ishaan Verma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Ishaan" }],
-    center: { _id: "c2", name: "Timezone Noida" }
-  },
-  {
-    rank: 7,
-    score: 13200,
-    played_at: new Date(Date.now() - 1000 * 3600 * 12).toISOString(),
-    players: [{ name: "Priya Nair", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Priya" }],
-    center: { _id: "c3", name: "Shinde Ground Pune" }
-  },
-  {
-    rank: 8,
-    score: 12800,
-    played_at: new Date(Date.now() - 1000 * 3600 * 18).toISOString(),
-    players: [{ name: "Rahul Sen", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rahul" }],
-    center: { _id: "c4", name: "Timezone Bangalore" }
-  },
-  {
-    rank: 9,
-    score: 12100,
-    played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(),
-    players: [{ name: "Rohan Das", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rohan" }],
-    center: { _id: "c1", name: "Smaash Mumbai" }
-  },
-  {
-    rank: 10,
-    score: 11500,
-    played_at: new Date(Date.now() - 1000 * 3600 * 30).toISOString(),
-    players: [{ name: "Sneha Rao", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Sneha" }],
-    center: { _id: "c2", name: "Timezone Noida" }
-  },
-  {
-    rank: 11,
-    score: 10800,
-    played_at: new Date(Date.now() - 1000 * 3600 * 36).toISOString(),
-    players: [{ name: "Amit Joshi", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Amit" }],
-    center: { _id: "c3", name: "Shinde Ground Pune" }
-  },
-  {
-    rank: 12,
-    score: 10200,
-    played_at: new Date(Date.now() - 1000 * 3600 * 42).toISOString(),
-    players: [{ name: "Vikram Singh", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vikram" }],
-    center: { _id: "c4", name: "Timezone Bangalore" }
-  },
-  {
-    rank: 13,
-    score: 9500,
-    played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(),
-    players: [{ name: "Neha Gupta", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Neha" }],
-    center: { _id: "c1", name: "Smaash Mumbai" }
-  },
-  {
-    rank: 14,
-    score: 8900,
-    played_at: new Date(Date.now() - 1000 * 3600 * 54).toISOString(),
-    players: [{ name: "Sanjay Mishra", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Sanjay" }],
-    center: { _id: "c2", name: "Timezone Noida" }
-  },
-  {
-    rank: 15,
-    score: 8200,
-    played_at: new Date(Date.now() - 1000 * 3600 * 60).toISOString(),
-    players: [{ name: "Anusha Sharma", avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }],
-    center: { _id: "c3", name: "Shinde Ground Pune" }
-  }
-]
 
 export function TournamentView({
   tournamentId,
@@ -173,8 +66,6 @@ export function TournamentView({
 }: Props) {
   const [tab, setTab] = useState<"leaderboard" | "plays" | "rewards">("leaderboard")
   const searchParams = useSearchParams()
-  const mockParam = searchParams.get("mock")
-  const isMockEnabled = mockParam !== "false"
 
   const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(initialLeaderboard)
   const [plays, setPlays] = useState<Gameplay[] | null>(initialPlays)
@@ -182,35 +73,12 @@ export function TournamentView({
   const [tournament, setTournament] = useState<Tournament | null>(initialTournament)
   const [isServerOffline, setIsServerOffline] = useState(false)
 
-  // Sync mock data or initial props data dynamically when mock query changes
+  // Sync props data dynamically when they change
   useEffect(() => {
-    if (isMockEnabled) {
-      setLeaderboard({
-        leaderboard: MOCK_INDIAN_LEADERBOARD.map(entry => {
-          if (entry.rank === 15) {
-            return {
-              ...entry,
-              players: [{ name: name || "Anusha Sharma", avatar_url: image || "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }]
-            }
-          }
-          return entry
-        }),
-        player: {
-          rank: 15,
-          best_score: 8200
-        }
-      })
-      setPlays([
-        { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
-        { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
-        { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
-        { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
-      ])
-    } else {
-      setLeaderboard(initialLeaderboard)
-      setPlays(initialPlays)
-    }
-  }, [isMockEnabled, initialLeaderboard, initialPlays, name, image])
+    setLeaderboard(initialLeaderboard)
+    setPlays(initialPlays)
+    setTournament(initialTournament)
+  }, [initialLeaderboard, initialPlays, initialTournament])
 
   // Swipe navigation logic for mobile users
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
@@ -272,7 +140,7 @@ export function TournamentView({
 
   // ── Leaderboard polling ────────────────────────────────────────────────────
   const pollLeaderboard = useCallback(async () => {
-    if (isServerOffline || isMockEnabled) return
+    if (isServerOffline) return
     try {
       const url = pid
         ? getUrlForEnv(`${SYNC}/api/v1/tournament/${tournamentId}/leaderboard/player/${pid}`, env)
@@ -280,29 +148,13 @@ export function TournamentView({
       const res = await fetch(url)
       if (!res.ok) return
       const data: LeaderboardData = await res.json()
-      if (data && data.leaderboard && data.leaderboard.length > 0) {
+      if (data) {
         setLeaderboard(data)
-      } else {
-        setLeaderboard({
-          leaderboard: MOCK_INDIAN_LEADERBOARD.map(entry => {
-            if (entry.rank === 15) {
-              return {
-                ...entry,
-                players: [{ name: name || "Anusha Sharma", avatar_url: image || "https://api.dicebear.com/7.x/adventurer/svg?seed=Anusha" }]
-              }
-            }
-            return entry
-          }),
-          player: {
-            rank: 15,
-            best_score: 8200
-          }
-        })
       }
     } catch {
       setIsServerOffline(true)
     }
-  }, [tournamentId, pid, env, isServerOffline, name, image, isMockEnabled])
+  }, [tournamentId, pid, env, isServerOffline])
 
   useEffect(() => {
     pollLeaderboard()
@@ -312,7 +164,7 @@ export function TournamentView({
 
   // ── My Plays lazy fetch ────────────────────────────────────────────────────
   useEffect(() => {
-    if (tab !== "plays" || playsLoaded || isMockEnabled) return
+    if (tab !== "plays" || playsLoaded) return
 
     async function fetchPlays() {
       try {
@@ -320,40 +172,21 @@ export function TournamentView({
           getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?tournament_id=${tournamentId}&limit=50`, env)
         )
         if (!res.ok) {
-          setPlays([
-            { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
-            { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
-            { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
-            { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
-          ])
+          setPlays([])
           return
         }
         const data = await res.json()
         const fetchedPlays = data.gameplays ?? []
-        if (fetchedPlays.length > 0) {
-          setPlays(fetchedPlays)
-        } else {
-          setPlays([
-            { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
-            { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
-            { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
-            { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
-          ])
-        }
+        setPlays(fetchedPlays)
       } catch {
-        setPlays([
-          { gameplay_id: "g1", score: 8200, played_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), center_name: "Shinde Ground Pune" },
-          { gameplay_id: "g2", score: 7500, played_at: new Date(Date.now() - 1000 * 3600 * 24).toISOString(), center_name: "Mumbai Smaash" },
-          { gameplay_id: "g3", score: 6800, played_at: new Date(Date.now() - 1000 * 3600 * 48).toISOString(), center_name: "Timezone Noida" },
-          { gameplay_id: "g4", score: 5400, played_at: new Date(Date.now() - 1000 * 3600 * 72).toISOString(), center_name: "Bangalore Arena" }
-        ])
+        setPlays([])
       } finally {
         setPlaysLoaded(true)
       }
     }
 
     fetchPlays()
-  }, [tab, playsLoaded, googleId, env, tournamentId, isMockEnabled])
+  }, [tab, playsLoaded, googleId, env, tournamentId])
 
 
   return (
