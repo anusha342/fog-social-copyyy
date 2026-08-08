@@ -145,7 +145,7 @@ export default async function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200">
+      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200 mt-auto">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-center font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wide sm:tracking-widest text-center">
           <span>© {new Date().getFullYear()} FOG Technologies Pvt. Limited</span>
         </div>
