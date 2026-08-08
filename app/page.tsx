@@ -48,7 +48,7 @@ export default async function Home() {
   if (session) redirect("/dashboard")
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-transparent text-zinc-900 flex flex-col justify-between relative">
+    <main className="min-h-screen overflow-x-hidden bg-transparent text-zinc-900 flex flex-col justify-start relative">
       {/* Page-wide subtle grid backdrop */}
       <div
         aria-hidden
@@ -123,7 +123,7 @@ export default async function Home() {
       </section>
 
       {/* ── Features ── */}
-      <section className="mx-auto w-full max-w-6xl px-6 pb-20 relative z-10">
+      <section className="mx-auto w-full max-w-6xl px-6 pt-4 pb-20 relative z-10">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {features.map(({ Icon, title, description, iconClass, cardClass }) => (
             <div

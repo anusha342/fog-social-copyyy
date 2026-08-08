@@ -340,7 +340,7 @@ export default async function DashboardPage({
           {/* 2. Tournament Leaderboard Card */}
           <Link
             href={env ? `/tournaments?env=${env}` : "/tournaments"}
-            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/40 !border-pink-700 shadow-[0_4px_20px_rgba(190,24,74,0.15)] sm:!bg-pink-50/15 sm:!border-pink-200/50 sm:shadow-none p-4 sm:p-6 transition-all duration-300 hover:!border-pink-700 hover:!bg-pink-50/30 hover:shadow-[0_4px_20px_rgba(190,24,74,0.18)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
+            className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/20 !border-pink-300 shadow-[0_4px_20px_rgba(190,24,74,0.08)] p-4 sm:p-6 transition-all duration-300 hover:!border-pink-500 hover:!bg-pink-50/30 hover:shadow-[0_8px_30px_rgba(190,24,74,0.15)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
             <div className="hover-shine-sweep opacity-0 md:group-hover/leaderboardcard:opacity-100 md:group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards] md:group-active/leaderboardcard:opacity-100 md:group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
@@ -479,13 +479,13 @@ export default async function DashboardPage({
                               </div>
 
                               {/* Score */}
-                              <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-start gap-0.5 w-[68px] shrink-0`}>
+                              <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-end gap-0.5 min-w-[80px] shrink-0`}>
                                 <div className="w-3.5 flex items-center justify-start shrink-0">
                                   {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0" />}
                                   {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0" />}
                                   {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0" />}
                                 </div>
-                                <span className="text-left flex-grow">
+                                <span className="text-right">
                                   {entry.score.toLocaleString()}
                                 </span>
                               </div>
