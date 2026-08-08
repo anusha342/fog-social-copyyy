@@ -72,6 +72,17 @@ export function TournamentView({
   const [playsLoaded, setPlaysLoaded] = useState(!!initialPlays)
   const [tournament, setTournament] = useState<Tournament | null>(initialTournament)
   const [isServerOffline, setIsServerOffline] = useState(false)
+  const [isMobile, setIsMobile] = useState(true)
+
+  // Listen to screen size changes for state-driven desktop columns
+  useEffect(() => {
+    const checkWidth = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkWidth()
+    window.addEventListener("resize", checkWidth)
+    return () => window.removeEventListener("resize", checkWidth)
+  }, [])
 
   // Sync props data dynamically when they change
   useEffect(() => {
@@ -191,24 +202,6 @@ export function TournamentView({
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
-      <style>{`
-        @media (min-width: 768px) {
-          .desktop-deck-override {
-            width: 100% !important;
-            transform: none !important;
-            display: grid !important;
-            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-            gap: 1.5rem !important;
-          }
-          .desktop-slide-override {
-            width: 100% !important;
-            transform: none !important;
-            opacity: 1 !important;
-            filter: none !important;
-            pointer-events: auto !important;
-          }
-        }
-      `}</style>
 
       {/* Page-wide subtle grid backdrop */}
       <div
@@ -363,7 +356,7 @@ export function TournamentView({
         )}
 
         {/* Tab bar (Separated from Navbar) */}
-        <div className="flex md:hidden border-b border-zinc-200/80 mb-5 items-center justify-between">
+        <div className="flex border-b border-zinc-200/80 mb-5 items-center justify-between">
           <div className="flex gap-4">
             {(["leaderboard", "plays", "rewards"] as const).map((t) => (
               <button
@@ -382,31 +375,32 @@ export function TournamentView({
 
         {/* 3D sliding deck */}
         <div
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          className="w-full overflow-hidden py-4"
-          style={{ perspective: "1200px" }}
+          onTouchStart={isMobile ? handleTouchStart : undefined}
+          onTouchEnd={isMobile ? handleTouchEnd : undefined}
+          className={isMobile ? "w-full overflow-hidden py-4" : "w-full py-4"}
+          style={isMobile ? { perspective: "1200px" } : undefined}
         >
           <div
-            className="flex w-[300%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] desktop-deck-override"
-            style={{
+            className={isMobile
+              ? "flex w-[300%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              : "w-full"
+            }
+            style={isMobile ? {
               transform: `translateX(-${(tab === "leaderboard" ? 0 : tab === "plays" ? 1 : 2) * 33.3333}%)`,
-            }}
+            } : undefined}
           >
             {/* Slide 1: Leaderboard */}
             <div
-              className="w-1/3 px-1 transition-all duration-500 origin-center desktop-slide-override"
-              style={{
+              className={isMobile ? "w-1/3 px-1 transition-all duration-500 origin-center" : "w-full"}
+              style={isMobile ? {
                 transform: tab === "leaderboard" ? "scale(1) rotateY(0deg)" : "scale(0.95) rotateY(-8deg)",
                 opacity: tab === "leaderboard" ? 1 : 0.15,
                 filter: tab === "leaderboard" ? "none" : "blur(2px)",
                 pointerEvents: tab === "leaderboard" ? "auto" : "none",
+              } : {
+                display: tab === "leaderboard" ? "block" : "none"
               }}
             >
-              {/* Desktop-only section title */}
-              <h3 className="hidden md:block font-mono text-sm font-black tracking-[0.15em] text-zinc-400 uppercase mb-4 text-left">
-                Leaderboard
-              </h3>
               {/* ── Leaderboard tab ────────────────────────────────────────────── */}
               {!leaderboard ? (
                 <div className="flex flex-col items-center gap-3 py-20">
@@ -527,24 +521,24 @@ export function TournamentView({
 
                             {/* Name */}
                             <div className="flex-1 min-w-0 pr-1">
-                              <p className={`text-base font-bold leading-tight flex items-center gap-1 flex-wrap ${isMe ? "text-emerald-950" : "text-zinc-900"}`}>
+                              <p className={`text-base font-bold leading-tight ${isMe ? "text-emerald-950" : "text-zinc-900"}`}>
                                 <span>
                                   {entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "Unknown"}
                                 </span>
                                 {isRank1 && (
-                                  <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 mb-0.5" />
+                                  <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 inline-block ml-1 align-middle" />
                                 )}
                               </p>
                             </div>
 
                             {/* Score */}
-                            <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-end gap-0.5 min-w-[80px] shrink-0`}>
+                            <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-start gap-0.5 min-w-[80px] pl-3 shrink-0`}>
                               <div className="w-3.5 flex items-center justify-start shrink-0">
                                 {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0" />}
                                 {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0" />}
                                 {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0" />}
                               </div>
-                              <span className="text-right">
+                              <span className="text-left">
                                 {entry.score.toLocaleString()}
                               </span>
                             </div>
@@ -559,18 +553,16 @@ export function TournamentView({
 
             {/* Slide 2: My Plays */}
             <div
-              className="w-1/3 px-1 transition-all duration-500 origin-center desktop-slide-override"
-              style={{
+              className={isMobile ? "w-1/3 px-1 transition-all duration-500 origin-center" : "w-full"}
+              style={isMobile ? {
                 transform: tab === "plays" ? "scale(1) rotateY(0deg)" : tab === "leaderboard" ? "scale(0.95) rotateY(8deg)" : "scale(0.95) rotateY(-8deg)",
                 opacity: tab === "plays" ? 1 : 0.15,
                 filter: tab === "plays" ? "none" : "blur(2px)",
                 pointerEvents: tab === "plays" ? "auto" : "none",
+              } : {
+                display: tab === "plays" ? "block" : "none"
               }}
             >
-              {/* Desktop-only section title */}
-              <h3 className="hidden md:block font-mono text-sm font-black tracking-[0.15em] text-zinc-400 uppercase mb-4 text-left">
-                My Plays
-              </h3>
               {/* ── My Plays tab ───────────────────────────────────────────────── */}
               {!playsLoaded ? (
                 <div className="flex flex-col items-center gap-3 py-20">
@@ -704,18 +696,16 @@ export function TournamentView({
 
             {/* Slide 3: My Rewards */}
             <div
-              className="w-1/3 px-1 transition-all duration-500 origin-center desktop-slide-override"
-              style={{
+              className={isMobile ? "w-1/3 px-1 transition-all duration-500 origin-center" : "w-full"}
+              style={isMobile ? {
                 transform: tab === "rewards" ? "scale(1) rotateY(0deg)" : "scale(0.95) rotateY(8deg)",
                 opacity: tab === "rewards" ? 1 : 0.15,
                 filter: tab === "rewards" ? "none" : "blur(2px)",
                 pointerEvents: tab === "rewards" ? "auto" : "none",
+              } : {
+                display: tab === "rewards" ? "block" : "none"
               }}
             >
-              {/* Desktop-only section title */}
-              <h3 className="hidden md:block font-mono text-sm font-black tracking-[0.15em] text-zinc-400 uppercase mb-4 text-left">
-                My Rewards
-              </h3>
               {(() => {
                 const userTopEntry = leaderboard?.leaderboard.find((e) =>
                   e.players.some((p) => p.name === name)

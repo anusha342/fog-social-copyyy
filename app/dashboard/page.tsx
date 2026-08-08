@@ -343,24 +343,25 @@ export default async function DashboardPage({
             className="group/leaderboardcard glass-panel-3d relative flex flex-col justify-between overflow-hidden !bg-pink-50/20 !border-pink-300 shadow-[0_4px_20px_rgba(190,24,74,0.08)] p-4 sm:p-6 transition-all duration-300 hover:!border-pink-500 hover:!bg-pink-50/30 hover:shadow-[0_8px_30px_rgba(190,24,74,0.15)] active:!bg-pink-50/25 active:scale-[0.98] hover:-translate-y-0.5 w-full h-full md:row-span-2"
           >
             {/* Hover Shine Sweep Overlay */}
-            <div className="hover-shine-sweep opacity-0 md:group-hover/leaderboardcard:opacity-100 md:group-hover/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards] md:group-active/leaderboardcard:opacity-100 md:group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
+            <div className="hover-shine-sweep opacity-0 md:group-hover/leaderboardcard:opacity-100 md:group-active/leaderboardcard:opacity-100 md:group-active/leaderboardcard:animate-[hoverShineSweep_0.8s_ease-out_forwards]" />
             <div className="flex flex-col justify-between h-full flex-grow relative z-20">
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30 w-full">
-                  <span className="font-sans text-base font-black tracking-wide sm:tracking-[0.1em] text-pink-700 uppercase flex items-center gap-1.5 min-w-0 shrink mr-2">
+                  <span className="flex items-center gap-1.5 text-pink-700 font-sans text-sm sm:text-base font-black tracking-wide uppercase min-w-0 flex-grow mr-2">
+                    {/* Live pulse dot */}
                     <span className="relative flex size-2 shrink-0">
                       <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60"></span>
                       <span className="relative inline-flex rounded-full size-2 bg-pink-700"></span>
                     </span>
-                    <span className="whitespace-normal leading-tight">
+                    <span className="truncate leading-tight">
                       {activeTournament?.name || "Active Tournament"}
                     </span>
                   </span>
-                  <span className="inline-flex items-center justify-center gap-1 pl-2 pr-1.5 py-0.5 sm:pl-3.5 sm:pr-2 sm:py-1.5 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
-                    <span className="font-mono text-[9px] sm:text-xs font-black uppercase tracking-wider">
+                  <span className="inline-flex items-center justify-center gap-1.5 pl-3.5 pr-2.5 py-1.5 sm:pl-5 sm:pr-3.5 sm:py-2 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
+                    <span className="font-mono text-[11px] sm:text-sm font-black uppercase tracking-wider">
                       ENTER ARENA
                     </span>
-                    <ChevronRight size={9.5} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
+                    <ChevronRight size={13} className="transition-transform group-hover/leaderboardcard:translate-x-0.5 shrink-0" />
                   </span>
                 </div>
 
@@ -468,24 +469,24 @@ export default async function DashboardPage({
 
                               {/* Name */}
                               <div className="flex-1 min-w-0 pr-1">
-                                <p className={`text-base font-bold leading-tight flex items-center gap-1 flex-wrap ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
+                                <p className={`text-base font-bold leading-tight ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
                                   <span>
                                     {entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "Unknown"}
                                   </span>
                                   {isRank1 && (
-                                    <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 mb-0.5" />
+                                    <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 inline-block ml-1 align-middle" />
                                   )}
                                 </p>
                               </div>
 
                               {/* Score */}
-                              <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-end gap-0.5 min-w-[80px] shrink-0`}>
+                              <div className={`font-mono text-base font-bold tabular-nums ${scoreColor} leading-none flex items-center justify-start gap-0.5 min-w-[80px] pl-3 shrink-0`}>
                                 <div className="w-3.5 flex items-center justify-start shrink-0">
                                   {isRank1 && <Trophy size={14} className="fill-amber-400 text-amber-500 shrink-0" />}
                                   {isRank2 && <Trophy size={14} className="fill-slate-300 text-slate-400 shrink-0" />}
                                   {isRank3 && <Trophy size={14} className="fill-orange-400 text-orange-500 shrink-0" />}
                                 </div>
-                                <span className="text-right">
+                                <span className="text-left">
                                   {entry.score.toLocaleString()}
                                 </span>
                               </div>
