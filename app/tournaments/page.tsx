@@ -253,9 +253,10 @@ export default async function TournamentsPage({
                     <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping"></span>
                     Active Arenas
                   </p>
-                  <span className="font-mono text-sm text-red-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="font-mono text-sm text-red-500 font-bold uppercase flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                    {active.length} Live
+                    {active.length}
+                    <span className="tracking-widest ml-1">Live</span>
                   </span>
                 </div>
 
@@ -275,8 +276,9 @@ export default async function TournamentsPage({
                     <Clock size={14} className="text-[#8a7f77]" />
                     All Tournaments
                   </p>
-                  <span className="font-mono text-sm text-muted-foreground/50 uppercase tracking-widest">
-                    {past.length} Completed
+                  <span className="font-mono text-sm text-muted-foreground/50 uppercase">
+                    {past.length}
+                    <span className="tracking-widest ml-1">Completed</span>
                   </span>
                 </div>
 

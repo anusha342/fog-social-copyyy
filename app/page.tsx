@@ -69,7 +69,7 @@ export default async function Home() {
 
 
       {/* ── Hero ── */}
-      <section className="relative flex flex-grow flex-col items-center justify-start px-6 pt-10 sm:pt-16 pb-12 z-10">
+      <section className="relative flex flex-col items-center justify-start px-6 pt-10 sm:pt-16 pb-12 z-10">
 
         {/* Content */}
         <div className="relative z-10 flex w-full max-w-3xl flex-col items-center text-center">
@@ -123,7 +123,7 @@ export default async function Home() {
       </section>
 
       {/* ── Features ── */}
-      <section className="mx-auto w-full max-w-6xl px-6 pt-4 pb-20 relative z-10">
+      <section className="mx-auto w-full max-w-6xl px-6 pt-4 pb-12 relative z-10">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {features.map(({ Icon, title, description, iconClass, cardClass }) => (
             <div

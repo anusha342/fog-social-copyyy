@@ -202,6 +202,18 @@ export function TournamentView({
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
+      <style>{`
+        @keyframes liquidShimmer {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .liquid-card-bg {
+          background: linear-gradient(135deg, #FFF0FA 0%, #F5E6FF 50%, #FFF0FA 100%);
+          background-size: 200% 200%;
+          animation: liquidShimmer 6s ease infinite;
+        }
+      `}</style>
 
       {/* Page-wide subtle grid backdrop */}
       <div
@@ -449,34 +461,34 @@ export function TournamentView({
                         const isRank2 = entry.rank === 2
                         const isRank3 = entry.rank === 3
 
-                        let cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-pink-200/90 shadow-[0_4px_15px_rgba(232,121,249,0.06)]"
+                        let cardClass = "glass-pill-3d liquid-card-bg md:active:scale-[0.99] border-pink-200/90 shadow-[0_4px_15px_rgba(232,121,249,0.08)] relative overflow-hidden"
                         let rankWidget = null
                         let scoreColor = "text-zinc-600 font-extrabold"
 
                         if (isRank1) {
-                          cardClass = "glass-pill-3d !bg-none !bg-[#FFDEB3] md:hover:!bg-[#FFD59E] md:active:scale-[0.99] border-[#FFA726] shadow-[0_8px_30px_rgba(249,115,22,0.22)] border-l-4 border-l-orange-500 scale-[1.02] md:transition-transform md:duration-200 z-10"
+                          cardClass = "glass-pill-3d !bg-none !bg-[#FFD2A0] md:hover:!bg-[#FFC78A] md:active:scale-[0.99] border-[#FFA726] shadow-[0_8px_30px_rgba(249,115,22,0.22)] border-l-4 border-l-orange-500 scale-[1.02] md:transition-transform md:duration-200 z-10"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
                               🥇
                             </div>
                           )
-                          scoreColor = "text-orange-700 font-extrabold"
+                          scoreColor = "text-orange-800 font-extrabold"
                         } else if (isRank2) {
-                          cardClass = "glass-pill-3d !bg-none !bg-[#CBE6FF] md:hover:!bg-[#B3D7FF] md:active:scale-[0.99] border-[#4FC3F7] shadow-[0_8px_30px_rgba(3,169,244,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
+                          cardClass = "glass-pill-3d !bg-none !bg-[#B2DCFF] md:hover:!bg-[#9ECEFF] md:active:scale-[0.99] border-[#4FC3F7] shadow-[0_8px_30px_rgba(3,169,244,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
                               🥈
                             </div>
                           )
-                          scoreColor = "text-sky-700 font-extrabold"
+                          scoreColor = "text-sky-800 font-extrabold"
                         } else if (isRank3) {
-                          cardClass = "glass-pill-3d !bg-none !bg-[#E5DFFF] md:hover:!bg-[#D1C9FF] md:active:scale-[0.99] border-[#9FA8DA] shadow-[0_8px_30px_rgba(99,102,241,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
+                          cardClass = "glass-pill-3d !bg-none !bg-[#D8CFFF] md:hover:!bg-[#C8BAFF] md:active:scale-[0.99] border-[#9FA8DA] shadow-[0_8px_30px_rgba(99,102,241,0.18)] scale-[1.01] md:transition-transform md:duration-200 z-10"
                           rankWidget = (
                             <div className="text-xl shrink-0 w-6 sm:w-8 flex items-center justify-center select-none">
                               🥉
                             </div>
                           )
-                          scoreColor = "text-indigo-700 font-extrabold"
+                          scoreColor = "text-indigo-800 font-extrabold"
                         } else {
                           rankWidget = (
                             <div className={`font-mono text-base font-black shrink-0 w-6 sm:w-8 flex items-center justify-center ${isMe ? "text-orange-700" : "text-zinc-500"
@@ -489,7 +501,7 @@ export function TournamentView({
 
                         if (isMe) {
                           if (!isRank1 && !isRank2 && !isRank3) {
-                            cardClass = "glass-pill-3d !bg-gradient-to-r !from-[#FFF0FA] !to-[#F3EAFF] md:hover:!from-[#FFF5FC] md:hover:!to-[#F7EFFF] md:active:scale-[0.99] border-emerald-500 shadow-md border-2"
+                            cardClass = "glass-pill-3d liquid-card-bg border-emerald-500 shadow-md border-2 relative overflow-hidden"
                           } else {
                             cardClass = `${cardClass} border-emerald-500 border-2`
                           }
