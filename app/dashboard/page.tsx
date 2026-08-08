@@ -462,7 +462,7 @@ export default async function DashboardPage({
                                 )}
                                 <Avatar
                                   src={entry.players[0]?.avatar_url ?? ""}
-                                  name={entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "?"}
+                                  name={entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "?"}
                                 />
                               </div>
 
@@ -470,7 +470,7 @@ export default async function DashboardPage({
                               <div className="flex-1 min-w-0 pr-1">
                                 <p className={`text-base font-bold leading-tight flex items-center gap-1 flex-wrap ${isMe ? "text-emerald-950" : "text-zinc-905"}`}>
                                   <span>
-                                    {entry.center?.name || entry.players.map(p => p?.name).filter(Boolean).join(", ") || "Unknown"}
+                                    {entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "Unknown"}
                                   </span>
                                   {isRank1 && (
                                     <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 mb-0.5" />
