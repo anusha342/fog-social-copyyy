@@ -347,16 +347,16 @@ export default async function DashboardPage({
             <div className="flex flex-col justify-between h-full flex-grow relative z-20">
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-pink-200/30 w-full">
-                  <span className="flex items-center gap-1.5 text-pink-700 font-sans text-sm sm:text-base font-black tracking-wide uppercase min-w-0 flex-grow mr-2">
+                  <div className="flex items-start gap-1.5 text-pink-700 font-sans text-sm sm:text-base font-black tracking-wide uppercase min-w-0 flex-grow mr-2">
                     {/* Live pulse dot */}
-                    <span className="relative flex size-2 shrink-0">
+                    <span className="relative flex size-2 shrink-0 mt-[5px]">
                       <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60"></span>
                       <span className="relative inline-flex rounded-full size-2 bg-pink-700"></span>
                     </span>
-                    <span className="truncate leading-tight">
+                    <span className="whitespace-normal break-words leading-tight">
                       {activeTournament?.name || "Active Tournament"}
                     </span>
-                  </span>
+                  </div>
                   <span className="inline-flex items-center justify-center gap-1.5 pl-3.5 pr-2.5 py-1.5 sm:pl-5 sm:pr-3.5 sm:py-2 rounded-full bg-pink-700/80 text-white border-pink-700/80 shadow-[0_4px_12px_rgba(190,24,74,0.18)] sm:bg-pink-50/50 sm:text-pink-700 sm:border-pink-200 sm:shadow-[0_2px_8px_rgba(190,24,74,0.08)] transition-all duration-300 group-hover/leaderboardcard:bg-pink-700/80 group-hover/leaderboardcard:text-white group-hover/leaderboardcard:border-pink-700/80 group-hover/leaderboardcard:shadow-[0_0_20px_rgba(190,24,74,0.35)] group-hover/leaderboardcard:translate-x-0.5 shrink-0">
                     <span className="font-mono text-[11px] sm:text-sm font-black uppercase tracking-wider">
                       ENTER ARENA
