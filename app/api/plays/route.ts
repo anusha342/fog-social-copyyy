@@ -42,23 +42,35 @@ export async function GET(request: Request) {
 
     try {
       const client = await clientPromise
+      const { ObjectId } = require("mongodb")
+      let queryTournamentId: any = tournamentId
+      try {
+        queryTournamentId = new ObjectId(tournamentId)
+      } catch {}
+
       const dbName = env === "prod" ? "hyper-grid" : `hyper-grid-${env}`
       let db = client.db(dbName)
       let mongoGameplays = await db.collection("tournament_gameplays").find({
-        tournament_id: tournamentId
+        $or: [
+          { tournament_id: tournamentId },
+          { tournament_id: queryTournamentId }
+        ]
       }).toArray()
 
       if (mongoGameplays.length === 0 && dbName !== "hyper-grid-dev") {
         db = client.db("hyper-grid-dev")
         mongoGameplays = await db.collection("tournament_gameplays").find({
-          tournament_id: tournamentId
+          $or: [
+            { tournament_id: tournamentId },
+            { tournament_id: queryTournamentId }
+          ]
         }).toArray()
       }
 
       const levelMap = new Map()
       for (const mg of mongoGameplays) {
         if (mg.gameplay_id && mg.level !== undefined) {
-          levelMap.set(mg.gameplay_id, mg.level)
+          levelMap.set(mg.gameplay_id.toString(), mg.level)
         }
       }
 
