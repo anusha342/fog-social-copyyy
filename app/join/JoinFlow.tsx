@@ -57,6 +57,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   const router = useRouter()
   const [phase, setPhase] = useState<"checking" | "unauthenticated" | "joining" | "error">("checking")
   const [errorCode, setErrorCode] = useState<JoinErrorCode | null>(null)
+  const [isSigningIn, setIsSigningIn] = useState(false)
   // Incrementing this re-triggers the join effect (used for retry).
   const [retryKey, setRetryKey] = useState(0)
 
@@ -148,6 +149,17 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   }, [phase, session, tournamentId, sessionCode, env, retryKey, router])
 
   // ── Checking ─────────────────────────────────────────────────────────────
+  if (isSigningIn) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-3.5">
+          <Loader2 size={28} className="text-primary animate-spin" aria-hidden />
+          <p className="text-base sm:text-lg font-bold text-zinc-955 uppercase font-sans tracking-wide">Connecting to Google…</p>
+        </div>
+      </div>
+    )
+  }
+
   if (phase === "checking") {
     return (
       <div className="flex min-h-svh items-center justify-center bg-background">
@@ -185,7 +197,10 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
           </p>
 
           <button
-            onClick={() => signIn("google", { callbackUrl })}
+            onClick={() => {
+              setIsSigningIn(true)
+              signIn("google", { callbackUrl })
+            }}
             className="flex w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-base font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
           >
             <GoogleIcon />

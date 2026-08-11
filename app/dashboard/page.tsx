@@ -9,6 +9,7 @@ import { Navbar } from "@/components/Navbar"
 import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
 import { getPlayerByGoogleId, getPlayerByEmail } from "@/lib/players"
 import { RewardsCarousel } from "@/components/RewardsCarousel"
+import { LocalTime } from "@/components/LocalTime"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
@@ -447,7 +448,7 @@ export default async function DashboardPage({
 
                           if (isMe) {
                             if (!isRank1 && !isRank2 && !isRank3) {
-                              cardClass = "glass-pill-3d liquid-card-bg border-emerald-500 shadow-md border-2 transition-all duration-300 relative overflow-hidden"
+                              cardClass = "glass-pill-3d liquid-card-bg border-emerald-500 shadow-md border-2 transition-all duration-300 relative"
                             } else {
                               cardClass = `${cardClass} border-emerald-500 border-2`
                             }
@@ -586,13 +587,12 @@ export default async function DashboardPage({
                       {/* Date / Time */}
                       <div className="min-w-0 flex-1 text-left">
                         <p className="font-mono text-base font-bold text-zinc-900 uppercase tracking-wide">
-                          {g.center_name || "FOG Cabinet"}
+                          {g.center_name || resolvedName || "FOG Cabinet"}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                           <p className="font-mono text-sm text-zinc-500">
-                            {new Date(g.played_at).toLocaleTimeString("en-US", {
-                              hour: "2-digit", minute: "2-digit",
-                            })}
+                            {/* Render time in local timezone */}
+                            <LocalTime isoString={g.played_at} type="time" />
                           </p>
                         </div>
                       </div>
@@ -605,9 +605,8 @@ export default async function DashboardPage({
                         <p className="mt-0.5 font-mono text-sm text-[#6e635c] uppercase tracking-widest flex items-center gap-0.5 justify-end">
                           <ShieldCheck size={12} className="text-emerald-600 shrink-0" />
                           <span>
-                            {new Date(g.played_at).toLocaleDateString("en-US", {
-                              month: "short", day: "numeric", year: "numeric",
-                            })}
+                            {/* Render date in local timezone */}
+                            <LocalTime isoString={g.played_at} type="date" />
                           </span>
                         </p>
                       </div>

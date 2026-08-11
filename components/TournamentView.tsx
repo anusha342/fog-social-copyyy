@@ -10,6 +10,7 @@ import { Navbar } from "./Navbar"
 import { getUrlForEnv } from "@/lib/sync-env"
 import { BackButton } from "./BackButton"
 import { RewardsCarousel } from "./RewardsCarousel"
+import { LocalTime } from "./LocalTime"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -23,6 +24,7 @@ interface Gameplay {
   score: number
   played_at: string
   center_name?: string | null
+  level?: number
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -180,7 +182,7 @@ export function TournamentView({
     async function fetchPlays() {
       try {
         const res = await fetch(
-          getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?tournament_id=${tournamentId}&limit=50`, env)
+          `/api/plays?tournamentId=${tournamentId}&googleId=${googleId}&env=${env}`
         )
         if (!res.ok) {
           setPlays([])
@@ -501,7 +503,7 @@ export function TournamentView({
 
                         if (isMe) {
                           if (!isRank1 && !isRank2 && !isRank3) {
-                            cardClass = "glass-pill-3d liquid-card-bg border-emerald-500 shadow-md border-2 relative overflow-hidden"
+                            cardClass = "glass-pill-3d liquid-card-bg border-emerald-500 shadow-md border-2 relative"
                           } else {
                             cardClass = `${cardClass} border-emerald-500 border-2`
                           }
@@ -655,24 +657,21 @@ export function TournamentView({
                             {/* Date/Time info */}
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap text-left">
-                                <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-800 leading-none whitespace-nowrap">
-                                  {new Date(g.played_at).toLocaleDateString("en-US", {
-                                    month: "short", day: "numeric", year: "numeric",
-                                  })}
+                                <p className="font-mono text-base sm:text-lg font-extrabold text-zinc-805 leading-none whitespace-nowrap">
+                                  {g.center_name || "FOG Cabinet"}
                                 </p>
-                                {/* badge removed to top border */}
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 text-white font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider shadow-sm select-none leading-none">
+                                  Level {g.level !== undefined ? g.level : (plays.length - index)}
+                                </span>
                               </div>
-                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
-                                <p className="font-mono text-sm text-zinc-500 font-bold uppercase tracking-wider leading-none whitespace-nowrap">
-                                  {new Date(g.played_at).toLocaleTimeString("en-US", {
-                                    hour: "2-digit", minute: "2-digit",
-                                  })}
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1.5">
+                                <p className="font-mono text-[11.5px] sm:text-xs text-zinc-400 font-bold uppercase tracking-wide leading-none whitespace-nowrap flex items-center gap-1">
+                                  {/* Render date in local timezone */}
+                                  <LocalTime isoString={g.played_at} type="date" />
+                                  <span className="text-zinc-300">•</span>
+                                  {/* Render time in local timezone */}
+                                  <LocalTime isoString={g.played_at} type="time" />
                                 </p>
-                                {g.center_name && (
-                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 border border-zinc-200 font-mono text-[10px] sm:text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none shadow-3xs whitespace-nowrap shrink-0">
-                                    {g.center_name}
-                                  </span>
-                                )}
                               </div>
                             </div>
                           </div>

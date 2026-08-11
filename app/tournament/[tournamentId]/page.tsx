@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { TournamentView } from "@/components/TournamentView"
 import { getPlayerByEmail, getPlayerByGoogleId } from "@/lib/players"
 import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
+import clientPromise from "@/lib/mongodb"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
@@ -56,9 +57,39 @@ async function fetchPlays(tournamentId: string, googleId: string, env: string) {
   try {
     const url = getUrlForEnv(`${SYNC}/api/v1/player/${googleId}/gameplays?tournament_id=${tournamentId}&limit=50`, env)
     const res = await fetchWithTimeout(url, { next: { revalidate: 3 } })
-    if (!res.ok) return []
     const data = await res.json()
-    return data.gameplays ?? []
+    const gameplays = data.gameplays ?? []
+    try {
+      const client = await clientPromise
+      const dbName = env === "prod" ? "hyper-grid" : `hyper-grid-${env}`
+      let db = client.db(dbName)
+      let mongoGameplays = await db.collection("tournament_gameplays").find({
+        tournament_id: tournamentId
+      }).toArray()
+
+      if (mongoGameplays.length === 0 && dbName !== "hyper-grid-dev") {
+        db = client.db("hyper-grid-dev")
+        mongoGameplays = await db.collection("tournament_gameplays").find({
+          tournament_id: tournamentId
+        }).toArray()
+      }
+
+      const levelMap = new Map()
+      for (const mg of mongoGameplays) {
+        if (mg.gameplay_id && mg.level !== undefined) {
+          levelMap.set(mg.gameplay_id, mg.level)
+        }
+      }
+
+      for (const g of gameplays) {
+        if (levelMap.has(g.gameplay_id)) {
+          g.level = levelMap.get(g.gameplay_id)
+        }
+      }
+    } catch (e) {
+      console.error("Failed to merge gameplay levels:", e)
+    }
+    return gameplays
   } catch {
     return []
   }
