@@ -73,6 +73,7 @@ export function TournamentView({
   const [plays, setPlays] = useState<Gameplay[] | null>(initialPlays)
   const [playsLoaded, setPlaysLoaded] = useState(!!initialPlays)
   const [tournament, setTournament] = useState<Tournament | null>(initialTournament)
+  const hasRewards = !!(tournament?.rewards && tournament.rewards.length > 0)
   const [isServerOffline, setIsServerOffline] = useState(false)
   const [isMobile, setIsMobile] = useState(true)
 
@@ -112,10 +113,10 @@ export function TournamentView({
       if (diffX > 0) {
         // Swipe Left -> Next Tab
         if (tab === "leaderboard") setTab("plays")
-        else if (tab === "plays") setTab("rewards")
+        else if (tab === "plays" && hasRewards) setTab("rewards")
       } else {
         // Swipe Right -> Previous Tab
-        if (tab === "rewards") setTab("plays")
+        if (tab === "rewards" && hasRewards) setTab("plays")
         else if (tab === "plays") setTab("leaderboard")
       }
     }
@@ -264,12 +265,12 @@ export function TournamentView({
 
       {/* ── Content ── */}
       <main
-        className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-2 pb-8 sm:pt-3 sm:pb-12 flex-grow min-h-[70vh]"
+        className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-2 pb-8 sm:pt-3 sm:pb-12 flex-grow min-h-[70vh] flex flex-col"
       >
 
         {/* ── Rewards Display (Carousel or Static cash podium) ── */}
         <div className="mb-6">
-          {(!tournament?.rewards || tournament.rewards.length === 0) ? null :
+          {!hasRewards ? null :
             tournament.rewards.some(r => r.image_url && r.image_url !== "") ? (
               <RewardsCarousel
                 bannerUrl={tournament?.banner_url}
@@ -372,7 +373,11 @@ export function TournamentView({
         {/* Tab bar (Separated from Navbar) */}
         <div className="flex border-b border-zinc-200/80 mb-5 items-center justify-between">
           <div className="flex gap-4">
-            {(["leaderboard", "plays", "rewards"] as const).map((t) => (
+            {([
+              "leaderboard",
+              "plays",
+              ...(hasRewards ? ["rewards" as const] : []),
+            ]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
@@ -391,21 +396,25 @@ export function TournamentView({
         <div
           onTouchStart={isMobile ? handleTouchStart : undefined}
           onTouchEnd={isMobile ? handleTouchEnd : undefined}
-          className={isMobile ? "w-full overflow-hidden py-4" : "w-full py-4"}
+          className={isMobile ? "w-full overflow-hidden py-4 flex-grow flex flex-col" : "w-full py-4"}
           style={isMobile ? { perspective: "1200px" } : undefined}
         >
           <div
             className={isMobile
-              ? "flex w-[300%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              ? `flex transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex-grow ${hasRewards ? "w-[300%]" : "w-[200%]"}`
               : "w-full"
             }
             style={isMobile ? {
-              transform: `translateX(-${(tab === "leaderboard" ? 0 : tab === "plays" ? 1 : 2) * 33.3333}%)`,
+              transform: `translateX(-${
+                hasRewards
+                  ? (tab === "leaderboard" ? 0 : tab === "plays" ? 1 : 2) * 33.3333
+                  : (tab === "leaderboard" ? 0 : 1) * 50
+              }%)`,
             } : undefined}
           >
             {/* Slide 1: Leaderboard */}
             <div
-              className={isMobile ? "w-1/3 px-1 transition-all duration-500 origin-center" : "w-full"}
+              className={isMobile ? `${hasRewards ? "w-1/3" : "w-1/2"} shrink-0 px-1 transition-all duration-500 origin-center flex flex-col flex-grow` : "w-full"}
               style={isMobile ? {
                 transform: tab === "leaderboard" ? "scale(1) rotateY(0deg)" : "scale(0.95) rotateY(-8deg)",
                 opacity: tab === "leaderboard" ? 1 : 0.15,
@@ -567,7 +576,7 @@ export function TournamentView({
 
             {/* Slide 2: My Plays */}
             <div
-              className={isMobile ? "w-1/3 px-1 transition-all duration-500 origin-center" : "w-full"}
+              className={isMobile ? `${hasRewards ? "w-1/3" : "w-1/2"} shrink-0 px-1 transition-all duration-500 origin-center flex flex-col flex-grow` : "w-full"}
               style={isMobile ? {
                 transform: tab === "plays" ? "scale(1) rotateY(0deg)" : tab === "leaderboard" ? "scale(0.95) rotateY(8deg)" : "scale(0.95) rotateY(-8deg)",
                 opacity: tab === "plays" ? 1 : 0.15,
@@ -706,8 +715,9 @@ export function TournamentView({
             </div>
 
             {/* Slide 3: My Rewards */}
-            <div
-              className={isMobile ? "w-1/3 px-1 transition-all duration-500 origin-center" : "w-full"}
+            {hasRewards && (
+              <div
+                className={isMobile ? "w-1/3 shrink-0 px-1 transition-all duration-500 origin-center flex flex-col flex-grow" : "w-full"}
               style={isMobile ? {
                 transform: tab === "rewards" ? "scale(1) rotateY(0deg)" : "scale(0.95) rotateY(8deg)",
                 opacity: tab === "rewards" ? 1 : 0.15,
@@ -873,8 +883,9 @@ export function TournamentView({
                     )}
                   </div>
                 )
-              })()}
-            </div>
+                })()}
+              </div>
+            )}
           </div>
         </div>
 
