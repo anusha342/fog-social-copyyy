@@ -73,7 +73,7 @@ export function TournamentView({
   const [plays, setPlays] = useState<Gameplay[] | null>(initialPlays)
   const [playsLoaded, setPlaysLoaded] = useState(!!initialPlays)
   const [tournament, setTournament] = useState<Tournament | null>(initialTournament)
-  const hasRewards = !!(tournament?.rewards && tournament.rewards.length > 0)
+  const hasRewards = (tournament?.rewards?.length ?? 0) > 0
   const [isServerOffline, setIsServerOffline] = useState(false)
   const [isMobile, setIsMobile] = useState(true)
 
@@ -271,7 +271,7 @@ export function TournamentView({
         {/* ── Rewards Display (Carousel or Static cash podium) ── */}
         <div className="mb-6">
           {!hasRewards ? null :
-            tournament.rewards.some(r => r.image_url && r.image_url !== "") ? (
+            tournament?.rewards?.some(r => r.image_url && r.image_url !== "") ? (
               <RewardsCarousel
                 bannerUrl={tournament?.banner_url}
                 rewards={tournament?.rewards}
@@ -296,7 +296,7 @@ export function TournamentView({
                 <div className="grid grid-cols-3 gap-3 items-end max-w-2xl mx-auto pt-3 pb-1 relative z-10">
                   {/* 2nd Place Card */}
                   {(() => {
-                    const r2 = tournament.rewards.find(r => Number(r.rank) === 2);
+                    const r2 = tournament?.rewards?.find(r => Number(r.rank) === 2);
                     if (!r2) return <div />;
                     return (
                       <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/95 !border-white shadow-md shadow-[#D9CFC7]/15 transition-all duration-300 md:hover:scale-[1.02] md:hover:border-white/95 h-fit">
@@ -315,7 +315,7 @@ export function TournamentView({
 
                   {/* 1st Place Card (Centered & Highlighted) */}
                   {(() => {
-                    const r1 = tournament.rewards.find(r => Number(r.rank) === 1);
+                    const r1 = tournament?.rewards?.find(r => Number(r.rank) === 1);
                     if (!r1) return <div />;
                     return (
                       <div className="relative flex flex-col items-center text-center p-4 sm:p-5 rounded-xl glass-pill-3d !bg-white/98 !border-white shadow-lg transition-all duration-300 md:hover:scale-[1.02] md:hover:border-white scale-[1.04] z-10">
@@ -338,7 +338,7 @@ export function TournamentView({
 
                   {/* 3rd Place Card */}
                   {(() => {
-                    const r3 = tournament.rewards.find(r => Number(r.rank) === 3);
+                    const r3 = tournament?.rewards?.find(r => Number(r.rank) === 3);
                     if (!r3) return <div />;
                     return (
                       <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/95 !border-white shadow-md shadow-[#D9CFC7]/15 transition-all duration-300 md:hover:scale-[1.02] md:hover:border-white/95 h-fit">
