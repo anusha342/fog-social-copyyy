@@ -24,9 +24,9 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
   })
 
   // Find 1st, 2nd, 3rd rewards
-  const r1 = rewards?.find((r) => r.rank === 1)
-  const r2 = rewards?.find((r) => r.rank === 2)
-  const r3 = rewards?.find((r) => r.rank === 3)
+  const r1 = rewards?.find((r) => Number(r.rank) === 1)
+  const r2 = rewards?.find((r) => Number(r.rank) === 2)
+  const r3 = rewards?.find((r) => Number(r.rank) === 3)
 
   if (r1) {
     if (r1.image_url) {

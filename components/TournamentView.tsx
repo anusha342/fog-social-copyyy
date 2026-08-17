@@ -295,7 +295,7 @@ export function TournamentView({
                 <div className="grid grid-cols-3 gap-3 items-end max-w-2xl mx-auto pt-3 pb-1 relative z-10">
                   {/* 2nd Place Card */}
                   {(() => {
-                    const r2 = tournament.rewards.find(r => r.rank === 2);
+                    const r2 = tournament.rewards.find(r => Number(r.rank) === 2);
                     if (!r2) return <div />;
                     return (
                       <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/95 !border-white shadow-md shadow-[#D9CFC7]/15 transition-all duration-300 md:hover:scale-[1.02] md:hover:border-white/95 h-fit">
@@ -314,7 +314,7 @@ export function TournamentView({
 
                   {/* 1st Place Card (Centered & Highlighted) */}
                   {(() => {
-                    const r1 = tournament.rewards.find(r => r.rank === 1);
+                    const r1 = tournament.rewards.find(r => Number(r.rank) === 1);
                     if (!r1) return <div />;
                     return (
                       <div className="relative flex flex-col items-center text-center p-4 sm:p-5 rounded-xl glass-pill-3d !bg-white/98 !border-white shadow-lg transition-all duration-300 md:hover:scale-[1.02] md:hover:border-white scale-[1.04] z-10">
@@ -337,7 +337,7 @@ export function TournamentView({
 
                   {/* 3rd Place Card */}
                   {(() => {
-                    const r3 = tournament.rewards.find(r => r.rank === 3);
+                    const r3 = tournament.rewards.find(r => Number(r.rank) === 3);
                     if (!r3) return <div />;
                     return (
                       <div className="relative flex flex-col items-center text-center p-3 sm:p-4 rounded-xl glass-pill-3d !bg-white/95 !border-white shadow-md shadow-[#D9CFC7]/15 transition-all duration-300 md:hover:scale-[1.02] md:hover:border-white/95 h-fit">
@@ -724,7 +724,7 @@ export function TournamentView({
                 const finalRank = pid ? leaderboard?.player?.rank : userTopEntry?.rank
 
                 const hasWon = finalRank !== undefined && finalRank >= 1 && finalRank <= 3
-                const dbReward = tournament?.rewards?.find((r) => r.rank === finalRank)
+                const dbReward = tournament?.rewards?.find((r) => Number(r.rank) === Number(finalRank))
 
                 let prizeAmount = dbReward?.prize_money ?? ""
                 let medalEmoji = ""
