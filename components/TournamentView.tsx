@@ -304,10 +304,10 @@ export function TournamentView({
                           2nd Place
                         </span>
                         <span className="font-sans text-base sm:text-2xl font-black text-zinc-955 tracking-tight leading-none mb-1.5 sm:mb-2 drop-shadow-xs">
-                          {r2.prize_money || r2.title}
+                          {r2.prize_money}
                         </span>
                         <span className="font-mono text-[10px] sm:text-xs text-zinc-600 font-bold uppercase tracking-widest leading-none">
-                          {r2.prize_money ? "Cash" : "Prize"}
+                          Cash
                         </span>
                       </div>
                     );
@@ -327,10 +327,10 @@ export function TournamentView({
                           1st Place
                         </span>
                         <span className="font-sans text-lg sm:text-3xl font-black text-zinc-955 tracking-tight leading-none mb-1.5 sm:mb-2 drop-shadow-xs">
-                          {r1.prize_money || r1.title}
+                          {r1.prize_money}
                         </span>
                         <span className="font-mono text-[10px] sm:text-xs text-zinc-700 font-bold uppercase tracking-widest leading-none">
-                          {r1.prize_money ? "Cash" : "Prize"}
+                          Cash
                         </span>
                       </div>
                     );
@@ -346,10 +346,10 @@ export function TournamentView({
                           3rd Place
                         </span>
                         <span className="font-sans text-base sm:text-2xl font-black text-zinc-955 tracking-tight leading-none mb-1.5 sm:mb-2 drop-shadow-xs">
-                          {r3.prize_money || r3.title}
+                          {r3.prize_money}
                         </span>
                         <span className="font-mono text-[10px] sm:text-xs text-zinc-600 font-bold uppercase tracking-widest leading-none">
-                          {r3.prize_money ? "Cash" : "Prize"}
+                          Cash
                         </span>
                       </div>
                     );
@@ -380,7 +380,7 @@ export function TournamentView({
             ]).map((t) => (
               <button
                 key={t}
-                onClick={() => setTab(t)}
+                onClick={() => setTab(t as "leaderboard" | "plays" | "rewards")}
                 className={`pb-2.5 font-sans text-sm sm:text-base font-black tracking-wide uppercase transition-all border-b-2 cursor-pointer ${tab === t
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -736,7 +736,7 @@ export function TournamentView({
                 const hasWon = finalRank !== undefined && finalRank >= 1 && finalRank <= 3
                 const dbReward = tournament?.rewards?.find((r) => Number(r.rank) === Number(finalRank))
 
-                let prizeAmount = dbReward?.prize_money || dbReward?.title || ""
+                let prizeAmount = dbReward?.prize_money ?? ""
                 let medalEmoji = ""
                 let rankTitle = dbReward?.title ?? ""
 
