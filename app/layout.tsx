@@ -32,17 +32,17 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body 
+      <body
         className="min-h-full flex flex-col relative overflow-x-hidden"
       >
         {/* Glow backdrop colors */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           {/* Cyan glow */}
-          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-cyan-500/45 blur-[130px] animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-cyan-500/65 blur-[130px] animate-pulse" style={{ animationDuration: '8s' }} />
           {/* Pink/Rose glow */}
-          <div className="absolute top-1/2 left-2/3 w-[500px] h-[500px] rounded-full bg-pink-500/45 blur-[130px] animate-pulse" style={{ animationDuration: '12s' }} />
+          <div className="absolute top-1/2 left-2/3 w-[500px] h-[500px] rounded-full bg-pink-500/65 blur-[130px] animate-pulse" style={{ animationDuration: '12s' }} />
           {/* Indigo glow */}
-          <div className="absolute -bottom-20 left-1/4 w-[550px] h-[550px] rounded-full bg-indigo-500/45 blur-[130px] animate-pulse" style={{ animationDuration: '10s' }} />
+          <div className="absolute -bottom-20 left-1/4 w-[550px] h-[550px] rounded-full bg-indigo-500/65 blur-[130px] animate-pulse" style={{ animationDuration: '10s' }} />
         </div>
 
         <div className="relative z-10 flex flex-col flex-grow">

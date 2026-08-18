@@ -294,9 +294,19 @@ export default async function TournamentsPage({
         )}
       </main>
 
-      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-center font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wide sm:tracking-widest text-center">
-          <span>© {new Date().getFullYear()} FOG Technologies Pvt. Limited</span>
+      <footer className="relative z-10 border-t border-zinc-200/50 py-3 bg-zinc-50/50 backdrop-blur-sm">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col-reverse md:flex-row items-center justify-between gap-1.5 font-mono text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider">
+          <span className="opacity-80">© {new Date().getFullYear()} FOG Technologies Pvt. Ltd.</span>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="hover:text-orange-500 hover:scale-[1.02] transition-all duration-200 py-1 relative group">
+              Privacy Policy
+              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-orange-500 transition-all duration-350 group-hover:w-full" />
+            </Link>
+            <Link href="/terms" className="hover:text-orange-500 hover:scale-[1.02] transition-all duration-200 py-1 relative group">
+              Terms & Conditions
+              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-orange-500 transition-all duration-350 group-hover:w-full" />
+            </Link>
+          </div>
         </div>
       </footer>
     </div>

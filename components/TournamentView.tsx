@@ -77,10 +77,10 @@ export function TournamentView({
   const [isServerOffline, setIsServerOffline] = useState(false)
   const [isMobile, setIsMobile] = useState(true)
 
-  // Listen to screen size changes for state-driven desktop columns
+  // Listen to screen size changes for state-driven desktop columns (include tablet width < 1024px)
   useEffect(() => {
     const checkWidth = () => {
-      setIsMobile(window.innerWidth < 768)
+      setIsMobile(window.innerWidth < 1024)
     }
     checkWidth()
     window.addEventListener("resize", checkWidth)
@@ -94,8 +94,9 @@ export function TournamentView({
     setTournament(initialTournament)
   }, [initialLeaderboard, initialPlays, initialTournament])
 
-  // Swipe navigation logic for mobile users
+  // Swipe navigation logic for mobile and tablet users
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
+  const [pointerStart, setPointerStart] = useState<{ x: number; y: number } | null>(null)
 
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0]
@@ -121,6 +122,35 @@ export function TournamentView({
       }
     }
     setTouchStart(null)
+  }
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return // only left click / primary pointer
+    e.currentTarget.setPointerCapture(e.pointerId)
+    setPointerStart({ x: e.clientX, y: e.clientY })
+  }
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!pointerStart) return
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    const diffX = pointerStart.x - e.clientX
+    const diffY = pointerStart.y - e.clientY
+
+    // Horizontal swipe threshold (> 40px delta)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        if (tab === "leaderboard") setTab("plays")
+        else if (tab === "plays" && hasRewards) setTab("rewards")
+      } else {
+        if (tab === "rewards" && hasRewards) setTab("plays")
+        else if (tab === "plays") setTab("leaderboard")
+      }
+    }
+    setPointerStart(null)
+  }
+
+  const handlePointerCancel = () => {
+    setPointerStart(null)
   }
 
   const startDateStr = tournament?.started_at
@@ -396,7 +426,10 @@ export function TournamentView({
         <div
           onTouchStart={isMobile ? handleTouchStart : undefined}
           onTouchEnd={isMobile ? handleTouchEnd : undefined}
-          className={isMobile ? "w-full overflow-hidden py-4 flex-grow flex flex-col" : "w-full py-4"}
+          onPointerDown={isMobile ? handlePointerDown : undefined}
+          onPointerUp={isMobile ? handlePointerUp : undefined}
+          onPointerCancel={isMobile ? handlePointerCancel : undefined}
+          className={isMobile ? "w-full overflow-hidden py-4 flex-grow flex flex-col touch-pan-y cursor-grab active:cursor-grabbing select-none" : "w-full py-4"}
           style={isMobile ? { perspective: "1200px" } : undefined}
         >
           <div
@@ -892,9 +925,19 @@ export function TournamentView({
       </main>
 
       {/* ── Footer ── */}
-      <footer className="relative z-10 border-t border-zinc-200 py-4 text-center bg-zinc-200">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex items-center justify-center font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wide sm:tracking-widest text-center">
-          <span>© {new Date().getFullYear()} FOG Technologies Pvt. Limited</span>
+      <footer className="relative z-10 border-t border-zinc-200/50 py-3 bg-zinc-50/50 backdrop-blur-sm">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col-reverse md:flex-row items-center justify-between gap-1.5 font-mono text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider">
+          <span className="opacity-80">© {new Date().getFullYear()} FOG Technologies Pvt. Ltd.</span>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="hover:text-orange-500 hover:scale-[1.02] transition-all duration-200 py-1 relative group">
+              Privacy Policy
+              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-orange-500 transition-all duration-350 group-hover:w-full" />
+            </Link>
+            <Link href="/terms" className="hover:text-orange-500 hover:scale-[1.02] transition-all duration-200 py-1 relative group">
+              Terms & Conditions
+              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-orange-500 transition-all duration-350 group-hover:w-full" />
+            </Link>
+          </div>
         </div>
       </footer>
 

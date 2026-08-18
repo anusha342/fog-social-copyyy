@@ -75,6 +75,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
 
   // Swipe navigation logic for carousel
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null)
+  const [pointerStart, setPointerStart] = useState<{ x: number; y: number } | null>(null)
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation()
@@ -102,6 +103,33 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
     setTouchStart(null)
   }
 
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return // only left click / primary pointer
+    e.currentTarget.setPointerCapture(e.pointerId)
+    setPointerStart({ x: e.clientX, y: e.clientY })
+  }
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!pointerStart) return
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    const diffX = pointerStart.x - e.clientX
+    const diffY = pointerStart.y - e.clientY
+
+    // Horizontal swipe threshold (> 40px delta)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+      } else {
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+      }
+    }
+    setPointerStart(null)
+  }
+
+  const handlePointerCancel = () => {
+    setPointerStart(null)
+  }
+
   useEffect(() => {
     if (slides.length <= 1) return
     const interval = setInterval(() => {
@@ -118,7 +146,10 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
     <div
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className={`relative w-full ${hasPodium ? "h-[200px] sm:h-[240px]" : "h-[100px] sm:h-[120px]"} rounded-2xl overflow-hidden shadow-md select-none group border border-amber-500/25`}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
+      className={`relative w-full ${hasPodium ? "h-[200px] sm:h-[240px]" : "h-[100px] sm:h-[120px]"} rounded-2xl overflow-hidden shadow-md select-none group border border-amber-500/25 touch-pan-y cursor-grab active:cursor-grabbing`}
       style={{ perspective: "1200px" }}
     >
       {/* Background container holding the slides */}
