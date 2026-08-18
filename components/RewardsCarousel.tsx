@@ -6,6 +6,7 @@ interface Slide {
   url: string
   title: string
   subtitle?: string
+  rank?: number
 }
 
 interface RewardsCarouselProps {
@@ -33,12 +34,14 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
       slides.push({
         url: r1.image_url,
         title: r1.title || "1st Place Reward",
+        rank: 1,
       })
-    } else if (r1.prize_money) {
+    } else {
       slides.push({
         url: "cash-reward",
         title: r1.title || "1st Place Reward",
-        subtitle: r1.prize_money,
+        subtitle: r1.prize_money || r1.title,
+        rank: 1,
       })
     }
   }
@@ -47,12 +50,14 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
       slides.push({
         url: r2.image_url,
         title: r2.title || "2nd Place Reward",
+        rank: 2,
       })
-    } else if (r2.prize_money) {
+    } else {
       slides.push({
         url: "cash-reward",
         title: r2.title || "2nd Place Reward",
-        subtitle: r2.prize_money,
+        subtitle: r2.prize_money || r2.title,
+        rank: 2,
       })
     }
   }
@@ -61,12 +66,14 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
       slides.push({
         url: r3.image_url,
         title: r3.title || "3rd Place Reward",
+        rank: 3,
       })
-    } else if (r3.prize_money) {
+    } else {
       slides.push({
         url: "cash-reward",
         title: r3.title || "3rd Place Reward",
-        subtitle: r3.prize_money,
+        subtitle: r3.prize_money || r3.title,
+        rank: 3,
       })
     }
   }
@@ -178,8 +185,8 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                         ) : (
                           <div className="flex flex-col items-center justify-center select-none">
                             <span className="text-xl sm:text-2xl mb-0.5 sm:mb-1">🥉</span>
-                            <span className="font-sans text-[8px] sm:text-[10px] font-black text-zinc-955 tracking-tight leading-none">
-                              {r3.prize_money}
+                            <span className="font-sans text-[8px] sm:text-[10px] font-black text-zinc-955 tracking-tight leading-none px-1 break-words max-w-full">
+                              {r3.prize_money || r3.title}
                             </span>
                           </div>
                         )}
@@ -196,8 +203,8 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                         ) : (
                           <div className="flex flex-col items-center justify-center select-none">
                             <span className="text-2xl sm:text-3xl mb-0.5 sm:mb-1.5">🥇</span>
-                            <span className="font-sans text-[9px] sm:text-[11px] font-black text-zinc-955 tracking-tight leading-none">
-                              {r1.prize_money}
+                            <span className="font-sans text-[9px] sm:text-[11px] font-black text-zinc-955 tracking-tight leading-none px-1 break-words max-w-full">
+                              {r1.prize_money || r1.title}
                             </span>
                           </div>
                         )}
@@ -214,8 +221,8 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                         ) : (
                           <div className="flex flex-col items-center justify-center select-none">
                             <span className="text-xl sm:text-2xl mb-0.5 sm:mb-1">🥈</span>
-                            <span className="font-sans text-[8px] sm:text-[10px] font-black text-zinc-955 tracking-tight leading-none">
-                              {r2.prize_money}
+                            <span className="font-sans text-[8px] sm:text-[10px] font-black text-zinc-955 tracking-tight leading-none px-1 break-words max-w-full">
+                              {r2.prize_money || r2.title}
                             </span>
                           </div>
                         )}
@@ -242,7 +249,7 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
                     {slide.url === "cash-reward" ? (
                       <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center glass-pill-3d rounded-2xl p-3 !bg-white/95 border-white shadow-md text-center">
                         <span className="text-2xl sm:text-3xl mb-1 sm:mb-1.5 select-none">
-                          {slide.title.includes("1st") ? "🥇" : slide.title.includes("2nd") ? "🥈" : "🥉"}
+                          {slide.rank === 1 ? "🥇" : slide.rank === 2 ? "🥈" : "🥉"}
                         </span>
                         <span className="font-sans text-xs sm:text-sm font-extrabold text-zinc-955 tracking-tight leading-none">
                           {slide.subtitle}
