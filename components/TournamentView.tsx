@@ -125,12 +125,14 @@ export function TournamentView({
   }
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === "touch") return
     if (e.button !== 0) return // only left click / primary pointer
     e.currentTarget.setPointerCapture(e.pointerId)
     setPointerStart({ x: e.clientX, y: e.clientY })
   }
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    if (e.pointerType === "touch") return
     if (!pointerStart) return
     e.currentTarget.releasePointerCapture(e.pointerId)
     const diffX = pointerStart.x - e.clientX
