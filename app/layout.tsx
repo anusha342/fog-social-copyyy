@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { NavigationLoader } from "@/components/NavigationLoader";
+import { LogRocketInit } from "@/components/LogRocketInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,9 @@ export default function RootLayout({
         </div>
         <Suspense fallback={null}>
           <NavigationLoader />
+        </Suspense>
+        <Suspense fallback={null}>
+          <LogRocketInit />
         </Suspense>
       </body>
     </html>

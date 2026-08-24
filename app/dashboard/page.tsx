@@ -10,6 +10,7 @@ import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/
 import { getPlayerByGoogleId, getPlayerByEmail } from "@/lib/players"
 import { RewardsCarousel } from "@/components/RewardsCarousel"
 import { LocalTime } from "@/components/LocalTime"
+import { LogRocketIdentify } from "@/components/LogRocketIdentify"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
@@ -275,6 +276,7 @@ export default async function DashboardPage({
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
+      <LogRocketIdentify id={resolvedGoogleId} name={resolvedName} email={email} />
       <style>{`
         @keyframes hoverShineSweep {
           0% { left: -100%; }
