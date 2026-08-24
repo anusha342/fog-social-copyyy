@@ -12,6 +12,7 @@ interface LogRocketUser {
 
 let initialized = false
 let identifiedUserId: string | null = null
+const clickCounts: Record<string, number> = {}
 
 function isBrowser(): boolean {
   return typeof window !== "undefined"
@@ -24,6 +25,24 @@ function isEnabled(): boolean {
 
 function getAppId(): string {
   return process.env.NEXT_PUBLIC_LOGROCKET_APP_ID || DEFAULT_APP_ID
+}
+
+const STATIC_PAGE_NAMES: Record<string, string> = {
+  "/": "Home",
+  "/dashboard": "Dashboard",
+  "/tournaments": "Tournaments",
+  "/join": "Join",
+}
+
+/**
+ * Collapses a raw pathname (query string stripped, dynamic segments folded)
+ * into a stable page label so LogRocket charts group by page instead of
+ * fragmenting across every tournament ID / query variant.
+ */
+export function getPageName(pathname: string): string {
+  if (STATIC_PAGE_NAMES[pathname]) return STATIC_PAGE_NAMES[pathname]
+  if (/^\/tournament\/[^/]+$/.test(pathname)) return "Tournament Detail"
+  return pathname
 }
 
 /**
@@ -66,6 +85,19 @@ export const logRocketManager = {
     } catch (err) {
       console.error("[LogRocket] track failed", err)
     }
+  },
+
+  /** Records a page view. Call on initial mount and on every route change. `path` may include the query string. */
+  trackPageView(path: string, pathname: string): void {
+    if (!isBrowser() || !initialized) return
+    logRocketManager.track("Page View", { path, page: getPageName(pathname) })
+  },
+
+  /** Records a click on a control, tagged with a running per-label click count for this session. */
+  trackClick(label: string, properties?: Record<string, string | number | boolean>): void {
+    if (!isBrowser() || !initialized) return
+    const count = (clickCounts[label] = (clickCounts[label] ?? 0) + 1)
+    logRocketManager.track("Click", { label, count, ...properties })
   },
 
   /** Resolves the shareable replay URL for the current session (e.g. to attach to a support ticket). */

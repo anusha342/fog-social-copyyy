@@ -71,6 +71,12 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
     })
   }, [session])
 
+  // Ties this recording to the arcade join session (tournamentId/sessionCode) even
+  // before the visitor signs in, so a specific QR-code session can be looked up in LogRocket.
+  useEffect(() => {
+    logRocketManager.track("Join Page Viewed", { tournamentId, sessionCode })
+  }, [tournamentId, sessionCode])
+
   // ── Session pre-check ─────────────────────────────────────────────────────
   useEffect(() => {
     let cancelled = false
@@ -110,6 +116,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
 
     let cancelled = false
     setErrorCode(null)
+    logRocketManager.track("Join Started", { tournamentId, sessionCode })
 
     async function join() {
       try {
@@ -137,11 +144,13 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
               : "network"
           setErrorCode(code)
           setPhase("error")
+          logRocketManager.track("Join Failed", { tournamentId, sessionCode, errorCode: code })
           return
         }
 
         const body = await res.json()
         if (!cancelled) {
+          logRocketManager.track("Join Succeeded", { tournamentId, sessionCode, playerId: body.player._id })
           router.replace(
             getUrlForEnv(`/tournament/${tournamentId}?pid=${encodeURIComponent(body.player._id)}`, env)
           )
@@ -150,6 +159,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
         if (!cancelled) {
           setErrorCode("network")
           setPhase("error")
+          logRocketManager.track("Join Failed", { tournamentId, sessionCode, errorCode: "network" })
         }
       }
     }

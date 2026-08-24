@@ -52,7 +52,9 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <NavigationLoader />
         </Suspense>
-        <LogRocketInit />
+        <Suspense fallback={null}>
+          <LogRocketInit />
+        </Suspense>
       </body>
     </html>
   );
