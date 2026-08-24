@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import { TournamentView } from "@/components/TournamentView"
+import { LogRocketIdentify } from "@/components/LogRocketIdentify"
 import { getPlayerByEmail, getPlayerByGoogleId } from "@/lib/players"
 import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
 import clientPromise from "@/lib/mongodb"
@@ -140,6 +141,7 @@ export default async function TournamentPage({
 
   return (
     <main>
+      <LogRocketIdentify id={resolvedGoogleId} name={dbPlayer?.name ?? session.user.name} email={session.user.email} />
       <TournamentView
         tournamentId={tournamentId}
         googleId={resolvedGoogleId}

@@ -7,6 +7,7 @@ import type { Session } from "next-auth"
 import { AlertCircle, QrCode, Loader2 } from "lucide-react"
 import type { JoinErrorCode } from "@/types"
 import { getUrlForEnv } from "@/lib/sync-env"
+import { logRocketManager } from "@/lib/logRocketManager"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -60,6 +61,15 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   const [isSigningIn, setIsSigningIn] = useState(false)
   // Incrementing this re-triggers the join effect (used for retry).
   const [retryKey, setRetryKey] = useState(0)
+
+  useEffect(() => {
+    if (!session?.user.google_id) return
+    logRocketManager.identify({
+      id: session.user.google_id,
+      name: session.user.name,
+      email: session.user.email,
+    })
+  }, [session])
 
   // ── Session pre-check ─────────────────────────────────────────────────────
   useEffect(() => {
