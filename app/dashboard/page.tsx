@@ -230,6 +230,24 @@ export default async function DashboardPage({
   // Sort gameplays by date descending (newest first) so that new play gets added on top
   const sortedGameplays = [...gameplays].sort((a, b) => new Date(b.played_at).getTime() - new Date(a.played_at).getTime())
 
+  // Calculate active tournament performance status
+  const hasActive = !!activeTournament
+  const hasPlayedActive = hasActive && !!leaderboardData?.player
+
+  const activeGamesPlayed = hasActive
+    ? (leaderboardData?.player ? Math.max(1, sortedGameplays.filter(g => g.tournament_id === activeTournament._id).length) : 0)
+    : (stats?.games_played ?? 0)
+
+  const activeBestScore = hasActive
+    ? (leaderboardData?.player?.best_score ?? 0)
+    : (stats?.best_score ?? 0)
+
+  const activeRank = hasActive
+    ? (leaderboardData?.player?.rank ?? null)
+    : (stats?.global_rank ?? null)
+
+  const showGlobalRank = hasActive ? hasPlayedActive : (activeRank != null)
+
   // Calculate stats progress bar widths
   const playerLevel = Math.max(1, Math.floor((stats?.games_played ?? 0) / 5) + 1)
   const nextLevelPercent = (((stats?.games_played ?? 0) % 5) / 5) * 100
@@ -526,7 +544,7 @@ export default async function DashboardPage({
                   {/* Games Played */}
                   <div className="glass-pill-3d !bg-cyan-200 border border-cyan-300 shadow-[0_4px_12px_rgba(6,182,212,0.08)] flex flex-col items-center justify-start text-center rounded-xl p-3 sm:p-4 w-full">
                     <p className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-cyan-955">
-                      {stats?.games_played != null ? stats.games_played.toLocaleString() : "—"}
+                      {activeGamesPlayed.toLocaleString()}
                     </p>
                     <p className="mt-1 font-mono text-sm font-bold tracking-wider text-cyan-800 uppercase leading-snug">
                       Games<br />Played
@@ -536,7 +554,7 @@ export default async function DashboardPage({
                   {/* Best Score */}
                   <div className="glass-pill-3d !bg-amber-200 border border-amber-300 shadow-[0_4px_12px_rgba(245,158,11,0.08)] flex flex-col items-center justify-start text-center rounded-xl p-3 sm:p-4 w-full">
                     <p className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-amber-955">
-                      {stats?.best_score != null ? stats.best_score.toLocaleString() : "—"}
+                      {activeBestScore.toLocaleString()}
                     </p>
                     <p className="mt-1 font-mono text-sm font-bold tracking-wider text-amber-800 uppercase leading-snug">
                       Best<br />Score
@@ -546,7 +564,7 @@ export default async function DashboardPage({
                   {/* Global Rank */}
                   <div className="glass-pill-3d !bg-indigo-200 border border-indigo-300 shadow-[0_4px_12px_rgba(99,102,241,0.08)] flex flex-col items-center justify-start text-center rounded-xl p-3 sm:p-4 w-full">
                     <p className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-indigo-950">
-                      {stats?.global_rank != null ? `# ${stats.global_rank}` : "—"}
+                      {activeRank ? `# ${activeRank}` : "# 0"}
                     </p>
                     <p className="mt-1 font-mono text-sm font-bold tracking-wider text-indigo-800 uppercase leading-snug">
                       Global<br />Rank
