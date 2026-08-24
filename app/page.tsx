@@ -43,6 +43,8 @@ const features = [
   },
 ]
 
+export const unstable_instant = false
+
 export default async function Home() {
   const session = await getServerSession(authOptions)
   if (session) redirect("/dashboard")

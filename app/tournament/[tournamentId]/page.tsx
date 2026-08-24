@@ -5,6 +5,8 @@ import { TournamentView } from "@/components/TournamentView"
 import { getPlayerByEmail, getPlayerByGoogleId } from "@/lib/players"
 import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
 import clientPromise from "@/lib/mongodb"
+import { Suspense } from "react"
+import { Loader2 } from "lucide-react"
 
 const SYNC = process.env.NEXT_PUBLIC_SYNC_SERVER_URL ?? ""
 
@@ -107,7 +109,28 @@ async function fetchPlays(tournamentId: string, googleId: string, env: string) {
   }
 }
 
-export default async function TournamentPage({
+export default function TournamentPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ tournamentId: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/30 backdrop-blur-sm">
+          <Loader2 className="animate-spin text-orange-500 size-12" strokeWidth={2.5} />
+        </div>
+      }
+    >
+      <TournamentPageContent params={params} searchParams={searchParams} />
+    </Suspense>
+  )
+}
+
+
+async function TournamentPageContent({
   params,
   searchParams,
 }: {
@@ -139,18 +162,16 @@ export default async function TournamentPage({
   ])
 
   return (
-    <main>
-      <TournamentView
-        tournamentId={tournamentId}
-        googleId={resolvedGoogleId}
-        env={env}
-        pid={resolvedPid}
-        name={dbPlayer?.name ?? session.user.name}
-        image={dbPlayer?.avatar_url ?? session.user.image}
-        initialTournament={tournamentData}
-        initialLeaderboard={leaderboardData}
-        initialPlays={playsData}
-      />
-    </main>
+    <TournamentView
+      tournamentId={tournamentId}
+      googleId={resolvedGoogleId}
+      env={env}
+      pid={resolvedPid}
+      name={dbPlayer?.name ?? session.user.name}
+      image={dbPlayer?.avatar_url ?? session.user.image}
+      initialTournament={tournamentData}
+      initialLeaderboard={leaderboardData}
+      initialPlays={playsData}
+    />
   )
 }
