@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import { TournamentView } from "@/components/TournamentView"
+import { LogRocketIdentify } from "@/components/LogRocketIdentify"
 import { getPlayerByEmail, getPlayerByGoogleId } from "@/lib/players"
 import { SYNC_ENV, getUrlForEnv, getSyncOfflineStatus, setSyncOffline } from "@/lib/sync-env"
 import clientPromise from "@/lib/mongodb"
@@ -67,7 +68,7 @@ async function fetchPlays(tournamentId: string, googleId: string, env: string) {
       let queryTournamentId: any = tournamentId
       try {
         queryTournamentId = new ObjectId(tournamentId)
-      } catch {}
+      } catch { }
 
       const dbName = env === "prod" ? "hyper-grid" : `hyper-grid-${env}`
       let db = client.db(dbName)
@@ -162,16 +163,19 @@ async function TournamentPageContent({
   ])
 
   return (
-    <TournamentView
-      tournamentId={tournamentId}
-      googleId={resolvedGoogleId}
-      env={env}
-      pid={resolvedPid}
-      name={dbPlayer?.name ?? session.user.name}
-      image={dbPlayer?.avatar_url ?? session.user.image}
-      initialTournament={tournamentData}
-      initialLeaderboard={leaderboardData}
-      initialPlays={playsData}
-    />
+    <main>
+      <LogRocketIdentify id={resolvedGoogleId} name={dbPlayer?.name ?? session.user.name} email={session.user.email} />
+      <TournamentView
+        tournamentId={tournamentId}
+        googleId={resolvedGoogleId}
+        env={env}
+        pid={resolvedPid}
+        name={dbPlayer?.name ?? session.user.name}
+        image={dbPlayer?.avatar_url ?? session.user.image}
+        initialTournament={tournamentData}
+        initialLeaderboard={leaderboardData}
+        initialPlays={playsData}
+      />
+    </main>
   )
 }

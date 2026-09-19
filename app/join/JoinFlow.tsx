@@ -7,6 +7,7 @@ import type { Session } from "next-auth"
 import { AlertCircle, QrCode, Loader2 } from "lucide-react"
 import type { JoinErrorCode } from "@/types"
 import { getUrlForEnv } from "@/lib/sync-env"
+import { logRocketManager } from "@/lib/logRocketManager"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -61,6 +62,21 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
   // Incrementing this re-triggers the join effect (used for retry).
   const [retryKey, setRetryKey] = useState(0)
 
+  useEffect(() => {
+    if (!session?.user.google_id) return
+    logRocketManager.identify({
+      id: session.user.google_id,
+      name: session.user.name,
+      email: session.user.email,
+    })
+  }, [session])
+
+  // Ties this recording to the arcade join session (tournamentId/sessionCode) even
+  // before the visitor signs in, so a specific QR-code session can be looked up in LogRocket.
+  useEffect(() => {
+    logRocketManager.track("Join Page Viewed", { tournamentId, sessionCode })
+  }, [tournamentId, sessionCode])
+
   // ── Session pre-check ─────────────────────────────────────────────────────
   useEffect(() => {
     let cancelled = false
@@ -100,6 +116,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
 
     let cancelled = false
     setErrorCode(null)
+    logRocketManager.track("Join Started", { tournamentId, sessionCode })
 
     async function join() {
       try {
@@ -127,11 +144,13 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
               : "network"
           setErrorCode(code)
           setPhase("error")
+          logRocketManager.track("Join Failed", { tournamentId, sessionCode, errorCode: code })
           return
         }
 
         const body = await res.json()
         if (!cancelled) {
+          logRocketManager.track("Join Succeeded", { tournamentId, sessionCode, playerId: body.player._id })
           const tournamentUrl = getUrlForEnv(
             `/tournament/${tournamentId}?pid=${encodeURIComponent(body.player._id)}`,
             env
@@ -156,6 +175,7 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
         if (!cancelled) {
           setErrorCode("network")
           setPhase("error")
+          logRocketManager.track("Join Failed", { tournamentId, sessionCode, errorCode: "network" })
         }
       }
     }

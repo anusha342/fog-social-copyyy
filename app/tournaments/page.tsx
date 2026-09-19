@@ -5,6 +5,7 @@ import { Trophy, Users, Calendar, ChevronRight, Clock } from "lucide-react"
 import { authOptions } from "@/lib/auth"
 import { Navbar } from "@/components/Navbar"
 import { BackButton } from "@/components/BackButton"
+import { LogRocketIdentify } from "@/components/LogRocketIdentify"
 import { SYNC_ENV, getUrlForEnv } from "@/lib/sync-env"
 import type { Tournament, TournamentsResponse } from "@/types"
 
@@ -178,6 +179,7 @@ export default async function TournamentsPage({
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-zinc-900 relative overflow-hidden select-none">
+      <LogRocketIdentify id={session.user.google_id} name={session.user.name} email={session.user.email} />
       <style>{`
         @keyframes hoverShineSweep {
           0% { left: -100%; }
