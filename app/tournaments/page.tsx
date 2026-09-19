@@ -27,8 +27,8 @@ async function fetchTournaments(): Promise<Tournament[]> {
 function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?: number }) {
   const href =
     env === "prod"
-      ? `/tournament/${t._id}`
-      : `/tournament/${t._id}?env=${env}`
+      ? `/dashboard?t=${t._id}`
+      : `/dashboard?t=${t._id}&env=${env}`
 
   const isActive = t.status === "active"
 
@@ -107,50 +107,50 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   return (
     <Link
       href={href}
-      className={`relative flex items-center justify-between rounded-xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden ${palette.card}`}
+      className={`relative flex items-start gap-3 sm:gap-4 rounded-xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden ${palette.card}`}
     >
-
-      <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1 mr-2">
-        {/* Icon */}
-        <div
-          className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl ${palette.icon}`}
-        >
-          <Trophy size={18} className="sm:size-[20px]" />
-        </div>
-
-        {/* Info */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="text-[15px] sm:text-base md:text-lg font-black text-zinc-955 whitespace-normal break-words leading-tight shrink">
-              {label}
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-2 text-xs sm:text-sm text-[#6e635c] leading-none">
-            <span className={`inline-flex items-center gap-1 font-mono px-1.5 py-0.5 rounded border ${palette.badge} whitespace-nowrap shrink-0`}>
-              <Users size={12} className={palette.badgeIcon} />
-              {t.player_count.toLocaleString()}
-            </span>
-            <span className="inline-flex items-center gap-1 font-mono whitespace-nowrap shrink-0">
-              <Calendar size={12} className="text-[#8a7f77]" />
-              {dateRangeStr}
-            </span>
-          </div>
-        </div>
+      {/* Left: Trophy Icon */}
+      <div
+        className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl mt-0.5 ${palette.icon}`}
+      >
+        <Trophy size={19} className="sm:size-[21px]" />
       </div>
 
-      {/* Top score + arrow */}
-      <div className="flex shrink-0 items-center gap-2 sm:gap-3 ml-auto">
+      {/* Right: All content lines aligned to the exact same starting point */}
+      <div className="flex-1 min-w-0 flex flex-col justify-between">
+        {/* Line 1: Tournament Name & Player Count in one line */}
+        <div className="flex items-center justify-between gap-2.5 w-full min-w-0">
+          <span className="text-[15px] sm:text-base md:text-lg font-black text-zinc-955 truncate leading-tight min-w-0">
+            {label}
+          </span>
 
-        {t.top_score != null && (
-          <div className="text-right">
-            <p className="font-mono text-[10px] sm:text-xs text-[#6e635c]/80 uppercase tracking-widest leading-none mb-1 hidden min-[390px]:block">Top Score</p>
-            <p className="font-mono text-base sm:text-lg font-bold tabular-nums text-zinc-900 leading-none">
-              {t.top_score.toLocaleString()}
+          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm`}>
+            <Users size={12} className={palette.badgeIcon} />
+            {t.player_count.toLocaleString()}
+          </span>
+        </div>
+
+        {/* Line 2: Top Score & Arrow in one line */}
+        <div className="flex items-center justify-between gap-3 mt-2.5 sm:mt-3 w-full min-w-0">
+          <div>
+            <p className="font-mono text-[9.5px] sm:text-[10px] text-[#6e635c] uppercase tracking-wider leading-none mb-1 font-semibold">
+              Top Score
+            </p>
+            <p className="font-mono text-sm sm:text-base font-black tabular-nums text-zinc-900 leading-none">
+              {t.top_score != null ? t.top_score.toLocaleString() : "—"}
             </p>
           </div>
-        )}
-        <ChevronRight size={16} className="text-[#8a7f77]" />
+
+          <ChevronRight size={16} className="text-[#8a7f77]" />
+        </div>
+
+        {/* Line 3: Date (starting point aligned with Tournament Name and Top Score) */}
+        <div className="mt-2.5 sm:mt-3 text-xs text-[#6e635c] leading-none pt-0.5">
+          <span className="inline-flex items-center gap-1.5 font-mono whitespace-nowrap text-zinc-700 text-[11px] sm:text-xs">
+            <Calendar size={12} className="text-[#8a7f77]" />
+            {dateRangeStr}
+          </span>
+        </div>
       </div>
     </Link>
   )
@@ -219,7 +219,7 @@ export default async function TournamentsPage({
       {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
       <div className="sticky top-[56px] z-30 bg-transparent py-3 mb-2">
         <div className="mx-auto w-full max-w-6xl px-4 flex justify-start">
-          <BackButton />
+          <BackButton fallbackHref="/dashboard" />
         </div>
       </div>
 
