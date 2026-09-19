@@ -1,7 +1,9 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { signIn, signOut } from "next-auth/react"
-import { LogOut } from "lucide-react"
+import { LogOut, Loader2 } from "lucide-react"
 
 export function SignOutButton() {
   return (
@@ -16,12 +18,30 @@ export function SignOutButton() {
 }
 
 export function GoogleSignInButton({ children, className }: { children: React.ReactNode; className?: string }) {
+  const [loading, setLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
-    <button
-      onClick={() => signIn("google")}
-      className={className}
-    >
-      {children}
-    </button>
+    <>
+      {loading && mounted && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-white/30 backdrop-blur-sm">
+          <Loader2 className="animate-spin text-orange-500 size-12" strokeWidth={2.5} />
+        </div>,
+        document.body
+      )}
+      <button
+        onClick={() => {
+          setLoading(true)
+          signIn("google")
+        }}
+        className={className}
+      >
+        {children}
+      </button>
+    </>
   )
 }
