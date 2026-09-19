@@ -294,12 +294,12 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
       {/* Right: All content lines aligned to the exact same starting point */}
       <div className="flex-1 min-w-0 flex flex-col justify-between">
         {/* Line 1: Tournament Name & Player Count in one line */}
-        <div className="flex items-center justify-between gap-2.5 w-full min-w-0">
-          <span className="text-[15px] sm:text-base md:text-lg font-black text-zinc-955 truncate leading-tight min-w-0">
+        <div className="flex items-start justify-between gap-2.5 w-full min-w-0">
+          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-snug min-w-0 break-words">
             {label}
           </span>
 
-          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm`}>
+          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm mt-0.5`}>
             <Users size={12} className={palette.badgeIcon} />
             {t.player_count.toLocaleString()}
           </span>
@@ -308,10 +308,10 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
         {/* Line 2: Top Score & Button in one line (Top Score starts at same point as Tournament Name) */}
         <div className="flex items-center justify-between gap-3 mt-2.5 sm:mt-3 w-full min-w-0">
           <div>
-            <p className="font-mono text-[9.5px] sm:text-[10px] text-[#6e635c] uppercase tracking-wider leading-none mb-1 font-semibold">
+            <p className="font-mono text-[10.5px] sm:text-[11.5px] text-zinc-700 uppercase tracking-wider leading-none mb-1.5 font-bold">
               Top Score
             </p>
-            <p className="font-mono text-sm sm:text-base font-black tabular-nums text-zinc-900 leading-none">
+            <p className="font-mono text-[15px] sm:text-[17px] md:text-lg font-black tabular-nums text-zinc-950 leading-none">
               {t.top_score != null ? t.top_score.toLocaleString() : "—"}
             </p>
           </div>
@@ -634,7 +634,7 @@ export default async function DashboardPage({
 
                                 <div className="flex-1 min-w-0 flex items-center gap-1.5 pr-1">
                                   <span
-                                    className={`text-base font-bold truncate leading-tight ${isMe ? "text-emerald-950" : "text-zinc-905"
+                                    className={`text-[14.5px] min-[380px]:text-[15.5px] sm:text-base md:text-[17px] font-bold leading-snug break-words ${isMe ? "text-emerald-950" : "text-zinc-905"
                                       }`}
                                   >
                                     {entry.players.map((p) => p?.name).filter(Boolean).join(", ") ||
@@ -830,8 +830,8 @@ export default async function DashboardPage({
         {/* ── Welcome Header & Player Summary ── */}
         <div className="border-b border-zinc-200/60 pb-5 mb-2 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-center sm:text-left">
-              Welcome Back, {firstName}!
+            <h1 className="text-xl min-[360px]:text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-tight text-center sm:text-left break-words">
+              {(stats?.games_played ?? 0) === 0 ? `Welcome, ${firstName}!` : `Welcome Back, ${firstName}!`}
             </h1>
           </div>
 

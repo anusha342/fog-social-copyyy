@@ -581,7 +581,7 @@ export function TournamentView({
                             {/* Name & Crown */}
                             <div className="flex-1 min-w-0 flex items-center gap-1.5 pr-1">
                               <span
-                                className={`text-base font-bold truncate leading-tight ${
+                                className={`text-[14.5px] min-[380px]:text-[15.5px] sm:text-base md:text-[17px] font-bold leading-snug break-words ${
                                   isMe ? "text-emerald-950" : "text-zinc-900"
                                 }`}
                               >

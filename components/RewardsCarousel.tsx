@@ -189,8 +189,8 @@ export function RewardsCarousel({ bannerUrl, rewards, tournamentName }: RewardsC
               {slide.url === "all-rewards" ? (
                 <>
                   {/* Top Text Content */}
-                  <div className="flex flex-col items-center text-center z-20 max-w-[85%] mt-1 sm:mt-1.5">
-                    <h3 className="font-sans text-base sm:text-xl font-black tracking-tight leading-tight mt-0.5 sm:mt-1 text-white uppercase drop-shadow-sm">
+                  <div className="flex flex-col items-center text-center z-20 w-full max-w-[96%] px-2 mt-0.5 sm:mt-1">
+                    <h3 className="font-sans text-sm min-[360px]:text-[15px] sm:text-lg md:text-xl font-black tracking-tight leading-snug text-white uppercase drop-shadow-sm break-words">
                       {slide.title}
                     </h3>
                     <p className="mt-0.5 text-[9px] sm:text-[11px] font-bold text-zinc-150 tracking-wide leading-none font-sans">
