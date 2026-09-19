@@ -391,8 +391,9 @@ export default async function DashboardPage({
 
     const hasActive = !!activeTournament
     const isTournamentCompleted =
-      activeTournament?.status === "completed" ||
-      Boolean(activeTournament?.end_date && new Date(activeTournament.end_date) < new Date())
+      activeTournament?.status === "past" ||
+      (activeTournament?.status as string) === "completed" ||
+      Boolean(activeTournament?.ended_at && new Date(activeTournament.ended_at) < new Date())
 
     const activeGamesPlayed = hasActive
       ? leaderboardData?.player
