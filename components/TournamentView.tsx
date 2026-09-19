@@ -281,19 +281,24 @@ export function TournamentView({
         </div>
       </div>
 
-      {/* ── Simple Title Header (Clean text, no card) ── */}
-      <div className="border-b border-zinc-200/60 pb-5 mb-2 w-full max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-tight text-left whitespace-normal break-words">
+      {/* ── Simple Title Header (Clean text, centered) ── */}
+      <div className="border-b border-zinc-200/60 pb-5 mb-2 w-full max-w-6xl mx-auto px-4 flex flex-col items-center justify-center text-center">
+        <h1
+          style={{ textAlign: "center" }}
+          className="w-full text-center text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-tight whitespace-normal break-words"
+        >
           {tournament?.name || "Tournament"}
         </h1>
         {tournament?.status === "active" && (
-          <span className="flex shrink-0 items-center gap-1.5 text-red-600 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
-            <span className="relative flex size-1.5 shrink-0">
-              <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
-              <span className="relative inline-flex rounded-full size-1.5 bg-red-500"></span>
+          <div className="mt-2 flex items-center justify-center">
+            <span className="flex shrink-0 items-center gap-1.5 text-red-600 font-mono font-black uppercase tracking-wider text-xs sm:text-sm">
+              <span className="relative flex size-1.5 shrink-0">
+                <span className="animate-[ping_1.6s_cubic-bezier(0,0,0.2,1)_infinite] absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
+                <span className="relative inline-flex rounded-full size-1.5 bg-red-500"></span>
+              </span>
+              Active
             </span>
-            Active
-          </span>
+          </div>
         )}
       </div>
 
@@ -443,8 +448,8 @@ export function TournamentView({
             }
             style={isMobile ? {
               transform: `translateX(-${hasRewards
-                  ? (tab === "leaderboard" ? 0 : tab === "plays" ? 1 : 2) * 33.3333
-                  : (tab === "leaderboard" ? 0 : 1) * 50
+                ? (tab === "leaderboard" ? 0 : tab === "plays" ? 1 : 2) * 33.3333
+                : (tab === "leaderboard" ? 0 : 1) * 50
                 }%)`,
             } : undefined}
           >
@@ -581,9 +586,8 @@ export function TournamentView({
                             {/* Name & Crown */}
                             <div className="flex-1 min-w-0 flex items-center gap-1.5 pr-1">
                               <span
-                                className={`text-[14.5px] min-[380px]:text-[15.5px] sm:text-base md:text-[17px] font-bold leading-snug break-words ${
-                                  isMe ? "text-emerald-950" : "text-zinc-900"
-                                }`}
+                                className={`text-[14.5px] min-[380px]:text-[15.5px] sm:text-base md:text-[17px] font-bold leading-snug break-words ${isMe ? "text-emerald-950" : "text-zinc-900"
+                                  }`}
                               >
                                 {entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "Unknown"}
                               </span>

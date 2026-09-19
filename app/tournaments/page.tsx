@@ -86,72 +86,65 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   const startDate = new Date(t.started_at)
   const endDate = t.ended_at ? new Date(t.ended_at) : null
 
-  const startYear = startDate.getFullYear()
-  const endYear = endDate ? endDate.getFullYear() : null
+  const formatShortDate = (d: Date) => `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`
 
   let dateRangeStr = ""
   if (endDate) {
+    const startYear = startDate.getFullYear()
+    const endYear = endDate.getFullYear()
     if (startYear === endYear) {
-      const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })
-      const endStr = endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      dateRangeStr = `${startStr} — ${endStr}`
+      dateRangeStr = `${formatShortDate(startDate)} - ${formatShortDate(endDate)}, ${endYear}`
     } else {
-      const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      const endStr = endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      dateRangeStr = `${startStr} — ${endStr}`
+      dateRangeStr = `${formatShortDate(startDate)}, ${startYear} - ${formatShortDate(endDate)}, ${endYear}`
     }
   } else {
-    const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-    dateRangeStr = `${startStr} — Active`
+    dateRangeStr = `${formatShortDate(startDate)}, ${startDate.getFullYear()} - Active`
   }
 
   return (
     <Link
       href={href}
-      className={`relative flex items-start gap-3 sm:gap-4 rounded-xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden ${palette.card}`}
+      className={`relative flex flex-col justify-between rounded-xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden ${palette.card}`}
     >
-      {/* Left: Trophy Icon */}
-      <div
-        className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl mt-0.5 ${palette.icon}`}
-      >
-        <Trophy size={19} className="sm:size-[21px]" />
-      </div>
+      {/* Line 1: Trophy Icon, Tournament Name & Top Score in one line */}
+      <div className="flex items-start justify-between gap-2.5 w-full min-w-0">
+        <div className="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
+          <div
+            className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl mt-0.5 ${palette.icon}`}
+          >
+            <Trophy size={19} className="sm:size-[21px]" />
+          </div>
 
-      {/* Right: All content lines aligned to the exact same starting point */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between">
-        {/* Line 1: Tournament Name & Top Score in one line */}
-        <div className="flex items-baseline justify-between gap-2.5 w-full min-w-0">
-          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-tight min-w-0 break-words">
+          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-tight min-w-0 break-words mt-0.5">
             {label}
           </span>
-
-          <div className="text-right shrink-0">
-            <p className="font-mono text-[10px] sm:text-[11px] text-zinc-600 uppercase tracking-wider leading-tight mb-1 font-bold">
-              Top Score
-            </p>
-            <p className="font-mono text-[15px] sm:text-[17px] md:text-lg font-black tabular-nums text-zinc-950 leading-none">
-              {t.top_score != null ? t.top_score.toLocaleString() : "—"}
-            </p>
-          </div>
         </div>
 
-        {/* Line 2: People Joined & Arrow in one line */}
-        <div className="flex items-center justify-between gap-3 mt-2.5 sm:mt-3 w-full min-w-0">
-          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm`}>
+        <div className="text-right shrink-0">
+          <p className="font-mono text-[10px] sm:text-[11px] text-zinc-600 uppercase tracking-wider leading-tight mb-1 font-bold">
+            Top Score
+          </p>
+          <p className="font-mono text-[15px] sm:text-[17px] md:text-lg font-black tabular-nums text-zinc-950 leading-none">
+            {t.top_score != null ? t.top_score.toLocaleString() : "—"}
+          </p>
+        </div>
+      </div>
+
+      {/* Line 2: People Joined + Date on exact same line, Arrow on right */}
+      <div className="flex items-center justify-between gap-2 mt-3 sm:mt-3.5 w-full min-w-0">
+        <div className="flex items-center gap-1.5 min-w-0 whitespace-nowrap overflow-hidden">
+          <span className={`inline-flex items-center gap-1 font-mono px-1.5 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs`}>
             <Users size={12} className={palette.badgeIcon} />
             {t.player_count.toLocaleString()}
           </span>
 
-          <ChevronRight size={16} className="text-[#8a7f77]" />
-        </div>
-
-        {/* Line 3: Date */}
-        <div className="mt-2.5 sm:mt-3 text-xs text-[#6e635c] leading-none pt-0.5">
-          <span className="inline-flex items-center gap-1.5 font-mono whitespace-nowrap text-zinc-700 text-[11px] sm:text-xs">
-            <Calendar size={12} className="text-[#8a7f77]" />
+          <span className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-zinc-600 text-[11px] sm:text-xs tracking-tight">
+            <Calendar size={11} className="text-[#8a7f77] shrink-0" />
             {dateRangeStr}
           </span>
         </div>
+
+        <ChevronRight size={16} className="text-[#8a7f77] shrink-0" />
       </div>
     </Link>
   )

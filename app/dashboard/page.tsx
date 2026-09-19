@@ -261,78 +261,71 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
   const startDate = new Date(t.started_at)
   const endDate = t.ended_at ? new Date(t.ended_at) : null
 
-  const startYear = startDate.getFullYear()
-  const endYear = endDate ? endDate.getFullYear() : null
+  const formatShortDate = (d: Date) => `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`
 
   let dateRangeStr = ""
   if (endDate) {
+    const startYear = startDate.getFullYear()
+    const endYear = endDate.getFullYear()
     if (startYear === endYear) {
-      const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })
-      const endStr = endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      dateRangeStr = `${startStr} — ${endStr}`
+      dateRangeStr = `${formatShortDate(startDate)} - ${formatShortDate(endDate)}, ${endYear}`
     } else {
-      const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      const endStr = endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      dateRangeStr = `${startStr} — ${endStr}`
+      dateRangeStr = `${formatShortDate(startDate)}, ${startYear} - ${formatShortDate(endDate)}, ${endYear}`
     }
   } else {
-    const startStr = startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-    dateRangeStr = `${startStr} — Active`
+    dateRangeStr = `${formatShortDate(startDate)}, ${startDate.getFullYear()} - Active`
   }
 
   return (
     <Link
       href={href}
-      className={`group/card relative flex items-start gap-3 sm:gap-4 rounded-2xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${palette.card}`}
+      className={`group/card relative flex flex-col justify-between rounded-2xl p-4 min-[390px]:p-4.5 sm:p-5 overflow-hidden transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${palette.card}`}
     >
-      {/* Left: Trophy Icon */}
-      <div
-        className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl mt-0.5 ${palette.icon}`}
-      >
-        <Trophy size={19} className="sm:size-[21px]" />
-      </div>
+      {/* Line 1: Trophy Icon, Tournament Name & Top Score in one line */}
+      <div className="flex items-start justify-between gap-2.5 w-full min-w-0">
+        <div className="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
+          <div
+            className={`flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl mt-0.5 ${palette.icon}`}
+          >
+            <Trophy size={19} className="sm:size-[21px]" />
+          </div>
 
-      {/* Right: All content lines aligned to the exact same starting point */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between">
-        {/* Line 1: Tournament Name & Top Score in one line */}
-        <div className="flex items-baseline justify-between gap-2.5 w-full min-w-0">
-          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-tight min-w-0 break-words">
+          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-tight min-w-0 break-words mt-0.5">
             {label}
           </span>
-
-          <div className="text-right shrink-0">
-            <p className="font-mono text-[10px] sm:text-[11px] text-zinc-600 uppercase tracking-wider leading-tight mb-1 font-bold">
-              Top Score
-            </p>
-            <p className="font-mono text-[15px] sm:text-[17px] md:text-lg font-black tabular-nums text-zinc-950 leading-none">
-              {t.top_score != null ? t.top_score.toLocaleString() : "—"}
-            </p>
-          </div>
         </div>
 
-        {/* Line 2: People Joined & Button in one line */}
-        <div className="flex items-center justify-between gap-3 mt-2.5 sm:mt-3 w-full min-w-0">
-          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm`}>
+        <div className="text-right shrink-0">
+          <p className="font-mono text-[10px] sm:text-[11px] text-zinc-600 uppercase tracking-wider leading-tight mb-1 font-bold">
+            Top Score
+          </p>
+          <p className="font-mono text-[15px] sm:text-[17px] md:text-lg font-black tabular-nums text-zinc-950 leading-none">
+            {t.top_score != null ? t.top_score.toLocaleString() : "—"}
+          </p>
+        </div>
+      </div>
+
+      {/* Line 2: People Joined + Date on exact same line, Button on right */}
+      <div className="flex items-center justify-between gap-2 mt-3 sm:mt-3.5 w-full min-w-0">
+        <div className="flex items-center gap-1.5 min-w-0 whitespace-nowrap overflow-hidden">
+          <span className={`inline-flex items-center gap-1 font-mono px-1.5 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs`}>
             <Users size={12} className={palette.badgeIcon} />
             {t.player_count.toLocaleString()}
           </span>
 
-          <div className="shrink-0">
-            <div
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 group-hover/card:scale-105 shadow-xs ${palette.btn}`}
-            >
-              <span className="text-zinc-900 font-bold">{isActive ? "Enter Arena" : "View Results"}</span>
-              <ChevronRight size={13} strokeWidth={2.5} className="transition-transform group-hover/card:translate-x-0.5 shrink-0 text-zinc-900" />
-            </div>
-          </div>
-        </div>
-
-        {/* Line 3: Date */}
-        <div className="mt-2.5 sm:mt-3 text-xs text-[#6e635c] leading-none pt-0.5">
-          <span className="inline-flex items-center gap-1.5 font-mono whitespace-nowrap text-zinc-700 text-[11px] sm:text-xs">
-            <Calendar size={12} className="text-[#8a7f77]" />
+          <span className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-zinc-600 text-[11px] sm:text-xs tracking-tight">
+            <Calendar size={11} className="text-[#8a7f77] shrink-0" />
             {dateRangeStr}
           </span>
+        </div>
+
+        <div className="shrink-0">
+          <div
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 group-hover/card:scale-105 shadow-xs ${palette.btn}`}
+          >
+            <span className="text-zinc-900 font-bold">{isActive ? "Enter Arena" : "View Results"}</span>
+            <ChevronRight size={13} strokeWidth={2.5} className="transition-transform group-hover/card:translate-x-0.5 shrink-0 text-zinc-900" />
+          </div>
         </div>
       </div>
     </Link>
@@ -477,12 +470,10 @@ export default async function DashboardPage({
         {/* ── Main Dashboard Container ── */}
         <main className="relative z-10 mx-auto max-w-6xl px-4 py-4 sm:py-6 space-y-6 sm:space-y-8 flex-grow w-full">
           {/* ── Tournament Header ── */}
-          <div className="border-b border-zinc-200/60 pb-5 mb-2 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none">
-                {activeTournament?.name || "Tournament Arena"}
-              </h1>
-            </div>
+          <div className="border-b border-zinc-200/60 pb-5 mb-2 flex flex-col items-center justify-center text-center gap-3 w-full">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-zinc-955 uppercase font-sans leading-none text-center w-full">
+              {activeTournament?.name || "Tournament Arena"}
+            </h1>
           </div>
 
           {/* ── Flat Responsive Layout: Rewards -> Leaderboard -> History ── */}
