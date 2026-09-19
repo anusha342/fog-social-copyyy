@@ -3,12 +3,32 @@
 import { useRouter } from "next/navigation"
 import { ChevronLeft } from "lucide-react"
 
-export function BackButton() {
+interface BackButtonProps {
+  fallbackHref?: string
+  forceHref?: string
+}
+
+export function BackButton({ fallbackHref = "/dashboard", forceHref }: BackButtonProps) {
   const router = useRouter()
+
+  const handleBack = () => {
+    if (forceHref) {
+      router.push(forceHref)
+      return
+    }
+
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back()
+      return
+    }
+    // Safe fallback to the parent page if opened directly with no history
+    router.push(fallbackHref)
+  }
 
   return (
     <button
-      onClick={() => router.back()}
+      type="button"
+      onClick={handleBack}
       className="group flex items-center justify-center cursor-pointer transition-all active:scale-[0.98] shadow-sm select-none
         /* Mobile styles: circular, compact icon button */
         size-10 rounded-full border border-orange-200 bg-orange-50/50 hover:bg-orange-100/80 hover:border-orange-300 text-orange-700

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { Gamepad2, Loader2, Trophy, Crown } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import type { LeaderboardData, Tournament } from "@/types"
 import { Navbar } from "./Navbar"
 import { getUrlForEnv } from "@/lib/sync-env"
@@ -66,6 +66,7 @@ export function TournamentView({
   initialLeaderboard = null,
   initialPlays = null,
 }: Props) {
+  const router = useRouter()
   const [tab, setTab] = useState<"leaderboard" | "plays" | "rewards">("leaderboard")
   const searchParams = useSearchParams()
 
@@ -76,6 +77,7 @@ export function TournamentView({
   const hasRewards = (tournament?.rewards?.length ?? 0) > 0
   const [isServerOffline, setIsServerOffline] = useState(false)
   const [isMobile, setIsMobile] = useState(true)
+
 
   // Listen to screen size changes for state-driven desktop columns (include tablet width < 1024px)
   useEffect(() => {
@@ -275,7 +277,7 @@ export function TournamentView({
       {/* ── Back Navigation Wrapper (Sticky below Navbar) ── */}
       <div className="sticky top-[56px] z-30 bg-transparent py-3 mb-2">
         <div className="mx-auto w-full max-w-6xl px-4 flex justify-start">
-          <BackButton />
+          <BackButton fallbackHref={getUrlForEnv(`/dashboard?t=${encodeURIComponent(tournamentId)}`, env)} />
         </div>
       </div>
 
@@ -576,16 +578,18 @@ export function TournamentView({
                               />
                             </div>
 
-                            {/* Name */}
-                            <div className="flex-1 min-w-0 pr-1">
-                              <p className={`text-base font-bold leading-tight ${isMe ? "text-emerald-950" : "text-zinc-900"}`}>
-                                <span>
-                                  {entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "Unknown"}
-                                </span>
-                                {isRank1 && (
-                                  <Crown size={13} className="fill-orange-500 text-orange-600 shrink-0 inline-block ml-1 align-middle" />
-                                )}
-                              </p>
+                            {/* Name & Crown */}
+                            <div className="flex-1 min-w-0 flex items-center gap-1.5 pr-1">
+                              <span
+                                className={`text-base font-bold truncate leading-tight ${
+                                  isMe ? "text-emerald-950" : "text-zinc-900"
+                                }`}
+                              >
+                                {entry.players.map(p => p?.name).filter(Boolean).join(", ") || entry.center?.name || "Unknown"}
+                              </span>
+                              {isRank1 && (
+                                <Crown size={14} className="fill-orange-500 text-orange-600 shrink-0" />
+                              )}
                             </div>
 
                             {/* Score */}

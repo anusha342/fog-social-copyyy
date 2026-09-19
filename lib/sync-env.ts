@@ -13,8 +13,8 @@ let isSyncOffline = false
 let lastChecked = 0
 
 export function getSyncOfflineStatus(): boolean {
-  // Allow checking again after 5 minutes in case the sync server starts up
-  if (isSyncOffline && Date.now() - lastChecked > 300000) {
+  // Allow checking again after 10 seconds in case the sync server starts up
+  if (isSyncOffline && Date.now() - lastChecked > 10000) {
     isSyncOffline = false
   }
   return isSyncOffline

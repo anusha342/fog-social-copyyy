@@ -132,9 +132,25 @@ export function JoinFlow({ tournamentId, sessionCode, env, session }: Props) {
 
         const body = await res.json()
         if (!cancelled) {
-          router.replace(
-            getUrlForEnv(`/tournament/${tournamentId}?pid=${encodeURIComponent(body.player._id)}`, env)
+          const tournamentUrl = getUrlForEnv(
+            `/tournament/${tournamentId}?pid=${encodeURIComponent(body.player._id)}`,
+            env
           )
+          const tournamentOverviewUrl = getUrlForEnv(
+            `/dashboard?t=${encodeURIComponent(tournamentId)}`,
+            env
+          )
+          const dashboardHomeUrl = getUrlForEnv("/dashboard", env)
+
+          // Prepopulate clean browser history stack:
+          // Entry 1: /dashboard (Home)
+          // Entry 2: /dashboard?t=123 (Tournament Overview)
+          // Entry 3: /tournament/123 (Current Arena Page)
+          if (typeof window !== "undefined") {
+            window.history.replaceState({ page: "dashboard" }, "", dashboardHomeUrl)
+            window.history.pushState({ page: "tournament-overview" }, "", tournamentOverviewUrl)
+          }
+          router.push(tournamentUrl)
         }
       } catch {
         if (!cancelled) {
