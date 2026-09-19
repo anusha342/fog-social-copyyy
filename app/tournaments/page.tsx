@@ -118,33 +118,33 @@ function TournamentCard({ t, env, index }: { t: Tournament; env: string; index?:
 
       {/* Right: All content lines aligned to the exact same starting point */}
       <div className="flex-1 min-w-0 flex flex-col justify-between">
-        {/* Line 1: Tournament Name & Player Count in one line */}
-        <div className="flex items-start justify-between gap-2.5 w-full min-w-0">
-          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-snug min-w-0 break-words">
+        {/* Line 1: Tournament Name & Top Score in one line */}
+        <div className="flex items-baseline justify-between gap-2.5 w-full min-w-0">
+          <span className="text-[15px] min-[380px]:text-base sm:text-lg md:text-xl font-black text-zinc-955 leading-tight min-w-0 break-words">
             {label}
           </span>
 
-          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm mt-0.5`}>
-            <Users size={12} className={palette.badgeIcon} />
-            {t.player_count.toLocaleString()}
-          </span>
-        </div>
-
-        {/* Line 2: Top Score & Arrow in one line */}
-        <div className="flex items-center justify-between gap-3 mt-2.5 sm:mt-3 w-full min-w-0">
-          <div>
-            <p className="font-mono text-[10.5px] sm:text-[11.5px] text-zinc-700 uppercase tracking-wider leading-none mb-1.5 font-bold">
+          <div className="text-right shrink-0">
+            <p className="font-mono text-[10px] sm:text-[11px] text-zinc-600 uppercase tracking-wider leading-tight mb-1 font-bold">
               Top Score
             </p>
             <p className="font-mono text-[15px] sm:text-[17px] md:text-lg font-black tabular-nums text-zinc-950 leading-none">
               {t.top_score != null ? t.top_score.toLocaleString() : "—"}
             </p>
           </div>
+        </div>
+
+        {/* Line 2: People Joined & Arrow in one line */}
+        <div className="flex items-center justify-between gap-3 mt-2.5 sm:mt-3 w-full min-w-0">
+          <span className={`inline-flex items-center gap-1.5 font-mono px-2 py-0.5 rounded-md border ${palette.badge} whitespace-nowrap shrink-0 text-xs sm:text-sm`}>
+            <Users size={12} className={palette.badgeIcon} />
+            {t.player_count.toLocaleString()}
+          </span>
 
           <ChevronRight size={16} className="text-[#8a7f77]" />
         </div>
 
-        {/* Line 3: Date (starting point aligned with Tournament Name and Top Score) */}
+        {/* Line 3: Date */}
         <div className="mt-2.5 sm:mt-3 text-xs text-[#6e635c] leading-none pt-0.5">
           <span className="inline-flex items-center gap-1.5 font-mono whitespace-nowrap text-zinc-700 text-[11px] sm:text-xs">
             <Calendar size={12} className="text-[#8a7f77]" />
